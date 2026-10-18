@@ -1,0 +1,1072 @@
+{
+  "sources": [
+    {
+      "id": "core-copy",
+      "title": "Python copy：浅拷贝与深拷贝",
+      "url": "https://docs.python.org/3/library/copy.html",
+      "publisher": "Python Software Foundation",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-defaults",
+      "title": "Python 教程：默认参数",
+      "url": "https://docs.python.org/3/tutorial/controlflow.html#default-argument-values",
+      "publisher": "Python Software Foundation",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "core-deque",
+      "title": "Python 教程：用 deque 实现队列",
+      "url": "https://docs.python.org/3/tutorial/datastructures.html#using-lists-as-queues",
+      "publisher": "Python Software Foundation",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "core-free-threading",
+      "title": "Python 自由线程构建说明",
+      "url": "https://docs.python.org/3/howto/free-threading-python.html",
+      "publisher": "Python Software Foundation",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-asyncio-tasks",
+      "title": "Python 协程与任务",
+      "url": "https://docs.python.org/3/library/asyncio-task.html",
+      "publisher": "Python Software Foundation",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-asyncio-queue",
+      "title": "Python asyncio 队列工作者示例",
+      "url": "https://docs.python.org/3/library/asyncio-queue.html#examples",
+      "publisher": "Python Software Foundation",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "core-selectors",
+      "title": "Python selectors 回声服务器示例",
+      "url": "https://docs.python.org/3/library/selectors.html#examples",
+      "publisher": "Python Software Foundation",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "core-struct",
+      "title": "Python struct：字节序、大小与对齐",
+      "url": "https://docs.python.org/3/library/struct.html#byte-order-size-and-alignment",
+      "publisher": "Python Software Foundation",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-sockets",
+      "title": "Python Socket Programming HOWTO",
+      "url": "https://docs.python.org/3/howto/sockets.html#using-a-socket",
+      "publisher": "Python Software Foundation",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-http-semantics",
+      "title": "RFC 9110：HTTP 方法语义",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2",
+      "publisher": "IETF",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-http-cache",
+      "title": "MDN：HTTP 缓存",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching",
+      "publisher": "MDN Web Docs",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-sse",
+      "title": "MDN：使用 Server-Sent Events",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events",
+      "publisher": "MDN Web Docs",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "core-pg-join",
+      "title": "PostgreSQL：表表达式与外连接示例",
+      "url": "https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN",
+      "publisher": "PostgreSQL Global Development Group",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-pg-window",
+      "title": "PostgreSQL 教程：窗口函数",
+      "url": "https://www.postgresql.org/docs/current/tutorial-window.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "core-pg-transactions",
+      "title": "PostgreSQL 教程：事务",
+      "url": "https://www.postgresql.org/docs/current/tutorial-transactions.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "core-pg-isolation",
+      "title": "PostgreSQL：事务隔离",
+      "url": "https://www.postgresql.org/docs/current/transaction-iso.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-pg-explain",
+      "title": "PostgreSQL：阅读 EXPLAIN",
+      "url": "https://www.postgresql.org/docs/current/using-explain.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-redis-transactions",
+      "title": "Redis：事务中的错误",
+      "url": "https://redis.io/docs/latest/develop/using-commands/transactions/",
+      "publisher": "Redis",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-bola",
+      "title": "OWASP API1:2023：对象级授权缺失",
+      "url": "https://api-security.owasp.org/editions/2023/en/0xa1-broken-object-level-authorization/",
+      "publisher": "OWASP",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-stripe-idempotency",
+      "title": "Stripe：幂等请求",
+      "url": "https://docs.stripe.com/api/idempotent_requests",
+      "publisher": "Stripe",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-retries",
+      "title": "AWS：超时、重试与退避抖动",
+      "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/",
+      "publisher": "Amazon Web Services",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-rabbit-work",
+      "title": "RabbitMQ Python 教程：工作队列",
+      "url": "https://www.rabbitmq.com/tutorials/tutorial-two-python",
+      "publisher": "RabbitMQ",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "core-outbox",
+      "title": "Debezium：Outbox Event Router",
+      "url": "https://debezium.io/documentation/reference/stable/transformations/outbox-event-router.html",
+      "publisher": "Debezium",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "core-ssrf",
+      "title": "OWASP：服务端请求伪造防护",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
+      "publisher": "OWASP",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    }
+  ],
+  "reviews": [
+    {
+      "sectionId": "py01",
+      "decision": "keep",
+      "reason": "原题已用 append 与重新绑定给出完整对照；再加同类实验会重复，引用关系图放到含嵌套对象的 PY02。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py02",
+      "decision": "add",
+      "reason": "原答案指出共享内层对象，但文字不易看出两层身份；增加与本题同对象关系的图，不再另造一套例子。",
+      "sourceIds": [
+        "core-copy"
+      ],
+      "additions": [
+        {
+          "id": "py02-official-diagram",
+          "kind": "diagram",
+          "title": "复制了外层，内层仍相连",
+          "body": "本图按当前题目的切片操作绘制；箭头表示引用，不表示对象复制。修改共享内层列表，会从两个外层列表中看到变化。\n\n```mermaid\nflowchart LR\n  A[\"a：原外层列表\"] --> I[\"共享内层列表 0\"]\n  A --> J[\"共享内层列表 1\"]\n  B[\"b：新外层列表\"] --> I\n  B --> J\n  B --> K[\"新追加的列表 2\"]\n```\n\n依据 Python copy 说明。深拷贝也需考虑哪些状态本来就应共享。",
+          "sourceIds": [
+            "core-copy"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "py03",
+      "decision": "add",
+      "reason": "已有修复答案；官方教程同时给出默认值求值时机和共享列表示例，适合补一次独立运行路径。",
+      "sourceIds": [
+        "core-defaults"
+      ],
+      "additions": [
+        {
+          "id": "py03-official-lab",
+          "kind": "lab",
+          "title": "默认值只求值一次",
+          "body": "前提：本地 Python 3，无第三方依赖。\n\n1. 打开默认参数教程，运行外层变量变化的示例。\n2. 运行共享列表示例，再运行 None 修复版。\n3. 比较默认值求值时机与多次调用的列表变化。",
+          "sourceIds": [
+            "core-defaults"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "py04",
+      "decision": "keep",
+      "reason": "相等、身份、驻留陷阱和 None 用法已经齐全；增加实现细节会冲淡这道基础辨析题。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py05",
+      "decision": "keep",
+      "reason": "原代码同时覆盖步长、反向切片与负下标，答案还交代复制成本，无明显缺口。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py06",
+      "decision": "keep",
+      "reason": "负数地板除和恒等式已有数值验证；跨语言差异仅作边界提醒，暂不扩成语言对照表。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py07",
+      "decision": "keep",
+      "reason": "原题用含列表的元组准确区分可哈希与表面不可变，无需补泛泛容器背景。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py08",
+      "decision": "add",
+      "reason": "复杂度结论已有，补官方 deque 排队例子让 FIFO 选型落实为可操作的接口。",
+      "sourceIds": [
+        "core-deque"
+      ],
+      "additions": [
+        {
+          "id": "py08-official-lab",
+          "kind": "lab",
+          "title": "一个实际的 FIFO 队列",
+          "body": "前提：本地 Python 3，无第三方依赖。\n\n1. 按 官方排队示例 建立 deque。\n2. 依次运行 append 与 popleft，比较到达和离开顺序。\n\n此例核对 FIFO 接口，不是性能基准。",
+          "sourceIds": [
+            "core-deque"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "py09",
+      "decision": "keep",
+      "reason": "原地修改、None 返回值与稳定排序边界已说明；再放排序动画对本题增量不足。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py10",
+      "decision": "keep",
+      "reason": "next 和两次 list 已构成完整消费实验；无需再引入生成器状态管理。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py11",
+      "decision": "keep",
+      "reason": "晚绑定与默认参数修复已经相邻呈现，额外历史说明没有帮助。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py12",
+      "decision": "keep",
+      "reason": "原答案覆盖空输入、n=0、多组格式和精确输出；保持输入契约训练的单一目标。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py13",
+      "decision": "keep",
+      "reason": "异常位置和局部绑定原因明确，且给出参数返回值的设计选择，暂无必要扩展。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py14",
+      "decision": "keep",
+      "reason": "with 清理与 finally return 的风险已经足够具体；新实验容易重复现有题意。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py15",
+      "decision": "keep",
+      "reason": "共享类列表和实例独立列表修复明确，与 PY03 相似但对象作用域不同，保留这项独立回忆。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py16",
+      "decision": "keep",
+      "reason": "已清楚区分静态注解和输入边界校验；不强行绑定某个验证框架。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py17",
+      "decision": "keep",
+      "reason": "选型同时考虑 I/O、CPU、隔离、序列化成本，已有适用边界；具体构建识别补在 PY18。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py18",
+      "decision": "add",
+      "reason": "原答案提及 free-threaded 但缺少如何识别当前环境；官方说明能补上构建能力与实际 GIL 状态的区别。",
+      "sourceIds": [
+        "core-free-threading"
+      ],
+      "additions": [
+        {
+          "id": "py18-official-aside",
+          "kind": "aside",
+          "title": "先确认你运行的是哪种构建",
+          "body": "官方区分“构建支持自由线程”和“当前进程已关闭 GIL”。前者可查看 python -VV，后者由支持该接口的版本通过 sys._is_gil_enabled() 查询。部分扩展导入还可能重新开启 GIL。\n\n因此先记录解释器构建与依赖，再讨论线程收益；见 官方环境识别说明。",
+          "sourceIds": [
+            "core-free-threading"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "py19",
+      "decision": "add",
+      "reason": "原题是三个调用形式的辨析，官方 say_after 示例能让调度区别直接落到时间线上。",
+      "sourceIds": [
+        "core-asyncio-tasks"
+      ],
+      "additions": [
+        {
+          "id": "py19-official-lab",
+          "kind": "lab",
+          "title": "顺序 await 与先创建任务",
+          "body": "前提：Python 3.7+。\n\n1. 运行 官方 say_after 示例 的顺序 await 版。\n2. 运行 create_task 版，比较时间及输出顺序。\n\n观察等待是否重叠，不追求精确秒数。",
+          "sourceIds": [
+            "core-asyncio-tasks"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "py20",
+      "decision": "keep",
+      "reason": "原题已有串行与并发睡眠对照且不承诺精确耗时；不重复添加 PY19 的官方示例。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py21",
+      "decision": "keep",
+      "reason": "阻塞位置、异步替代与 to_thread 边界已写全；避免把同一 asyncio 页面再拆成重复实验。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py22",
+      "decision": "keep",
+      "reason": "原题已经包含可运行的两任务竞态、确切结果和锁范围；保留原实验，不额外编写一个。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py23",
+      "decision": "add",
+      "reason": "原文从信号量延伸到固定 worker，但没有完整工作者结构；官方 Queue 示例恰好补此层。",
+      "sourceIds": [
+        "core-asyncio-queue"
+      ],
+      "additions": [
+        {
+          "id": "py23-official-lab",
+          "kind": "lab",
+          "title": "三个 worker 分配二十项工作",
+          "body": "前提：本地 Python 3。\n\n1. 运行 asyncio.Queue 官方示例 的三个 worker。\n2. 观察工作领取顺序，以及 join 何时返回。\n3. 再读 maxsize 与 put 的等待规则。\n\n原例使用无界队列，只演示固定 worker。不能改成小队列后仍先 put_nowait 全部工作。",
+          "sourceIds": [
+            "core-asyncio-queue"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "py24",
+      "decision": "keep",
+      "reason": "超时不等于未执行、清理和取消传播都已覆盖；请求重放的具体业务边界放在 BE03/BE05。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "py25",
+      "decision": "add",
+      "reason": "文字容易把子任务失败与聚合等待者被取消混为一谈；加紧凑对照，保留原答案的例外边界。",
+      "sourceIds": [
+        "core-asyncio-tasks"
+      ],
+      "additions": [
+        {
+          "id": "py25-official-comparison",
+          "kind": "comparison",
+          "title": "是哪一方发生了失败或取消？",
+          "body": "| 事件 | 默认 gather | TaskGroup |\n| --- | --- | --- |\n| 某个子任务抛普通异常 | 向等待者传播，其他任务继续 | 取消其余任务并等待清理 |\n| gather 自身被取消 | 传播取消给未完成任务 | 不适用这个调用形式 |\n\n官方语义。TaskGroup 需 Python 3.11+；本表只比较普通异常，特殊退出异常另见文档。",
+          "sourceIds": [
+            "core-asyncio-tasks"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "py26",
+      "decision": "keep",
+      "reason": "已有从空文件到空输入的完整实践要求和样例；再接外部词频教程会降低独立完成的价值。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cs01",
+      "decision": "keep",
+      "reason": "共享地址空间与独有栈/寄存器已对照清楚；不引入平台专属内存布局以免扩大基础题范围。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cs02",
+      "decision": "keep",
+      "reason": "原题已经把等待重叠与 CPU 并行分开；无需重复 Python 异步示例。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cs03",
+      "decision": "keep",
+      "reason": "丢失更新和整个业务临界区的范围已说明；库存的具体业务延伸在 DB11，保留互相独立的层次。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cs04",
+      "decision": "keep",
+      "reason": "锁与信号量的对象及异常释放边界完整；PY23 已提供固定 worker 的实际示例。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cs05",
+      "decision": "keep",
+      "reason": "两把锁的反向顺序、四条件和统一顺序已足够构成推理闭环，不为短题再塞同内容流程图。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cs06",
+      "decision": "keep",
+      "reason": "题目刻意避免给所有 API 套同一分类，原答案保留实现依赖；不补可能误导的四象限通用图。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cs07",
+      "decision": "keep",
+      "reason": "已指出 Python 名称与堆对象关系，避免跨语言绝对化；底层内存布局不是这道题的必要前提。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cs08",
+      "decision": "keep",
+      "reason": "原答案已区分正常按需缺页与非法访问；本轮未找到可顺利核验且成本合适的官方动手例，不硬加。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cs09",
+      "decision": "keep",
+      "reason": "原答案包含 CPU、缓存、锁、内存和下游容量，测量指标也明确；不追加未经实测的线程数建议。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cs10",
+      "decision": "add",
+      "reason": "原题只有概念解释，官方 selectors 回声服务器可观察注册、就绪、读取与断开；同时注明示例的简化边界。",
+      "sourceIds": [
+        "core-selectors"
+      ],
+      "additions": [
+        {
+          "id": "cs10-official-lab",
+          "kind": "lab",
+          "title": "观察事件驱动的回声服务器",
+          "body": "前提：本地 Python 3，localhost:1234 可用。\n\n1. 启动 selectors 官方回声服务器。\n2. 用本地 TCP 客户端连接、发短文本，观察 accept/read 回调。\n3. 断开客户端，观察空读取后的注销。\n\nDefaultSelector 不保证使用 epoll；原例简化发送处理，不是完整生产服务器。",
+          "sourceIds": [
+            "core-selectors"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "cs11",
+      "decision": "keep",
+      "reason": "已有空间局部性与算法/分配等变量，不应补造缓存命中率图或性能倍数。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cs12",
+      "decision": "keep",
+      "reason": "数量级已给出且明确不是实测指令数；不额外制造一秒通过阈值。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cs13",
+      "decision": "keep",
+      "reason": "原答案明确固定宽整数与 Python 的区别，中点公式也保留边界条件；无需更多位运算练习。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cs14",
+      "decision": "add",
+      "reason": "字节序文字可直接接 Python struct 的官方打包示例，观察同数值的不同字节，无需额外运行环境。",
+      "sourceIds": [
+        "core-struct"
+      ],
+      "additions": [
+        {
+          "id": "cs14-official-lab",
+          "kind": "lab",
+          "title": "同一整数，两种字节排列",
+          "body": "前提：本地 Python 3。\n\n1. 运行 struct 官方示例，分别用 >h 与 <h 打包 1023。\n2. 比较返回的两个字节，并对照格式表中的 ! 与 @。\n\n观察同值的字节次序，分清网络字节序与本机布局。",
+          "sourceIds": [
+            "core-struct"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "nt01",
+      "decision": "keep",
+      "reason": "已列主要阶段并指出缓存、复用、QUIC，固定握手流程图反而容易抹掉这些分支。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "nt02",
+      "decision": "add",
+      "reason": "字节流与业务消息边界需要一个结构示意；按官方 Socket HOWTO 画长度前缀收帧过程，避免依赖实际分包时机。",
+      "sourceIds": [
+        "core-sockets"
+      ],
+      "additions": [
+        {
+          "id": "nt02-official-diagram",
+          "kind": "diagram",
+          "title": "应用如何从字节流取出一帧",
+          "body": "按 Python Socket HOWTO 的长度前缀方案整理。一次 recv 可能只拿到头的一部分，也可能带回下一帧数据。\n\n```mermaid\nflowchart TD\n  R[\"追加收到的字节\"] --> H{\"头部完整？\"}\n  H -->|否| W[\"继续等待\"]\n  H -->|是| L[\"解析长度\"]\n  L --> B{\"帧体足够？\"}\n  B -->|否| W\n  B -->|是| E[\"取出一帧，保留剩余字节\"]\n  E --> H\n```\n\n这是接收缓冲的示意，不是一次 send 与一次 recv 的对应关系。",
+          "sourceIds": [
+            "core-sockets"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "nt03",
+      "decision": "keep",
+      "reason": "初始序列号和双向状态解释已足够，暂不加需抓包权限或环境准备的练习。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "nt04",
+      "decision": "keep",
+      "reason": "原答案避免把 TIME_WAIT 当故障，也覆盖连接复用和端口判断；不加系统参数调优捷径。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "nt05",
+      "decision": "keep",
+      "reason": "常用状态码及接口契约边界已列全；再接大型状态表会增加查阅噪音。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "nt06",
+      "decision": "add",
+      "reason": "原题区分最终影响和响应一致性；RFC 另有容易遗漏的安全方法业务约束，补 GET 触发删除的具体风险。",
+      "sourceIds": [
+        "core-http-semantics"
+      ],
+      "additions": [
+        {
+          "id": "nt06-official-aside",
+          "kind": "aside",
+          "title": "为什么删除操作不能藏在 GET 链接里",
+          "body": "RFC 9110 专门提醒：预取、爬取和链接检查可能自动访问 GET URL。若用 ?do=delete 执行业务删除，不能指望“用户没点击删除按钮”来保护状态。\n\n安全与幂等首先是接口承诺；访问日志等附带记录仍可能变化。参见 安全方法与幂等方法。",
+          "sourceIds": [
+            "core-http-semantics"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "nt07",
+      "decision": "keep",
+      "reason": "TLS 保障与应用权限漏洞已明确分层；不加入与当前题目无关的加密算法历史。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "nt08",
+      "decision": "keep",
+      "reason": "机制、状态、格式三者并非互斥的关系已讲清；不强行画成三选一架构。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "nt09",
+      "decision": "add",
+      "reason": "已有头字段定义，但缺少客户端缓存参与路径；一张条件请求分支图能说明 304 为什么依赖旧实体。",
+      "sourceIds": [
+        "core-http-cache"
+      ],
+      "additions": [
+        {
+          "id": "nt09-official-diagram",
+          "kind": "diagram",
+          "title": "304 要与客户端已有内容一起使用",
+          "body": "依据 MDN 的 ETag 条件请求示例。\n\n```mermaid\nflowchart TD\n  C[\"缓存内容与 ETag\"] --> Q[\"发起 If-None-Match 条件请求\"]\n  Q --> V{\"服务端版本相同？\"}\n  V -->|是| N[\"304：无新响应体\"]\n  N --> U[\"结合响应元数据复用缓存内容\"]\n  V -->|否| F[\"200：返回新内容和版本\"]\n```\n\n图示适用于 GET 条件读取；不要把 304 当成可以单独解析的新正文。",
+          "sourceIds": [
+            "core-http-cache"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "nt10",
+      "decision": "keep",
+      "reason": "浏览器限制、预检和认证边界已准确覆盖；双源服务部署成本高，本题不额外挂通用 CORS 实验。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "nt11",
+      "decision": "keep",
+      "reason": "传输层、多路复用和队头阻塞均已对照；不附性能快慢定论。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "nt12",
+      "decision": "add",
+      "reason": "原题是选型说明，MDN 有完整 EventSource/PHP 示例，能补事件帧与页面持续接收的实际观察。",
+      "sourceIds": [
+        "core-sse"
+      ],
+      "additions": [
+        {
+          "id": "nt12-official-lab",
+          "kind": "lab",
+          "title": "浏览器接收持续事件",
+          "body": "前提：浏览器与可运行 PHP 的本地 HTTP 环境。\n\n1. 按 MDN SSE 示例 准备事件生成脚本。\n2. 用页面中的 EventSource 连接它，观察 message 与具名 ping 事件。\n3. 检查 text/event-stream 的双换行边界。\n\n文末链接完整官方示例；这不是模型接口实验。",
+          "sourceIds": [
+            "core-sse"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "db01",
+      "decision": "keep",
+      "reason": "已提供建表、数据、SQL 和确定排序结果，完整自包含；无需重复外部入门查询。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "db02",
+      "decision": "keep",
+      "reason": "NULL、空集合和平均数分母的边界已经齐全；保留和共同数据的关联。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "db03",
+      "decision": "keep",
+      "reason": "WHERE/HAVING 过滤层次已有实际 SQL 和全 NULL 分组提醒；不另加同类聚合教程。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "db04",
+      "decision": "add",
+      "reason": "ON 与 WHERE 差异是高频误用点；官方 t1/t2 的并列结果能补独立验证，不改本题订单数据。",
+      "sourceIds": [
+        "core-pg-join"
+      ],
+      "additions": [
+        {
+          "id": "db04-official-lab",
+          "kind": "lab",
+          "title": "把同一条件放在 ON 和 WHERE",
+          "body": "前提：PostgreSQL 独立练习库。\n\n1. 根据 官方表表达式例 的 t1/t2 表格准备数据。\n2. 运行文中将 t2.value 条件放在 ON 和 WHERE 的两条 LEFT JOIN 查询。\n3. 对比无匹配行是否保留。\n\n不要与本题 orders 数据混写。",
+          "sourceIds": [
+            "core-pg-join"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "db05",
+      "decision": "keep",
+      "reason": "NOT EXISTS、NOT IN 与非空前提已明确；本题自身即能检验三值逻辑，不扩成第二套样例。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "db06",
+      "decision": "add",
+      "reason": "本题已用 id 打破同值顺序；官方窗口例展示同薪排名未定，适合反衬稳定排序的重要性。",
+      "sourceIds": [
+        "core-pg-window"
+      ],
+      "additions": [
+        {
+          "id": "db06-official-lab",
+          "kind": "lab",
+          "title": "同薪员工的编号为何不确定",
+          "body": "前提：PostgreSQL 独立练习库。\n\n1. 准备 官方窗口教程 的 empsalary 示例数据。\n2. 运行按部门、薪水生成 row_number 的查询。\n3. 查看同薪行为何没有固定编号，再回看本题的 id 排序。\n\n不替换原题订单数据。",
+          "sourceIds": [
+            "core-pg-window"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "db07",
+      "decision": "keep",
+      "reason": "未知与零的业务含义已明确，避免再用 COALESCE 实验鼓励无条件填零。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "db08",
+      "decision": "keep",
+      "reason": "值参数与标识符允许列表的界限写得具体；不补与已有规则相同的注入演示。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "db09",
+      "decision": "add",
+      "reason": "ACID 定义已齐全，官方转账与保存点示例可补提交/撤销的操作过程。",
+      "sourceIds": [
+        "core-pg-transactions"
+      ],
+      "additions": [
+        {
+          "id": "db09-official-lab",
+          "kind": "lab",
+          "title": "从整笔回滚到保存点",
+          "body": "前提：PostgreSQL 独立练习库；官方事务教程 省略部分建表细节，需先准备其账户与分支示例表。\n\n1. 沿教程核对 BEGIN/COMMIT 和 ROLLBACK 示例。\n2. 再按 SAVEPOINT 示例观察撤销范围。\n\n比较整笔回滚与保存点后回滚，不在真实账户库操作。",
+          "sourceIds": [
+            "core-pg-transactions"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "db10",
+      "decision": "add",
+      "reason": "原答案强调数据库差异；补 PostgreSQL 两级快照及失败处理对照，防止只背隔离级别名称。",
+      "sourceIds": [
+        "core-pg-isolation"
+      ],
+      "additions": [
+        {
+          "id": "db10-official-comparison",
+          "kind": "comparison",
+          "title": "PostgreSQL：快照范围与重试范围",
+          "body": "| 隔离级别 | 读取视图 |\n| --- | --- |\n| Read Committed | 每条语句开始时取得快照 |\n| Repeatable Read | 从事务首条非事务控制语句开始，保持同一快照 |\n\n稳定快照不等于可串行化。官方给出并发更新冲突时重试整个事务的要求；只重试最后一条 SQL 可能仍沿用失效前提。见 PostgreSQL 事务隔离。",
+          "sourceIds": [
+            "core-pg-isolation"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "db11",
+      "decision": "keep",
+      "reason": "条件更新、影响行数、事务及幂等要求完整；本轮不补未经并发实测的防超卖代码。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "db12",
+      "decision": "add",
+      "reason": "原题要求看执行计划；官方 EXPLAIN 例可解释扫描选择，但其回归数据前提不适合作为即开即跑实验。",
+      "sourceIds": [
+        "core-pg-explain"
+      ],
+      "additions": [
+        {
+          "id": "db12-official-reference",
+          "kind": "reference",
+          "title": "从计划读懂“为什么没走索引”",
+          "body": "PostgreSQL EXPLAIN 示例 对同一 tenk1 表逐步收紧条件，展示顺序扫描、位图扫描与索引扫描的选择。\n\n先比较扫描节点、估计输出行数、Index Cond 与 Filter；cost 不是毫秒。页面使用回归测试数据与统计信息，不能直接把文中的计划或耗时套到本题五行 orders 上。",
+          "sourceIds": [
+            "core-pg-explain"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "db13",
+      "decision": "keep",
+      "reason": "已经明确首列优势和可能的跳跃扫描，保留实现依赖；不要补过时的最左前缀绝对规则。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "db14",
+      "decision": "keep",
+      "reason": "游标 SQL、唯一次序、随机跳页和数据变更代价均已写明，无需新增分页框架。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "db15",
+      "decision": "keep",
+      "reason": "数据类型与操作关联清楚，键隔离和 TTL 也已提示；不扩成 Redis 全命令清单。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "db16",
+      "decision": "keep",
+      "reason": "三类失效情景和相应措施已有对应关系，补通用缓存架构会稀释区别。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "db17",
+      "decision": "keep",
+      "reason": "并发、失败、复制延迟与强一致限制都已列出；不把某个缓存策略补成通用保证。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "db18",
+      "decision": "add",
+      "reason": "原题明确不支持任意回滚，官方事务错误示例可以直接观察执行期错误与其他命令的关系。",
+      "sourceIds": [
+        "core-redis-transactions"
+      ],
+      "additions": [
+        {
+          "id": "db18-official-lab",
+          "kind": "lab",
+          "title": "EXEC 后一条失败会怎样",
+          "body": "前提：隔离的本地 Redis 练习实例。\n\n1. 打开 官方事务错误示例，执行其中 MULTI、SET、列表操作、EXEC。\n2. 检查各条返回，以及成功命令是否撤回。\n\n区分入队错误与执行期 WRONGTYPE；不使用业务键。",
+          "sourceIds": [
+            "core-redis-transactions"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "be01",
+      "decision": "keep",
+      "reason": "原答案允许小项目简化层数，职责边界完整；不加架构模板把三层变成强制框架。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "be02",
+      "decision": "add",
+      "reason": "原题已有笔记越权情景；OWASP 的对象级授权定义可补 UUID 仍需权限检查的边界。",
+      "sourceIds": [
+        "core-bola"
+      ],
+      "additions": [
+        {
+          "id": "be02-official-aside",
+          "kind": "aside",
+          "title": "UUID 不能替代对象级授权",
+          "body": "OWASP 的 BOLA 条目把顺序 ID、UUID 和字符串都纳入对象标识：不可猜不等于有权限。授权要判断“此用户能否对这个对象执行这项动作”。\n\n可将原题扩成自己的验收项：本人笔记、他人笔记、跨租户笔记分别检查读与写；这是本项目据定义提出的检查方向，不是已运行测试。见 OWASP API1:2023。",
+          "sourceIds": [
+            "core-bola"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "be03",
+      "decision": "add",
+      "reason": "原文要求稳定键与持久协调；真实 Stripe API 的版本差异能说明幂等接口还需约定失败重放规则。",
+      "sourceIds": [
+        "core-stripe-idempotency"
+      ],
+      "additions": [
+        {
+          "id": "be03-official-comparison",
+          "kind": "comparison",
+          "title": "真实接口约定：同键失败如何返回",
+          "body": "Stripe 幂等请求文档 对 API v1 说明：执行开始后保存首次状态与响应，重复键也会重放已保存的 500。当前文档同时指出 API v2 对失败或部分失败有不同处理。\n\n因此设计自己的契约时，需要明确键范围、参数一致性与失败重试语义；不能只写“支持幂等”便套用所有平台。本项是接口参照，不需要真实账户请求。",
+          "sourceIds": [
+            "core-stripe-idempotency"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "be04",
+      "decision": "keep",
+      "reason": "专用哈希、盐、成本和认证限速已覆盖；不抄会随部署变化的固定成本参数。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "be05",
+      "decision": "add",
+      "reason": "原题提示多层重试放大但较抽象；AWS 的分层调用案例可转成简短请求数量图。",
+      "sourceIds": [
+        "core-retries"
+      ],
+      "additions": [
+        {
+          "id": "be05-official-diagram",
+          "kind": "diagram",
+          "title": "每层重试会相乘",
+          "body": "以 AWS 的分层重试说明 为依据，简化成三层、每层总共尝试三次的示意：\n\n```mermaid\nflowchart TD\n  A[\"入口：1 次意图\"] --> B[\"第一层：最多 3 次尝试\"]\n  B --> C[\"第二层：最多 9 次尝试\"]\n  C --> D[\"数据库：最多 27 次尝试\"]\n```\n\n数字是乘法示例，不是负载实测。重试预算要沿调用链协调；抖动缓解同刻重试，不会消除额外请求。",
+          "sourceIds": [
+            "core-retries"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "be06",
+      "decision": "add",
+      "reason": "官方 RabbitMQ 工作队列教程含中止 worker 后重新投递的步骤，正好观察至少一次，而非凭空新增队列实验。",
+      "sourceIds": [
+        "core-rabbit-work"
+      ],
+      "additions": [
+        {
+          "id": "be06-official-lab",
+          "kind": "lab",
+          "title": "中止 worker 后重新投递",
+          "body": "前提：本地 RabbitMQ、Python 与 Pika。\n\n1. 按 Work Queues 教程 启动多个 worker 并发送工作。\n2. 在消息尚未确认时终止其中一个 worker。\n3. 观察重新投递与确认状态。\n\n区分消费者确认和消息持久化；此例不证明业务副作用恰好一次。",
+          "sourceIds": [
+            "core-rabbit-work"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "be07",
+      "decision": "add",
+      "reason": "原题只有模式概述；Debezium 的真实路由器可补从 outbox 表到事件键/去重标识的连接图。",
+      "sourceIds": [
+        "core-outbox"
+      ],
+      "additions": [
+        {
+          "id": "be07-official-diagram",
+          "kind": "diagram",
+          "title": "真实实现映射：outbox 到消费者",
+          "body": "依据 Debezium Outbox Event Router 绘制此关系示意：\n\n```mermaid\nflowchart TD\n  T[\"同一事务：业务表与 outbox\"] --> C[\"CDC 捕获 outbox 变化\"]\n  C --> R[\"Event Router\"]\n  R --> K[\"消息主题\"]\n  K --> D[\"消费者按事件 ID 去重\"]\n```\n\n文档中的事件 id 可用于去重，aggregateid 则用于消息键与分区内顺序；两者职责不同。图不表示跨系统已获得一次性执行保证。",
+          "sourceIds": [
+            "core-outbox"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "be08",
+      "decision": "keep",
+      "reason": "池大小与等待、队列、下游容量一起考虑，答案已完整；不加入未经环境验证的连接数配置。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "be09",
+      "decision": "keep",
+      "reason": "固定窗口与令牌桶差异及维度误伤已说明；暂无必要再挂完整网关配置教程。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "be10",
+      "decision": "keep",
+      "reason": "稳定错误码、request_id 和脱敏已有清楚职责；不加虚构日志当作真实排障证据。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "be11",
+      "decision": "keep",
+      "reason": "分页上限、稳定排序、权限和总数均已覆盖；与 DB14 形成接口与查询两层，无需重复游标例。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "be12",
+      "decision": "add",
+      "reason": "原答案同时谈上传和 URL，范围较大；只补 OWASP SSRF 的已核实防护入口，帮助落实重定向与目的地校验。",
+      "sourceIds": [
+        "core-ssrf"
+      ],
+      "additions": [
+        {
+          "id": "be12-official-reference",
+          "kind": "reference",
+          "title": "抓取 URL 的校验不能止于输入框",
+          "body": "OWASP SSRF 防护说明 分别讨论应用校验与网络层限制，并提醒关闭自动跟随重定向可避免绕过输入校验。\n\n落实时按自己的抓取业务确定允许目标，再处理解析、DNS 与连接目的地；仅检查 URL 字符串前缀不足以成为完整防护。本引用只补 URL 抓取，不代替上传文件的独立规则。",
+          "sourceIds": [
+            "core-ssrf"
+          ]
+        }
+      ]
+    }
+  ]
+}

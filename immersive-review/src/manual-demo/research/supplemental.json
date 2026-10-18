@@ -1,0 +1,986 @@
+{
+  "sources": [
+    {
+      "id": "suppl-vector-capacity",
+      "title": "C++ 工作草案：vector 容量与失效规则",
+      "url": "https://eel.is/c++draft/vector.capacity",
+      "publisher": "C++ 标准委员会工作草案",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "suppl-unique-move",
+      "title": "C++ 工作草案：unique_ptr 移动构造",
+      "url": "https://eel.is/c++draft/unique.ptr.single.ctor",
+      "publisher": "C++ 标准委员会工作草案",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "suppl-ubsan",
+      "title": "Clang：UndefinedBehaviorSanitizer 使用示例",
+      "url": "https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html",
+      "publisher": "LLVM Project",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "suppl-java-exact",
+      "title": "Java 17 Math：精确整数运算",
+      "url": "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Math.html#multiplyExact(int,int)",
+      "publisher": "Oracle",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "suppl-java-wildcards",
+      "title": "Java 教程：通配符与子类型",
+      "url": "https://docs.oracle.com/javase/tutorial/java/generics/subtyping.html",
+      "publisher": "Oracle",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "suppl-java-resources",
+      "title": "Java 教程：try-with-resources",
+      "url": "https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html",
+      "publisher": "Oracle",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "suppl-go-slices",
+      "title": "A Tour of Go：切片与底层数组",
+      "url": "https://go.dev/tour/moretypes/8",
+      "publisher": "Go Project",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "suppl-go-maps",
+      "title": "A Tour of Go：map 初始化",
+      "url": "https://go.dev/tour/moretypes/19",
+      "publisher": "Go Project",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "suppl-go-defer",
+      "title": "A Tour of Go：defer 栈",
+      "url": "https://go.dev/tour/flowcontrol/13",
+      "publisher": "Go Project",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "suppl-go-close",
+      "title": "A Tour of Go：Range and Close",
+      "url": "https://go.dev/tour/concurrency/4",
+      "publisher": "Go Project",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "suppl-go-nil",
+      "title": "A Tour of Go：含 nil 底层值的接口",
+      "url": "https://go.dev/tour/methods/12",
+      "publisher": "Go Project",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "suppl-sklearn-leakage",
+      "title": "scikit-learn：数据泄露的错误与正确示例",
+      "url": "https://scikit-learn.org/stable/common_pitfalls.html#data-leakage",
+      "publisher": "scikit-learn developers",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "suppl-ml-overfit",
+      "title": "Machine Learning Crash Course：过拟合",
+      "url": "https://developers.google.com/machine-learning/crash-course/overfitting/overfitting",
+      "publisher": "Google",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "suppl-ml-threshold",
+      "title": "Machine Learning Crash Course：阈值交互练习",
+      "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding",
+      "publisher": "Google",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "suppl-ml-metrics",
+      "title": "Machine Learning Crash Course：分类指标交互练习",
+      "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall",
+      "publisher": "Google",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "suppl-ml-gradient",
+      "title": "Machine Learning Crash Course：梯度下降交互练习",
+      "url": "https://developers.google.com/machine-learning/crash-course/linear-regression/gradient-descent-exercise",
+      "publisher": "Google",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "suppl-ml-logloss",
+      "title": "Machine Learning Crash Course：Log Loss",
+      "url": "https://developers.google.com/machine-learning/crash-course/logistic-regression/loss-regularization",
+      "publisher": "Google",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "suppl-sqlite-fiddle",
+      "title": "SQLite Fiddle：浏览器 SQL 环境",
+      "url": "https://www.sqlite.org/fiddle/",
+      "publisher": "SQLite",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "suppl-postgres-join",
+      "title": "PostgreSQL：外连接与 WHERE",
+      "url": "https://www.postgresql.org/docs/current/queries-table-expressions.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "suppl-stripe-idempotency",
+      "title": "Stripe API：幂等请求及版本差异",
+      "url": "https://docs.stripe.com/api/idempotent_requests",
+      "publisher": "Stripe",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "suppl-owasp-injection",
+      "title": "OWASP LLM01：Prompt Injection",
+      "url": "https://genai.owasp.org/llmrisk/llm01-prompt-injection/",
+      "publisher": "OWASP Foundation",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    }
+  ],
+  "reviews": [
+    {
+      "sectionId": "cpp01",
+      "decision": "keep",
+      "reason": "引用、值复制与修改后的结果已经对照清楚，保留小题的短反馈。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cpp02",
+      "decision": "keep",
+      "reason": "负数整除向零截断及余数关系已说明并附工作草案，不再添加相同计算。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cpp03",
+      "decision": "keep",
+      "reason": "范围循环按值复制的原因与引用写法已经齐备，额外循环示例价值有限。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cpp04",
+      "decision": "keep",
+      "reason": "剩余换行与 std::ws 的空白吞并边界都已说明，保留准确的输入场景。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cpp05",
+      "decision": "keep",
+      "reason": "缺失键插入默认值这一副作用解释完整，不重复增加容器教程。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cpp06",
+      "decision": "keep",
+      "reason": "默认大根堆与取顶结果明确，题内无需引入自定义比较器扩展。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cpp07",
+      "decision": "keep",
+      "reason": "上下界的区间含义与重复值位置已完整给出，不再加同义图。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cpp08",
+      "decision": "add",
+      "reason": "原题限定了 push_back 已发生重分配；补充 reserve 自身也会失效，避免把预分配误当成无限有效的引用保证。",
+      "sourceIds": [
+        "suppl-vector-capacity"
+      ],
+      "additions": [
+        {
+          "id": "cpp08-supplement",
+          "kind": "aside",
+          "title": "reserve 也可能让旧引用失效",
+          "body": "`reserve(n)` 调整容量，不增加元素个数。当 `n > capacity()` 时它自身就会重新分配，并让旧引用、指针和迭代器失效。需要预留容量时，先 `reserve`，再取得元素引用；之后仍要检查是否超过容量。",
+          "sourceIds": [
+            "suppl-vector-capacity"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "cpp09",
+      "decision": "keep",
+      "reason": "动态派发问题已与析构场景隔离，保留既定考点，避免引入本题没有的 delete。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cpp10",
+      "decision": "add",
+      "reason": "原文正确区分复制与移动；所有权图能直接补足从值复制直觉切换到资源转移的理解。",
+      "sourceIds": [
+        "suppl-unique-move"
+      ],
+      "additions": [
+        {
+          "id": "cpp10-supplement",
+          "kind": "diagram",
+          "title": "移动的是所有权",
+          "body": "以本题 `auto q = std::move(p)` 为例，移动构造后，`q` 持有原来的对象，`p.get()` 为空；没有产生第二份对象。\n\n```mermaid\nflowchart LR\n  subgraph A[\"移动前\"]\n    P[\"p\"] --> X[\"唯一对象\"]\n  end\n  subgraph B[\"移动后\"]\n    Q[\"q\"] --> Y[\"原来的对象\"]\n    E[\"p：nullptr\"]\n  end\n  A -->|\"移动构造\"| B\n```\n\n依据 C++ 工作草案的移动构造后置条件重绘；不是内存地址示意图。",
+          "sourceIds": [
+            "suppl-unique-move"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "cpp11",
+      "decision": "add",
+      "reason": "本题是未定义行为，不能用一次普通运行证明结果；官方 sanitizer 示例提供适合的观察手段与边界。",
+      "sourceIds": [
+        "suppl-ubsan"
+      ],
+      "additions": [
+        {
+          "id": "cpp11-supplement",
+          "kind": "lab",
+          "title": "让溢出从静默变成诊断",
+          "body": "前提：可用的 Clang C++ 编译器与 UBSan 运行库。\n\n1. 打开 Usage 中的 signed integer overflow 示例，保留原程序作为对照。\n2. 按页面命令加入 `-fsanitize=undefined`，并由 `clang++` 完成链接。\n3. 运行并查看诊断中的运算位置与溢出数值；不要把某次输出的回绕结果当作 C++ 保证。\n\n部分检查默认报告后继续运行；是否中止由 sanitizer 选项决定。",
+          "sourceIds": [
+            "suppl-ubsan"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "cpp12",
+      "decision": "keep",
+      "reason": "指针本身与被指向对象的 const 边界已经逐项说明，保持紧凑。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "cpp-io-template",
+      "decision": "keep",
+      "reason": "输入约束、long long 容量及提升时机已覆盖，保留完整可复制模板，不添加第二套输入框架。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "java01",
+      "decision": "keep",
+      "reason": "整型与浮点除法的类型规则和结果完整，不再重复算例。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "java02",
+      "decision": "keep",
+      "reason": "引用比较与内容比较已通过显式 new 区分，无需引入字符串池旁支。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "java03",
+      "decision": "keep",
+      "reason": "数组共享与复制替代方式已说明，不重复增加拷贝模块。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "java04",
+      "decision": "keep",
+      "reason": "按下标与按值删除的重载选择已足够具体，保留原例。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "java05",
+      "decision": "keep",
+      "reason": "getOrDefault 不插入键的行为已说明，与本题的判断直接对应。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "java06",
+      "decision": "add",
+      "reason": "原题已解释提升时机；补一个实际工程中主动发现溢出的标准 API，而非继续堆输出题。",
+      "sourceIds": [
+        "suppl-java-exact"
+      ],
+      "additions": [
+        {
+          "id": "java06-supplement",
+          "kind": "aside",
+          "title": "需要报错时用 multiplyExact",
+          "body": "`1L * a * a` 先提升为 `long`，但 `long` 也有上限。需要拒绝溢出时，可使用 `Math.multiplyExact`：超出所选 `int` 或 `long` 重载的范围会抛出 `ArithmeticException`。参数类型仍决定检查的范围。",
+          "sourceIds": [
+            "suppl-java-exact"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "java07",
+      "decision": "keep",
+      "reason": "排序区间左闭右开已经明确，不扩展无关排序算法。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "java08",
+      "decision": "keep",
+      "reason": "nextInt 后的行尾处理边界完整，不添加另一种扫描器教程。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "java09",
+      "decision": "add",
+      "reason": "原文只有不变性结论；保留官方图的类型关系细节，有助于理解通配符究竟解决了哪一层兼容。",
+      "sourceIds": [
+        "suppl-java-wildcards"
+      ],
+      "additions": [
+        {
+          "id": "java09-supplement",
+          "kind": "diagram",
+          "title": "能赋给谁，不等于能写入什么",
+          "body": "下面箭头表示可以赋给的目标类型；`List<Integer>` 与 `List<Number>` 之间没有这条箭头。\n\n```mermaid\nflowchart BT\n  I[\"List&lt;Integer&gt;\"] --> E[\"List&lt;? extends Number&gt;\"]\n  N[\"List&lt;Number&gt;\"] --> E\n  E --> W[\"List&lt;?&gt;\"]\n```\n\n依据 Oracle 通配符子类型图简化重绘。`? extends Number` 允许按 `Number` 读取，但不能据此写入任意 `Number`。来源为 JDK 8 教程，图中关系同样适用于本题 Java 17。",
+          "sourceIds": [
+            "suppl-java-wildcards"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "java10",
+      "decision": "keep",
+      "reason": "final 固定引用但不冻结数组内容的区别已讲清楚。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "java11",
+      "decision": "add",
+      "reason": "原题说明 finally 的 return 会覆盖结果；用资源关闭对照补出同类覆盖问题的实用替代方式。",
+      "sourceIds": [
+        "suppl-java-resources"
+      ],
+      "additions": [
+        {
+          "id": "java11-supplement",
+          "kind": "comparison",
+          "title": "清理资源时保留真正的异常",
+          "body": "| 写法 | 读取与关闭同时失败时 |\n| --- | --- |\n| 在普通 `finally` 中直接关闭 | 关闭时抛出的异常可能遮住原来的读取异常 |\n| `try-with-resources` | 保留主体异常，关闭异常可从 suppressed exceptions 查看 |\n\n`try-with-resources` 适用于 `AutoCloseable` 资源，并按创建的反向顺序关闭。来源为 JDK 8 教程；这套机制在本题 Java 17 中仍适用。",
+          "sourceIds": [
+            "suppl-java-resources"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "java12",
+      "decision": "keep",
+      "reason": "拆箱 null 触发 NPE 的原因明确，保持题目级反馈。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "java-io-template",
+      "decision": "keep",
+      "reason": "模板已经交代空行和整行保留的限制，不另写输入层或夸大性能。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "go01",
+      "decision": "keep",
+      "reason": "数组整体值复制的结果已清楚，切片共享实验安排在 go02 避免重复。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "go02",
+      "decision": "add",
+      "reason": "把本题的共享数组结论接到可直接操作的官方例子，避免另造运行平台或混入 append 扩容条件。",
+      "sourceIds": [
+        "suppl-go-slices"
+      ],
+      "additions": [
+        {
+          "id": "go02-supplement",
+          "kind": "lab",
+          "title": "追踪两个切片共有的元素",
+          "body": "前提：浏览器能打开 Go Tour 并运行示例。\n\n1. 运行 names 数组和切片 `a`、`b` 的现成例子，确认两个切片覆盖的下标。\n2. 找到 `b[0] = \"XXX\"`，先预测 `a` 与 names 中哪一项也会变化，再运行核对。\n3. 只改变切片的起止下标，重新判断重叠区域；此例没有 `append`，结论来自共享底层数组。",
+          "sourceIds": [
+            "suppl-go-slices"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "go03",
+      "decision": "keep",
+      "reason": "nil map 的读取、存在性与长度已完整说明，初始化实验集中到写入问题。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "go04",
+      "decision": "add",
+      "reason": "原题指出写 nil map 会 panic；官方地图例子正好能单点改动并看见初始化前后的区别。",
+      "sourceIds": [
+        "suppl-go-maps"
+      ],
+      "additions": [
+        {
+          "id": "go04-supplement",
+          "kind": "lab",
+          "title": "给 nil map 分配可写空间",
+          "body": "前提：浏览器能运行 Go Tour 的 Maps 示例。\n\n1. 运行原例中的 `make(map[string]Vertex)` 与键写入，观察读回结果。\n2. 暂时去掉 `make`，保留写入语句；对比 nil map 写入时的错误。\n3. 恢复初始化，并解释为什么声明变量只得到 nil，而没有得到可写的 map。",
+          "sourceIds": [
+            "suppl-go-maps"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "go05",
+      "decision": "add",
+      "reason": "本题同时考参数求值与逆序执行；现成的 defer 栈例子能把执行时序拆开观察。",
+      "sourceIds": [
+        "suppl-go-defer"
+      ],
+      "additions": [
+        {
+          "id": "go05-supplement",
+          "kind": "lab",
+          "title": "看清 defer 的入栈和出栈",
+          "body": "前提：浏览器能运行 Go Tour 的 Stacking defers 示例。\n\n1. 运行原例，先观察普通输出 counting 与 done 的先后。\n2. 对照循环的 0 到 9 入栈顺序，检查延迟输出为何反向出现。\n3. 把循环上限改成 3，再预测结果；本例直接传参，不把闭包变量捕获混进来。",
+          "sourceIds": [
+            "suppl-go-defer"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "go06",
+      "decision": "keep",
+      "reason": "短变量声明的块级遮蔽已经准确，避免和版本化循环语义混在一起。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "go07",
+      "decision": "keep",
+      "reason": "字节、rune 与可视字符边界已有明确限制及官方依据，不把 Unicode 简化成字节计数。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "go08",
+      "decision": "add",
+      "reason": "本题是单次接收结果；官方完整生产消费例子补出关闭如何结束一段实际流程。",
+      "sourceIds": [
+        "suppl-go-close"
+      ],
+      "additions": [
+        {
+          "id": "go08-supplement",
+          "kind": "lab",
+          "title": "让接收方知道数据已经结束",
+          "body": "前提：浏览器能运行 Go Tour 的 Range and Close 示例。\n\n1. 运行 Fibonacci 示例，观察接收方通过 `range c` 读完数据后退出。\n2. 找到发送函数末尾的 `close(c)`，解释它为何由发送方执行。\n3. 对照本题的二值接收：关闭后的缓冲区仍可继续读，耗尽后才得到零值与 `false`。",
+          "sourceIds": [
+            "suppl-go-close"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "go09",
+      "decision": "add",
+      "reason": "原题只问接口比较；官方示例还展示 nil 接收者方法的实际行为，能防止把非空接口当成对象可用保证。",
+      "sourceIds": [
+        "suppl-go-nil"
+      ],
+      "additions": [
+        {
+          "id": "go09-supplement",
+          "kind": "lab",
+          "title": "接口非空，接收者却可以是 nil",
+          "body": "前提：浏览器能运行 Go Tour 的 nil underlying values 示例。\n\n1. 运行原例，查看接口中保存的动态类型与底层值。\n2. 找到 `M` 方法对 `t == nil` 的处理，解释为什么仍然能调用这个方法。\n3. 对照本题：接口是否等于 nil，与指针接收者是否为 nil 是两个检查。",
+          "sourceIds": [
+            "suppl-go-nil"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "go10",
+      "decision": "keep",
+      "reason": "已明确遍历顺序没有保证而非每次必然不同，不补伪随机实验。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "go11",
+      "decision": "keep",
+      "reason": "Go 1.22 循环变量版本条件和 := 前提已经写明并引用发布说明，保留现有边界。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "go12",
+      "decision": "keep",
+      "reason": "有类型整数的显式转换规则已经完整，不重复语言规范摘要。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "go-io-template",
+      "decision": "keep",
+      "reason": "模板明确 bufio、int64 和 Flush，且没有超出证据的性能保证，保留。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "mock01",
+      "decision": "keep",
+      "reason": "循环计数与时间复杂度推导完整，不额外引入同型算法例子。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "mock02",
+      "decision": "keep",
+      "reason": "BFS 的无权前提与最短路径结论完整，保留单一判别题。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "mock03",
+      "decision": "keep",
+      "reason": "题目已规定操作交错且排除了语言级竞争语义，继续保留这条边界。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "mock04",
+      "decision": "keep",
+      "reason": "线程共享地址空间与各自栈寄存器的区分完整，不添加操作系统实验。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "mock05",
+      "decision": "keep",
+      "reason": "锁顺序结论限定于题目中的锁，未承诺解决所有死锁，保留。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "mock06",
+      "decision": "keep",
+      "reason": "TCP 字节流与业务分帧责任已经分清，相关协议内容留在专章。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "mock07",
+      "decision": "keep",
+      "reason": "401 与 403 已区分身份与权限，继续保持短答案。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "mock08",
+      "decision": "keep",
+      "reason": "A 记录的 IPv4 映射含义完整，不扩展整套 DNS 流程。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "mock09",
+      "decision": "keep",
+      "reason": "COUNT 和 SUM 对 NULL 的规则以及结果已齐备，共享数据入口另行补充。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "mock10",
+      "decision": "add",
+      "reason": "原题有正确 SQL；采用 PostgreSQL 官方表表达式的前后阶段对照，将容易混淆的两个位置直接并列。",
+      "sourceIds": [
+        "suppl-postgres-join"
+      ],
+      "additions": [
+        {
+          "id": "mock10-supplement",
+          "kind": "comparison",
+          "title": "过滤发生在连接之前还是之后",
+          "body": "| 条件位置 | 未匹配到 paid 订单的用户 |\n| --- | --- |\n| `LEFT JOIN ... ON ... AND o.status = 'paid'` | 仍保留，订单列由 NULL 补齐 |\n| `LEFT JOIN ... ON ... WHERE o.status = 'paid'` | 补齐行不能通过 WHERE，被过滤掉 |\n\n这也是外连接不能随意把 ON 条件挪到 WHERE 的原因。右表计数使用 `COUNT(o.id)`，避免把补齐行当作一笔订单。",
+          "sourceIds": [
+            "suppl-postgres-join"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "mock11",
+      "decision": "keep",
+      "reason": "原子性已用整体提交或回滚解释，保持与隔离性等其他属性的边界。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "mock12",
+      "decision": "keep",
+      "reason": "回归用例同时覆盖空数组与正常路径，已经适合本题需求。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "mock13",
+      "decision": "add",
+      "reason": "原题的幂等条件正确；真实 API 的失败响应与版本差异能补足重试不等于成功这个工程边界。",
+      "sourceIds": [
+        "suppl-stripe-idempotency"
+      ],
+      "additions": [
+        {
+          "id": "mock13-supplement",
+          "kind": "aside",
+          "title": "同一个 key 不保证这次会成功",
+          "body": "幂等保护的是重复副作用。Stripe 的 API v1 会保存端点开始执行后的首次状态码与响应，重试可能再次得到同一个 500；API v2 的失败重试语义又不同。因此要按具体服务与版本确认幂等契约，不能只看到同一个 key 就认定业务已经完成。",
+          "sourceIds": [
+            "suppl-stripe-idempotency"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "mock14",
+      "decision": "keep",
+      "reason": "检索指标与最终答案指标已分层，不再将另一个检索评测教程塞进模拟题。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "mock15",
+      "decision": "add",
+      "reason": "原题已给正确判断；补充对应的一手风险定义和可落在工具侧的控制点，不另造攻击演示。",
+      "sourceIds": [
+        "suppl-owasp-injection"
+      ],
+      "additions": [
+        {
+          "id": "mock15-supplement",
+          "kind": "reference",
+          "title": "把内容与执行权限分开",
+          "body": "OWASP 将外部文档中的恶意指令列为间接提示注入。对应本题，检索到的文字可以作为待分析内容，但不能据此获得工具权限；工具侧仍需用代码校验参数、限制可访问资源，并对高影响操作设置批准条件。仅把模型输出改为 JSON 不能建立这些权限边界。",
+          "sourceIds": [
+            "suppl-owasp-injection"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "ml01",
+      "decision": "add",
+      "reason": "原文已提示数据泄露；随机标签实验让虚高分数与错误处理顺序形成可验证联系。",
+      "sourceIds": [
+        "suppl-sklearn-leakage"
+      ],
+      "additions": [
+        {
+          "id": "ml01-supplement",
+          "kind": "lab",
+          "title": "随机标签也能被做出虚高分数",
+          "body": "前提：Python、NumPy 与 scikit-learn；使用页面的 Data leakage during pre-processing 示例。\n\n1. 按示例构造随机标签数据，查看先在全部数据上做特征选择的错误流程。\n2. 对照正确流程：先切分，再只用训练集拟合特征选择器，测试集仅做转换。\n3. 再读 Pipeline 写法，检查交叉验证时预处理如何留在每个训练折内。\n\n比较流程造成的差异，不要求每个环境复现页面的同一个分数。",
+          "sourceIds": [
+            "suppl-sklearn-leakage"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "ml02",
+      "decision": "add",
+      "reason": "原题的处理原则完整；补充保留官方先猜再揭示的视觉例子，而非再写一段过拟合定义。",
+      "sourceIds": [
+        "suppl-ml-overfit"
+      ],
+      "additions": [
+        {
+          "id": "ml02-supplement",
+          "kind": "reference",
+          "title": "先画分界，再看新样本",
+          "body": "Google 的森林分类例子先展示训练点，允许你先想一个分界；展开复杂边界后，再用新样本观察它如何失效。随后对照训练与验证损失分叉的示意图。这里观察的是泛化差距，不把某条示意曲线当成自己的训练测量结果。",
+          "sourceIds": [
+            "suppl-ml-overfit"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "ml03",
+      "decision": "add",
+      "reason": "原题展示多数类准确率陷阱；用同一组样本改变阈值，能看见分类决策而不只是记指标名称。",
+      "sourceIds": [
+        "suppl-ml-threshold"
+      ],
+      "additions": [
+        {
+          "id": "ml03-supplement",
+          "kind": "lab",
+          "title": "少数类里移动一次阈值",
+          "body": "前提：浏览器可加载页面的阈值交互组件。\n\n1. 切换到 Imbalanced 数据集，先看正例在样本中的占比。\n2. 将阈值从 0.1 调到 0.9，比较 TP、FP、FN、TN 的变化。\n3. 选定一个更在意漏报或误报的场景，解释为何不能只凭 accuracy 选择阈值。\n\n示例分数不代表现实系统已校准的概率。",
+          "sourceIds": [
+            "suppl-ml-threshold"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "ml04",
+      "decision": "add",
+      "reason": "原题已有完整手算；交互练习补充指标联动及零分母边界，与单独套公式形成互补。",
+      "sourceIds": [
+        "suppl-ml-metrics"
+      ],
+      "additions": [
+        {
+          "id": "ml04-supplement",
+          "kind": "lab",
+          "title": "让 precision 与 recall 同时动起来",
+          "body": "前提：浏览器可加载页面的 Try it yourself 组件。\n\n1. 选定一组数据与阈值，先根据混淆矩阵手算 precision 和 recall。\n2. 提高阈值，再核对组件中的结果；记录得到更少预测正例后牺牲了什么。\n3. 找到没有预测正例的情形，检查分母为零时的显示；不要把未定义值直接当成 0 或 1。",
+          "sourceIds": [
+            "suppl-ml-metrics"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "ml05",
+      "decision": "keep",
+      "reason": "点积、余弦及零向量不可直接计算普通余弦的边界齐备，保留简明计算。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "ml06",
+      "decision": "add",
+      "reason": "原题手算一次更新；官方交互图补出迭代过程与步长的可见影响，且明确数据不同。",
+      "sourceIds": [
+        "suppl-ml-gradient"
+      ],
+      "additions": [
+        {
+          "id": "ml06-supplement",
+          "kind": "lab",
+          "title": "同一条损失曲线，不同的步长",
+          "body": "前提：浏览器可加载梯度下降练习的图表。\n\n1. 按第一个任务把学习率设为 0.03，运行并观察参数与损失如何同步变化。\n2. 重置后改为 1.10e-5，比较相同观察时间内的进展。\n3. 回到本题的一步更新，指出学习率乘在梯度的哪里；页面使用另一组数据，不应得到本题的数值。",
+          "sourceIds": [
+            "suppl-ml-gradient"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "ml07",
+      "decision": "keep",
+      "reason": "不放回且已知首球颜色的条件已经明确，无需额外概率可视化。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "ml08",
+      "decision": "add",
+      "reason": "原题只计算 y=1；一个双行对照比完整推导更直接地堵住把 -ln(p) 当通用公式的误区。",
+      "sourceIds": [
+        "suppl-ml-logloss"
+      ],
+      "additions": [
+        {
+          "id": "ml08-supplement",
+          "kind": "comparison",
+          "title": "把标签为 0 的另一半补齐",
+          "body": "设 `p` 是模型给正类的概率，且 `0 < p < 1`。\n\n| 真实标签 | 单样本损失 |\n| --- | --- |\n| `y = 1` | `-ln(p)` |\n| `y = 0` | `-ln(1 - p)` |\n\n两种情况都在惩罚给真实类别过低的概率；对整个数据集通常再取平均。因此本题的 `-ln(p)` 是标签为 1 时的特例。",
+          "sourceIds": [
+            "suppl-ml-logloss"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "lg01",
+      "decision": "keep",
+      "reason": "与 Java 对象相等和哈希主题重复，保留复述题，不二次添加扩展。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "lg02",
+      "decision": "keep",
+      "reason": "生命周期与 vector 失效已有专节说明，补充模块集中在 cpp08。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "lg03",
+      "decision": "keep",
+      "reason": "切片共享及 append 条件已有解答，Go Tour 实验集中在 go02。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "lg04",
+      "decision": "keep",
+      "reason": "goroutine 与线程、无缓冲 channel 阻塞已说明，避免重复并发教程。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "ap01",
+      "decision": "keep",
+      "reason": "基数变化是该题唯一关键点，计算完整，保留。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "ap02",
+      "decision": "keep",
+      "reason": "效率相加的题设前提已明确，保留直接计算，不推广成现实团队规律。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "ap03",
+      "decision": "keep",
+      "reason": "充分条件与逆否命题已准确区分，保留短逻辑题。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "ap04",
+      "decision": "keep",
+      "reason": "增长率的分母基数与计算完整，无需增加展示模块。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "sql-dataset",
+      "decision": "add",
+      "reason": "为共享数据提供真实的轻量练习入口；只作为执行环境引用，不把工具页面说成已有完整题库实验。",
+      "sourceIds": [
+        "suppl-sqlite-fiddle"
+      ],
+      "additions": [
+        {
+          "id": "sql-dataset-supplement",
+          "kind": "reference",
+          "title": "用浏览器核对这份数据",
+          "body": "SQLite Fiddle 提供可直接输入 SQL 的浏览器终端，需支持 WebAssembly。可在新的临时数据库里粘贴本节建表与插入语句，再用 `SELECT` 核对用户、订单和 NULL。它适合本节通用 SQL 练习；PostgreSQL 专有语法与执行行为仍应在目标数据库验证。",
+          "sourceIds": [
+            "suppl-sqlite-fiddle"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "practice-method",
+      "decision": "keep",
+      "reason": "这是用户可执行的练习方法，不需要再叠一套学习指南。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "two-day-plan",
+      "decision": "keep",
+      "reason": "保留通用学习安排，训练目标由读者自主选择，练习结果用于发现具体知识缺口。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "gap-check",
+      "decision": "keep",
+      "reason": "保留通用学习安排，训练目标由读者自主选择，练习结果用于发现具体知识缺口。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "practice-followup",
+      "decision": "keep",
+      "reason": "后续练习与原计划紧密相连，不再新增全局课程或重复待办。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "language-choice",
+      "decision": "keep",
+      "reason": "保留通用学习安排，训练目标由读者自主选择，练习结果用于发现具体知识缺口。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "language-practice",
+      "decision": "keep",
+      "reason": "保留通用学习安排，训练目标由读者自主选择，练习结果用于发现具体知识缺口。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "mock-conditions",
+      "decision": "keep",
+      "reason": "保留通用学习安排，训练目标由读者自主选择，练习结果用于发现具体知识缺口。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "technical-sources",
+      "decision": "keep",
+      "reason": "保留通用学习安排，训练目标由读者自主选择，练习结果用于发现具体知识缺口。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "online-practice",
+      "decision": "keep",
+      "reason": "保留通用学习安排，训练目标由读者自主选择，练习结果用于发现具体知识缺口。",
+      "sourceIds": [],
+      "additions": []
+    }
+  ]
+}

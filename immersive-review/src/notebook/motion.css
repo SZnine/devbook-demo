@@ -1,0 +1,41 @@
+/* Motion belongs to controls, not page navigation. Local transitions can reverse
+   from their current position on repeated clicks without replaying the screen. */
+:root{--read-motion-ease:cubic-bezier(.22,1,.36,1)}
+.notebook.nb-native-workspace :is(.nb-main,.nb-feed,.nb-library,.nb-reader,.nb-start,.nb-memory-view,.chapter-workspace,.cw-page,.cw-home,.nb-reference-outline,.na-panel){animation:none!important}
+
+/* Keep both states mounted so collapsing has a real height transition too. */
+.notebook .nb-tree-children{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows 220ms var(--read-motion-ease),opacity 140ms ease}
+.notebook .nb-tree-children[data-open=true]{grid-template-rows:1fr;opacity:1}
+.notebook .nb-tree-children-content{min-height:0;overflow:hidden}
+.notebook .nb-tree-children[data-open=true]>.nb-tree-children-content:has(.nb-navigation-menu){overflow:visible}
+.notebook .nb-sidebar-scroll{overflow-anchor:none}
+.notebook.nb-native-workspace :is(.nb-tree-disclosure svg,.nb-reference-navigation>summary>svg,.nb-answer-reveal svg:last-child){transition:transform 200ms var(--read-motion-ease)}
+.notebook.nb-native-workspace :is(.nb-tree-row,.nb-primary>button,.nb-sidebar-item,.nb-tree-disclosure,.nb-tree-more,.nro-row,.nb-reference-navigation>summary,.nb-icon,.cl-icon,.mi-tool,.cw-icon,.nb-answer-reveal){transition:background-color 130ms ease,color 130ms ease,box-shadow 130ms ease,opacity 130ms ease}
+.notebook.nb-native-workspace :is(.nb-tree-disclosure,.nb-icon,.cl-icon,.cw-icon){transition:background-color 130ms ease,color 130ms ease,scale 100ms ease}
+.notebook.nb-native-workspace :is(.nb-tree-disclosure,.nb-icon,.cl-icon,.cw-icon):active{transform:none;scale:.94}
+.notebook.nb-native-workspace .nb-tree-row:has(>.nb-tree-open:active){background:#dce3ed}
+.notebook.nb-native-workspace[data-theme=dark] .nb-tree-row:has(>.nb-tree-open:active){background:#34373e}
+.notebook .nb-tree-more{transition:opacity 130ms ease,background-color 130ms ease}
+
+/* UI labels don't become accidental selections on double/triple clicks.
+   Reading text remains selectable, including editors inside toolbar/side panels. */
+.notebook :is(button,summary,[role=button],[role=tab],.nb-sidebar,.nb-reference-outline,.nb-page-header,[role=toolbar],[role=menu],.component-library,.nb-composer-tools,.cw-toolbar,.nb-selection-bar,.cw-selection-bar){-webkit-user-select:none;user-select:none}
+.notebook :is(input,textarea,[contenteditable=true],[contenteditable=true] *){-webkit-user-select:text;user-select:text}
+
+.notebook :is(.nb-memory-badge,.nb-record,.nb-memory-bar span,.cw-freshness){transition:background-color 220ms ease,color 220ms ease,width 220ms var(--read-motion-ease),border-color 220ms ease}
+.notebook.nb-craft .nb-answer-mode{position:relative;isolation:isolate}
+.notebook.nb-craft .nb-answer-mode::before{content:'';position:absolute;inset:3px auto 3px 3px;width:calc((100% - 8px)/2);border-radius:6px;background:#fff;box-shadow:0 1px 3px #26314912;z-index:-1;transition:translate 200ms var(--read-motion-ease),background-color 140ms ease}
+.notebook.nb-craft .nb-answer-mode:has(button:last-child[aria-pressed=true])::before{translate:calc(100% + 2px) 0}
+.notebook.nb-craft .nb-answer-mode>button[aria-pressed=true]{background:transparent;box-shadow:none}
+.notebook.nb-craft[data-theme=dark] .nb-answer-mode::before{background:#2c2e33;box-shadow:0 1px 3px #0002}
+.notebook .nbc-tag-picker[popover]{opacity:0;translate:0 4px;transition:opacity 140ms ease,translate 180ms var(--read-motion-ease),display 180ms allow-discrete,overlay 180ms allow-discrete}
+.notebook .nbc-tag-picker:popover-open{opacity:1;translate:0 0}
+@starting-style{.notebook .nbc-tag-picker:popover-open{opacity:0;translate:0 4px}}
+@supports(interpolate-size:allow-keywords){
+  .notebook details{interpolate-size:allow-keywords}
+  .notebook details::details-content{height:0;opacity:0;overflow:clip;transition:height 220ms var(--read-motion-ease),opacity 140ms ease,content-visibility 220ms allow-discrete}
+  .notebook details[open]::details-content{height:auto;opacity:1}
+}
+@media(prefers-reduced-motion:reduce){
+  .notebook *,.notebook *::before,.notebook details::details-content{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+}

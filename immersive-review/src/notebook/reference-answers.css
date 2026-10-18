@@ -1,0 +1,34 @@
+/* Continuous solutions and an explicit recall option, informed by React Learn.
+   Keep the notebook's neutral surfaces rather than copying React's blue canvas. */
+.notebook.nb-craft .nb-answer-mode{display:flex;flex:none;gap:2px;padding:3px;border:1px solid #dfe2e8;border-radius:9px;background:#e6e8ed}
+.notebook.nb-craft .nb-answer-mode>button{min-width:43px;height:26px;padding:0 9px;border-radius:6px;color:#767b85;font-size:12px;line-height:26px;transition:background 120ms ease,color 120ms ease}
+.notebook.nb-craft .nb-answer-mode>button[aria-pressed=true]{background:#fff;color:#414752;box-shadow:0 1px 3px #26314912}
+.notebook.nb-craft .nb-answer-mode>button:hover{color:#356ba0}
+.notebook.nb-craft .nb-answer-sheet{margin:24px 0 0;padding:20px 22px;border:1px solid #e1e4ea;border-radius:12px;background:#fafbfd;box-shadow:0 1px 2px #26314904;color:#454b55}
+.notebook.nb-craft .nb-answer-sheet[hidden]{display:none}
+.notebook.nb-craft .nb-answer-heading{display:flex;align-items:center;gap:8px;margin:0 0 13px;color:#698596}
+.notebook.nb-craft .nb-answer-heading>svg{width:16px;height:16px;flex:none;color:#4e8eae}
+.notebook.nb-craft .nb-answer-heading>h4{margin:0;color:inherit;font-size:12px;line-height:20px;font-weight:550;letter-spacing:.02em}
+.notebook.nb-craft .nb-answer-part+.nb-answer-part{margin-top:20px;padding-top:16px;border-top:1px solid #e7eaf0}
+.notebook.nb-craft .nb-answer-part-label{margin:0 0 8px;font-size:12px;line-height:1.6;font-weight:550;color:#7a8492}
+.notebook.nb-craft .nb-answer-sheet .markdown{font-size:15px;line-height:1.85;color:inherit}
+.notebook.nb-craft .nb-answer-sheet .markdown>:first-child{margin-top:0}
+.notebook.nb-craft .nb-answer-sheet .markdown>:last-child{margin-bottom:0}
+.notebook.nb-craft .nb-answer-reveal{display:inline-flex;align-items:center;gap:7px;margin:20px 0 0;padding:7px 12px;border:1px solid #d8e2ed;border-radius:9px;background:#edf3f9;color:#487599;font-size:12px;line-height:20px;font-weight:500;transition:background 120ms ease,border-color 120ms ease}
+.notebook.nb-craft .nb-answer-reveal:hover{background:#e1ecf7;border-color:#bfd3e5}
+.notebook.nb-craft .nb-answer-reveal>svg{width:15px;height:15px}
+.notebook.nb-craft .nb-answer-reveal>svg:last-child{width:12px;height:12px;opacity:.65;transform:rotate(90deg)}
+.notebook.nb-craft .nb-answer-reveal[aria-expanded=true]>svg:last-child{transform:rotate(-90deg)}
+.notebook.nb-craft .nb-answer-reveal+.nb-answer-sheet{margin-top:12px}
+.notebook.nb-craft .nb-answer-mode>button:focus-visible,.notebook.nb-craft .nb-answer-reveal:focus-visible{outline:2px solid #5998c9;outline-offset:3px}
+.notebook.nb-craft[data-theme="dark"] .nb-answer-mode{background:#101113;border-color:#373a40}
+.notebook.nb-craft[data-theme="dark"] .nb-answer-mode>button{color:#909296}
+.notebook.nb-craft[data-theme="dark"] .nb-answer-mode>button[aria-pressed=true]{background:#2c2e33;color:#f1f3f5;box-shadow:0 1px 3px #0002}
+.notebook.nb-craft[data-theme="dark"] .nb-answer-sheet{background:#1a1b1e;border-color:#303237;color:#c1c2c5;box-shadow:0 1px 2px #0002}
+.notebook.nb-craft[data-theme="dark"] .nb-answer-heading{color:#98acb8}
+.notebook.nb-craft[data-theme="dark"] .nb-answer-heading>svg{color:#74a9c3}
+.notebook.nb-craft[data-theme="dark"] .nb-answer-part+.nb-answer-part{border-color:#303237}
+.notebook.nb-craft[data-theme="dark"] .nb-answer-part-label{color:#909ba8}
+.notebook.nb-craft[data-theme="dark"] .nb-answer-reveal{background:#222a31;border-color:#35424c;color:#9bbdd3}
+.notebook.nb-craft[data-theme="dark"] .nb-answer-reveal:hover{background:#293640;border-color:#485e6e}
+@media(prefers-reduced-motion:reduce){.notebook.nb-craft .nb-answer-mode>button,.notebook.nb-craft .nb-answer-reveal{transition:none}}

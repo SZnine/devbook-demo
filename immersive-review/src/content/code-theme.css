@@ -1,0 +1,18 @@
+/* Native text highlights inherit from the edited element, so changing theme
+   never replaces its DOM, selection, composition state or undo history. */
+html[data-read-theme="dark"], .notebook[data-theme="dark"] {
+  --read-code-keyword: #f97583;
+  --read-code-string: #9ecbff;
+  --read-code-number: #79b8ff;
+  --read-code-comment: #878e96;
+  --read-code-title: #b392f0;
+  --read-code-variable: #e1e4e8;
+}
+.notebook[data-theme="light"] {
+  --read-code-keyword: #7b34d9;
+  --read-code-string: #2c6e1e;
+  --read-code-number: #a54107;
+  --read-code-comment: #5d5f6e;
+  --read-code-title: #1a57d1;
+  --read-code-variable: #c00e34;
+}

@@ -1,0 +1,24 @@
+.markdown img { display:block; max-width:100%; height:auto; margin:1.2em auto; border-radius:6px; }
+.markdown figure { margin:1.25em 0; min-width:0; }
+.markdown figcaption { margin:.6em 0 0; font-size:12px; color:#a2a6ae; text-align:center; }
+.markdown mark { color:#efdfb7; background:#56472b; border-radius:2px; padding:0 2px; }
+.markdown kbd { border:1px solid #50545d; border-bottom-width:2px; padding:1px 5px; border-radius:4px; font: .84em Consolas, monospace; }
+.markdown .callout { margin:1.3em 0; padding:13px 17px; border-left:3px solid #88a7cb; background:#8da6c80c; border-radius:0 5px 5px 0; }
+.markdown .callout[data-subtype="WARNING"],.markdown .callout[data-subtype="CAUTION"] { border-color:#ceb277; background:#ceb2770c; }
+.markdown .callout-info { display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:13px; font-weight:600; color:#b5c8df; }
+.markdown .callout-icon { display:none; }
+.markdown .callout-content>:last-child { margin-bottom:0; }
+.markdown .footnotes-defs-div { color:#a8acb4; font-size:.86em; margin-top:2em; }
+.markdown .footnotes-ref a { padding:2px 4px; text-decoration:none; }
+.markdown [id] { scroll-margin-top:calc(var(--reading-nav-offset, 0px) + 22px); }
+.markdown .math-block { max-width:100%; overflow-x:auto; overflow-y:hidden; padding:10px 0; margin:1em 0; }
+.markdown .math-inline { white-space:normal; }
+.markdown .katex { font-size:1.12em; color:inherit; }
+.markdown .katex-display { margin:0; }
+.markdown .table-scroll:focus-visible { outline:2px solid #a7bade; outline-offset:3px; }
+.markdown .document-diagram { position:relative; border:1px solid #343b46; padding:20px 14px 8px; border-radius:8px; background:#202329; }
+.markdown .diagram-surface { max-width:100%; overflow:auto; text-align:center; }
+.markdown .diagram-surface svg { display:block; width:100%; height:auto; min-width:220px; margin:auto; }
+.markdown .diagram-source-toggle { display:block; margin:5px 0 0 auto; min-height:36px; padding:6px 10px; border:0; background:none; color:#a9b7cb; font-size:12px; }
+.markdown [data-content-control] { user-select:none; }
+@media(max-width:650px) { .markdown .diagram-source-toggle { min-height:44px; } .markdown .document-diagram { padding:12px 8px 4px; } }

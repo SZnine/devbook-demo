@@ -1,0 +1,40 @@
+# Dependencies and generated output
+**/node_modules/
+/immersive-review/dist/
+/immersive-review/build/
+**/coverage/
+**/*.tsbuildinfo
+**/.vite/
+**/test-results/
+**/playwright-report/
+**/acceptance/
+*.log
+
+# Private runtime data and credentials (all depths)
+**/.local/
+**/data/
+**/.env
+**/.env.*
+!**/.env.example
+**/assistant-config*.json
+**/*.private.*
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.sqlite*
+**/*.db
+**/*.db-*
+
+# Personal exports, old research and local tooling
+/.archive/
+/research/
+**/exports/
+**/backups/
+*.zip
+*.tar
+*.gz
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

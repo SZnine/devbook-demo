@@ -1,0 +1,5 @@
+.nb-craft .nb-page-header>.nb-theme-toggle{flex:none;width:32px;height:32px;margin-left:0;padding:7px!important;border:1px solid #e3e2ee;border-radius:10px;background:#f5f3fb;color:#8270b7!important}
+.nb-craft .nb-page-header>.nb-theme-toggle:hover{background:#eae5f6}
+.nb-craft .nb-page-header>.nb-theme-toggle svg{width:17px;height:17px}
+.notebook.nb-craft[data-theme="dark"] .nb-page-header>.nb-theme-toggle.nb-icon{border-color:#373a40;background:#25262b;color:#ffd43b!important;box-shadow:none}
+.notebook.nb-craft[data-theme="dark"] .nb-page-header>.nb-theme-toggle.nb-icon:hover{background:#2c2e33;color:#ffe066!important}

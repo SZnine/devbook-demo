@@ -1,0 +1,186 @@
+.chapter-editor {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  color: #34373c;
+  background: #fff;
+}
+
+.chapter-editor .vditor {
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  --border-color: #e7e4e0;
+  --toolbar-background-color: #faf9f7;
+  --toolbar-icon-color: #77716b;
+  --toolbar-icon-hover-color: #393632;
+  --toolbar-icon-hover-background: #eeebe6;
+  --textarea-background-color: #fff;
+  --textarea-text-color: #34322f;
+  --panel-background-color: #fff;
+}
+
+.chapter-editor .vditor-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 38px;
+  margin: 0 0 14px;
+  padding: 3px 5px !important;
+  border: 1px solid #e9e6e1;
+  border-radius: 4px;
+  background: #faf9f7;
+  box-shadow: none;
+}
+
+.chapter-editor .vditor-toolbar__item { padding: 0 1px; }
+.chapter-editor .vditor-toolbar__item > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  padding: 6px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  box-shadow: none;
+}
+.chapter-editor .vditor-toolbar__item > button:hover { background: #eeebe6; }
+.chapter-editor .vditor-toolbar__item > button:focus-visible { outline: 2px solid #7b9ec9; outline-offset: 1px; }
+.chapter-editor .vditor-toolbar__item > button svg { width: 15px; height: 15px; }
+.chapter-editor .vditor-toolbar__divider { margin: 7px 5px; height: 15px; border-color: #e3dfd9; }
+.chapter-editor .vditor-content { min-height: 180px; overflow: visible; }
+.chapter-editor .vditor-wysiwyg,
+.chapter-editor .vditor-ir { min-height: 180px; overflow: visible; }
+.chapter-editor .vditor-reset,
+.chapter-editor .vditor-sv {
+  min-height: 180px;
+  padding: 0 0 24px !important;
+  border: 0;
+  outline: none;
+  color: #34373c;
+  background: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  font-size: 16px;
+  line-height: 1.85;
+  letter-spacing: .005em;
+}
+.chapter-editor .vditor-sv {
+  resize: vertical;
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.chapter-editor .vditor-reset p { margin: 0 0 12px; }
+.chapter-editor .vditor-wysiwyg .vditor-reset h1,
+.chapter-editor .vditor-wysiwyg .vditor-reset h2,
+.chapter-editor .vditor-wysiwyg .vditor-reset h3 {
+  margin: 28px 0 12px;
+  padding: 0;
+  border: 0;
+  color: #2b2926;
+  line-height: 1.4;
+  letter-spacing: -.02em;
+}
+.chapter-editor .vditor-wysiwyg .vditor-reset h1 { font-size: 28px; }
+.chapter-editor .vditor-wysiwyg .vditor-reset h2 { font-size: 23px; }
+.chapter-editor .vditor-wysiwyg .vditor-reset h3 { font-size: 19px; }
+.chapter-editor .vditor-wysiwyg .vditor-reset > :first-child { margin-top: 0; }
+.chapter-editor .vditor-reset blockquote { margin: 18px 0; padding: 2px 0 2px 18px; border-left: 3px solid #b6c4dd; color: #6b7380; }
+.chapter-editor .vditor-reset pre { margin: 16px 0; padding: 16px 18px; border:1px solid #dce0e8; border-radius: 10px; background: #eff1f5; color:#4c4f69; box-shadow: none; }
+.chapter-editor .vditor-reset pre > code,
+.chapter-editor .vditor-reset pre > code:not(.hljs):not(.highlight-chroma) { display: block; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; background-image: none; font: 13px/1.75 "Cascadia Code", Consolas, monospace; }
+.chapter-editor .vditor-reset [data-type="code-block"] { margin: 16px 0; padding: 0; line-height: 1.75; }
+.chapter-editor .vditor-reset [data-type="code-block"] > pre { margin: 0; }
+.chapter-editor .vditor-reset [data-type="code-block"]:not(.vditor-ir__node--expand) > .vditor-ir__marker { display: none; }
+.chapter-editor .vditor-reset [data-type="code-block"]::before,
+.chapter-editor .vditor-reset [data-type="code-block"]::after { display: none; }
+.chapter-editor .vditor-reset [data-type="code-block"].vditor-ir__node--expand { padding: 10px 16px; border-radius: 10px; background: #eff1f5; color:#4c4f69; }
+.chapter-editor .vditor-reset [data-type="code-block"].vditor-ir__node--expand::before,
+.chapter-editor .vditor-reset [data-type="code-block"].vditor-ir__node--expand::after { display: inline; font: 13px/1.75 "Cascadia Code", Consolas, monospace; }
+.chapter-editor .vditor-reset [data-type="code-block"].vditor-ir__node--expand > pre { padding: 0; background: transparent; }
+.chapter-editor .vditor-reset [data-type="code-block"].vditor-ir__node--expand > [data-local-highlight] { display: none; }
+.chapter-editor .vditor-reset [data-type="code-block"] > .vditor-ir__marker--info { font: 12px/1.75 "Cascadia Code", Consolas, monospace; }
+.chapter-editor .vditor-wysiwyg pre.vditor-reset { margin: 0; border-radius: 0; box-shadow: none; }
+.chapter-editor .vditor-wysiwyg [data-type="code-block"] > pre { margin: 0; padding: 16px 18px; border:1px solid #dce0e8; border-radius: 10px; background: #eff1f5; color:#4c4f69; }
+.chapter-editor .vditor-wysiwyg > .vditor-reset > :is(h1,h2,h3,h4,h5,h6)::before { content: none; }
+.chapter-editor .vditor-reset code:not(.hljs):not(.highlight-chroma) { background-image: none; }
+.chapter-editor .vditor-reset li { margin: 5px 0; }
+.chapter-editor .vditor-reset a { color: #4d7ca7; }
+.chapter-editor .vditor-reset:empty::before { color: #aaa29a; }
+.chapter-editor .vditor-panel,
+.chapter-editor .vditor-hint { border: 1px solid #e8e3dd; border-radius: 9px; box-shadow: 0 7px 24px #29201917, 0 1px 3px #29201908; }
+.chapter-editor .vditor-hint button { border-radius: 4px; font-family: inherit; }
+.chapter-editor .vditor-wysiwyg__popover { border-radius: 7px; box-shadow: 0 4px 16px #29201914; }
+.chapter-editor-loading { min-height: 180px; padding: 16px 0; color: #9a928a; font-size: 13px; }
+.chapter-editor-footer { display: flex; align-items: center; gap: 8px; padding: 8px 0 6px; }
+.chapter-editor-error { flex: 1; color: #a05c4e; font-size: 12px; }
+.chapter-editor-footer > button {
+  min-width: 54px;
+  height: 30px;
+  padding: 0 13px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font: 500 12px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  cursor: pointer;
+  transition: background-color 130ms;
+}
+.chapter-editor-footer > .chapter-editor-cancel { background: transparent; color: #91877d; }
+.chapter-editor-footer > .chapter-editor-cancel:hover { background: #f2efeb; color: #564e47; }
+.chapter-editor-footer > .chapter-editor-save { background: #e9eff6; color: #4a709b; }
+.chapter-editor-footer > .chapter-editor-save:hover { background: #dde7f1; }
+.chapter-editor-footer > button:focus-visible { outline: 2px solid #7b9ec9; outline-offset: 2px; }
+.chapter-editor-footer > button:disabled { opacity: .45; cursor: default; }
+.chapter-editor-live { background: transparent; }
+.chapter-editor-live .vditor { background: transparent; }
+.chapter-editor-live .vditor-toolbar { display: none !important; }
+/* Native up/down/delete controls are siblings of the editable document. */
+.chapter-editor-live .vditor-wysiwyg > .vditor-panel { display: none !important; }
+.chapter-editor-live .vditor-content,
+.chapter-editor-live .vditor-wysiwyg,
+.chapter-editor-live .vditor-ir,
+.chapter-editor-live .vditor-reset,
+.chapter-editor-live .vditor-sv {
+  min-height: 36px;
+  background: transparent;
+}
+.chapter-editor-live .vditor-reset,
+.chapter-editor-live .vditor-sv { padding: 0 !important; }
+.chapter-editor-live .vditor-reset > :last-child { margin-bottom: 0; }
+.chapter-editor-live .vditor-reset > h1:first-child { margin-top: 0; }
+.chapter-editor-live .vditor-sv {
+  field-sizing: content;
+  width: 100%;
+  resize: none;
+  overflow-y: hidden;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.chapter-editor-live .vditor-wysiwyg pre.vditor-reset { margin: 0; font-family: inherit; }
+.chapter-editor-live .chapter-editor-loading { min-height: 36px; padding: 0; }
+.chapter-editor-live-status { height: 0; }
+.chapter-editor-live-status.has-error { display: flex; align-items: center; gap: 8px; height: auto; padding-top: 6px; color: #a05c4e; font-size: 11px; }
+.chapter-editor-live-status button { padding: 0; border: 0; background: none; color: inherit; font: inherit; text-decoration: underline; cursor: pointer; }
+.chapter-editor-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.chapter-editor .vditor-wysiwyg [data-editor-placeholder] { position: relative; min-height: 1.4em; }
+.chapter-editor .vditor-wysiwyg [data-editor-placeholder]::after { content: attr(data-editor-placeholder); position: absolute; top: 0; left: 0; color: #aaa7a2; font-weight: 400; pointer-events: none; user-select: none; white-space: nowrap; }
+.chapter-editor .vditor-wysiwyg li.vditor-task[data-editor-placeholder]::after { left: 24px; }
+.chapter-editor .vditor-wysiwyg .vditor-reset :is(h1,h2,h3,h4,h5,h6) { padding-right: 58px; }
+.chapter-editor .vditor-wysiwyg [data-type="code-block"] > pre { padding-bottom: 38px; }
+.chapter-block-control { position: absolute; z-index: 3; width: 45px; height: 25px; }
+.chapter-block-control-code { width: 84px; }
+.chapter-block-control select { display: block; width: 100%; height: 25px; margin: 0; padding: 0 3px 0 6px; border: 1px solid transparent; border-radius: 4px; color: #8a8987; background: #fff; box-shadow: none; font: 11px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; cursor: pointer; }
+.chapter-block-control-code select { background: #eff1f5; color:#7a5b95; }
+.chapter-block-control select:hover { border-color: #dedddc; color: #555350; }
+.chapter-block-control select:focus-visible { outline: 2px solid #9692cc; outline-offset: 1px; }
+.chapter-flow-end { display: flex; justify-content: flex-start; min-height: 30px; margin-top: 5px; }
+.chapter-flow-end button { display: inline-flex; align-items: center; gap: 6px; height: 27px; padding: 0 7px 0 2px; border: 0; border-radius: 5px; color: #8b8985; background: transparent; font-family: inherit; font-size: 12px; line-height: 1.3; cursor: pointer; }
+.chapter-flow-end svg { width: 16px; height: 16px; }
+.chapter-flow-end kbd { margin-left: 5px; color: #aaa7a2; font-family: inherit; font-size: 10px; line-height: 1.3; }
+.chapter-flow-end button:hover { color: #5e6790; background: #f1f2f7; }
+.chapter-flow-end button:focus-visible { outline: 2px solid #9692cc; outline-offset: 2px; }
+.chapter-editor-hint { padding-top: 6px; color: #77716b; font-size: 12px; line-height: 1.5; }
+@media (prefers-reduced-motion: reduce) { .chapter-editor-footer > button { transition: none; } }

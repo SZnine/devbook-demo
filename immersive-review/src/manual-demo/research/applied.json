@@ -1,0 +1,1163 @@
+{
+  "sources": [
+    {
+      "id": "app-tiktoken",
+      "title": "How to count tokens with Tiktoken（已归档；仅分词基础操作）",
+      "url": "https://developers.openai.com/cookbook/examples/how_to_count_tokens_with_tiktoken",
+      "publisher": "OpenAI",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "app-structured",
+      "title": "Structured model outputs",
+      "url": "https://developers.openai.com/api/docs/guides/structured-outputs",
+      "publisher": "OpenAI",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-tools",
+      "title": "Function calling",
+      "url": "https://developers.openai.com/api/docs/guides/function-calling",
+      "publisher": "OpenAI",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-retrieval",
+      "title": "Retrieval",
+      "url": "https://developers.openai.com/api/docs/guides/retrieval",
+      "publisher": "OpenAI",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-injection",
+      "title": "Agent builder safety — Prompt injections",
+      "url": "https://developers.openai.com/api/docs/guides/agent-builder-safety#prompt-injections",
+      "publisher": "OpenAI",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-evaluation",
+      "title": "Evaluation best practices",
+      "url": "https://developers.openai.com/api/docs/guides/evaluation-best-practices",
+      "publisher": "OpenAI",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-mock",
+      "title": "unittest.mock — examples",
+      "url": "https://docs.python.org/3/library/unittest.mock-examples.html",
+      "publisher": "Python Software Foundation",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-git-stage",
+      "title": "Pro Git — Recording Changes to the Repository",
+      "url": "https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository",
+      "publisher": "Pro Git / git-scm.com",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-docker-volume",
+      "title": "Persisting container data",
+      "url": "https://docs.docker.com/get-started/docker-concepts/running-containers/persisting-container-data/",
+      "publisher": "Docker",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "app-docker-secrets",
+      "title": "Build secrets",
+      "url": "https://docs.docker.com/build/building/secrets/",
+      "publisher": "Docker",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-closures",
+      "title": "Closures",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures",
+      "publisher": "MDN Web Docs",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-execution",
+      "title": "JavaScript execution model",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model",
+      "publisher": "MDN Web Docs",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-promise-all",
+      "title": "Promise.all()",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all",
+      "publisher": "MDN Web Docs",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-ts-narrowing",
+      "title": "TypeScript Handbook — Narrowing",
+      "url": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
+      "publisher": "Microsoft / TypeScript",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-form",
+      "title": "Your first form",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Your_first_form",
+      "publisher": "MDN Web Docs",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "app-box",
+      "title": "The box model — Playing with box models",
+      "url": "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Box_model#playing_with_box_models",
+      "publisher": "MDN Web Docs",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "app-react-queue",
+      "title": "Queueing a Series of State Updates",
+      "url": "https://react.dev/learn/queueing-a-series-of-state-updates",
+      "publisher": "React",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "app-react-effects",
+      "title": "Synchronizing with Effects",
+      "url": "https://react.dev/learn/synchronizing-with-effects",
+      "publisher": "React",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-react-keys",
+      "title": "Rendering Lists — Keeping list items in order with key",
+      "url": "https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key",
+      "publisher": "React",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-perf-monitor",
+      "title": "Performance monitor",
+      "url": "https://developer.chrome.com/docs/devtools/performance-monitor",
+      "publisher": "Google / Chrome for Developers",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-rank-eval",
+      "title": "Ranking evaluation API",
+      "url": "https://www.elastic.co/docs/reference/elasticsearch/rest-apis/search-rank-eval",
+      "publisher": "Elastic",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-sse",
+      "title": "HTML Standard — Server-sent events",
+      "url": "https://html.spec.whatwg.org/multipage/server-sent-events.html#parsing-an-event-stream",
+      "publisher": "WHATWG",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    },
+    {
+      "id": "app-bfs",
+      "title": "Graph Traversal — Depth/Breadth First Search",
+      "url": "https://visualgo.net/en/dfsbfs",
+      "publisher": "VisuAlgo / Steven Halim, National University of Singapore",
+      "checkedAt": "2026-10-15",
+      "kind": "lab"
+    },
+    {
+      "id": "app-knapsack",
+      "title": "6.006 Recitation 21 — Dynamic Programming: Knapsack",
+      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/95e744ee64464cb6bc8f8264faeea080_MIT6_006F11_rec21.pdf",
+      "publisher": "MIT OpenCourseWare",
+      "checkedAt": "2026-10-15",
+      "kind": "documentation"
+    }
+  ],
+  "reviews": [
+    {
+      "sectionId": "ai01",
+      "decision": "add",
+      "reason": "原题说明了 token 与上下文预算，但缺少能亲眼比较分词结果的操作入口；官方分词示例可直接补足。",
+      "sourceIds": [
+        "app-tiktoken"
+      ],
+      "additions": [
+        {
+          "id": "ai01-tokenizer-lab",
+          "kind": "lab",
+          "title": "观察同一文本的分词结果",
+          "body": "前提：Python 与 tiktoken；首次加载编码需要联网下载。How to count tokens with Tiktoken 的第 1–5 节提供分词操作。\n\n1. 加载示例编码，将文本转成 token 编号。\n2. 解码并观察字节片段与空格归属。\n3. 对照不同编码的结果，区分字符数与 token 数。\n\n文章已归档；这里只借用分词操作，不采用旧模型表或聊天请求计费估算。",
+          "sourceIds": [
+            "app-tiktoken"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "ai02",
+      "decision": "keep",
+      "reason": "本节要建立自回归生成与实时事实检索的区别，现有答案已命中边界；加入模型架构细节会偏离这一短问目标。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "ai03",
+      "decision": "keep",
+      "reason": "原答已限定 temperature=0 的稳定性与不同服务实现边界；缺少指定模型、版本和请求条件时，不添加伪确定性的重复调用实验。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "ai04",
+      "decision": "keep",
+      "reason": "任务、格式、歧义与缺失处理已经形成可执行的提示词检查点；外部模板会重复这些要点，暂不扩充。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "ai05",
+      "decision": "add",
+      "reason": "原题区分了合法 JSON 和业务正确性；增加三层验收表，能避免把结构化输出当成事实保证。",
+      "sourceIds": [
+        "app-structured"
+      ],
+      "additions": [
+        {
+          "id": "ai05-validation-layers",
+          "kind": "comparison",
+          "title": "结构通过，还缺哪一关？",
+          "body": "| 层次 | 本节的验收问题 |\n| --- | --- |\n| JSON 语法 | 能否解析？ |\n| Schema | 字段、类型和枚举是否符合约定？ |\n| 业务事实 | 引用是否存在，结论是否有依据？ |\n\n这是针对本题整理的检查顺序。Structured Outputs约束输出结构，仍可能产生内容错误；无关输入也需要明确的空值或拒答约定。",
+          "sourceIds": [
+            "app-structured"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "ai06",
+      "decision": "keep",
+      "reason": "调用意图、参数校验、权限和执行结果已在答案中分开；完整消息闭环集中补到 AI07，避免相邻两节重复同图。",
+      "sourceIds": [
+        "app-tools"
+      ],
+      "additions": []
+    },
+    {
+      "sectionId": "ai07",
+      "decision": "add",
+      "reason": "本节描述循环但调用与回执的关联不够直观；官方 function calling 流程适合改绘为职责图。",
+      "sourceIds": [
+        "app-tools"
+      ],
+      "additions": [
+        {
+          "id": "ai07-tool-loop",
+          "kind": "diagram",
+          "title": "谁提出调用，谁执行？",
+          "body": "据 Function calling 资料重绘；校验与停止条件沿用本题要求。\n\n```mermaid\nflowchart TD\n  M[模型返回工具名、参数、call_id] --> V[应用校验参数与权限]\n  V --> E[应用执行获准工具]\n  E --> O[按 call_id 回传工具结果]\n  O --> N[模型继续响应]\n  N -->|还有调用且未达轮次上限| M\n  N -->|完成或触发停止条件| F[结束]\n```\n\n工具结果必须对应原调用。模型输出调用请求，并不代表外部操作已经发生。",
+          "sourceIds": [
+            "app-tools"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "ai08",
+      "decision": "keep",
+      "reason": "并行独立查询与串行依赖操作已用具体例子区分；没有实际工具依赖图时，不为这道判断题增加抽象调度架构。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "ai09",
+      "decision": "add",
+      "reason": "RAG 的阶段已齐全，补一张离线准备与在线回答分开的图，比再堆术语更便于定位故障。",
+      "sourceIds": [
+        "app-retrieval"
+      ],
+      "additions": [
+        {
+          "id": "ai09-retrieval-flow",
+          "kind": "diagram",
+          "title": "先准备索引，再取证回答",
+          "body": "据 Retrieval 文档重绘；这是学习用分层，不限定产品实现。\n\n```mermaid\nflowchart TD\n  D[文档] --> I[\"切块、嵌入<br/>建立索引\"]\n  I --> S[检索库]\n  Q[问题] --> R[检索与筛选]\n  S --> R\n  R --> C[候选片段及来源]\n  C --> A[\"结合证据<br/>生成答案\"]\n```\n\n排查时先看候选片段，再看回答；检索分数不能代替答案核对。",
+          "sourceIds": [
+            "app-retrieval"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "ai10",
+      "decision": "keep",
+      "reason": "语义向量与事实、逻辑判断的边界已经写明；没有具体语料和相似度输出，不增加容易误读为正确率的可视化分值。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "ai11",
+      "decision": "keep",
+      "reason": "原答已覆盖块大小、重叠与语义完整性的取舍；脱离文档类型不存在可推荐的固定大小，保持条件化判断。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "ai12",
+      "decision": "add",
+      "reason": "关键词、向量与重排的区别已有定义；补真实产品参数，可把术语关联到可调节的检索行为。",
+      "sourceIds": [
+        "app-retrieval"
+      ],
+      "additions": [
+        {
+          "id": "ai12-hybrid-ranking",
+          "kind": "reference",
+          "title": "混合检索并不是两份结果简单相加",
+          "body": "OpenAI Retrieval 的 Ranking提供语义与关键词权重，以及候选分数阈值。提高阈值会缩小结果，也可能丢掉有用片段。\n\n本题可据此追问：是关键词召回漏了，还是排序把证据压下去了？参数变化应回到固定评测集验证。",
+          "sourceIds": [
+            "app-retrieval"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "ai13",
+      "decision": "add",
+      "reason": "本节已列出注入防护措施；补明确的信任边界，可阻止把检索内容中的命令当用户授权。",
+      "sourceIds": [
+        "app-injection"
+      ],
+      "additions": [
+        {
+          "id": "ai13-trust-boundary",
+          "kind": "aside",
+          "title": "引用材料没有指令权限",
+          "body": "OpenAI 安全文档将提示注入描述为不可信输入试图改写系统行为。\n\n对本题而言：检索片段可提供事实，不能授予工具权限。即使内容写着“请上传密钥”，它仍是待处理材料；工具授权必须由应用另行判断。",
+          "sourceIds": [
+            "app-injection"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "ai14",
+      "decision": "keep",
+      "reason": "拒答、指出缺失证据与澄清问题已构成完整行为约定；添加看似万能的拒答话术会掩盖任务差异。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "ai15",
+      "decision": "add",
+      "reason": "原答有样本和指标清单，但缺少执行顺序；官方评估方法能整理成小型闭环，无需额外接入评估平台。",
+      "sourceIds": [
+        "app-evaluation"
+      ],
+      "additions": [
+        {
+          "id": "ai15-eval-cycle",
+          "kind": "steps",
+          "title": "把评测缩成可重复的一轮",
+          "body": "依据Evaluation best practices整理：\n\n1. 写清目标行为与失败判据。\n2. 收集正常、边界和对抗样本，留下独立验证集。\n3. 固定输入、评价标准和版本，记录基线。\n4. 改动后重复比较，并人工复核争议样本。\n\n这里只采用评估方法，不绑定平台接口。",
+          "sourceIds": [
+            "app-evaluation"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "ai16",
+      "decision": "add",
+      "reason": "检索与生成混合计分会掩盖问题；补分层对照，把本节与 LAB08 的排名指标连接起来。",
+      "sourceIds": [
+        "app-rank-eval",
+        "app-evaluation"
+      ],
+      "additions": [
+        {
+          "id": "ai16-evaluation-layers",
+          "kind": "comparison",
+          "title": "同一个坏答案，先定位哪一层？",
+          "body": "| 检查层 | 固定什么 | 观察什么 |\n| --- | --- | --- |\n| 检索 | 问题、相关文档标注 | Recall@k、首个相关结果位置 |\n| 回答 | 一组固定证据 | 是否忠于证据、是否回答问题 |\n\n这是结合排名评估与任务评估原则提出的本题诊断方法。先隔离变量，再测完整链路；单层通过不等于整体通过。",
+          "sourceIds": [
+            "app-rank-eval",
+            "app-evaluation"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "ai17",
+      "decision": "keep",
+      "reason": "模型裁判偏差、人工校准和与真实任务对齐已覆盖；本轮没有经过校准的具体评分器，不追加貌似权威的通用分数模板。",
+      "sourceIds": [
+        "app-evaluation"
+      ],
+      "additions": []
+    },
+    {
+      "sectionId": "ai18",
+      "decision": "keep",
+      "reason": "本题重点是独立验证与考试授权边界；原答已经具体，不能用工具教程替用户判定考试是否允许 AI。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "en01",
+      "decision": "keep",
+      "reason": "单元、集成、端到端的范围和成本已清楚；本节不指定框架，新增测试金字塔图片不会提升现有判断题的可操作性。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "en02",
+      "decision": "keep",
+      "reason": "最大值函数的空输入、负数、重复值契约已给出；这些本地边界样本比迁移到外部测试课程更直接。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "en03",
+      "decision": "add",
+      "reason": "原答说明了 Mock 的边界；官方连续返回与异常示例可让读者看到替身如何支撑故障路径测试。",
+      "sourceIds": [
+        "app-mock"
+      ],
+      "additions": [
+        {
+          "id": "en03-mock-lab",
+          "kind": "lab",
+          "title": "用官方 Mock 示例观察失败路径",
+          "body": "前提：Python；使用标准库即可。官方示例的 Raising exceptions 与 Side effect functions and iterables 已提供可运行片段。\n\n1. 运行异常与连续返回值示例。\n2. 观察调用顺序和次数，区分设置替身与断言真实行为。\n3. 回到本题，只替换外部依赖，保留待测逻辑。\n\n该练习不证明真实服务集成成功。",
+          "sourceIds": [
+            "app-mock"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "en04",
+      "decision": "keep",
+      "reason": "原题已有二分搜索的边界、随机输入与独立朴素解对照；继续补外部练习会重复测试策略。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "en05",
+      "decision": "keep",
+      "reason": "覆盖率和断言质量的区别已明确；没有真实覆盖报告时不添加百分比图或虚构质量阈值。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "en06",
+      "decision": "add",
+      "reason": "三个区域的名称易记，暂存后再修改的状态易混淆；官方案例适合用快照流向图展示。",
+      "sourceIds": [
+        "app-git-stage"
+      ],
+      "additions": [
+        {
+          "id": "en06-staging-snapshot",
+          "kind": "diagram",
+          "title": "提交的是暂存快照",
+          "body": "据 Pro Git的暂存案例重绘。\n\n```mermaid\nflowchart LR\n  W[工作区内容] -->|git add| S[暂存快照]\n  S -->|git commit| C[新提交]\n  W -.再次编辑.-> W2[新的未暂存改动]\n```\n\n`git diff` 看未暂存差异，`git diff --staged` 看待提交差异。再次编辑不会自动更新已暂存的快照。",
+          "sourceIds": [
+            "app-git-stage"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "en07",
+      "decision": "keep",
+      "reason": "共享历史用 revert、改写历史需谨慎的适用边界已完整；不追加会误触真实仓库的回退操作练习。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "en08",
+      "decision": "keep",
+      "reason": "原答已强调冲突标记之外的语义审查和测试；没有真实冲突上下文，模拟合并故事会分散核心检查点。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "en09",
+      "decision": "keep",
+      "reason": "固定字符串匹配、统计行数与轮转日志跟随已区分；保留现有命令例子，不混入更大日志分析系统。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "en10",
+      "decision": "keep",
+      "reason": "重定向顺序是这一节的单一核心，现有两条命令已形成足够对照；外部 shell 章节会放大阅读范围。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "en11",
+      "decision": "keep",
+      "reason": "先定位占用端口的具体进程再处理已符合本题目的；系统和权限未固定，不追加自动终止进程脚本。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "en12",
+      "decision": "add",
+      "reason": "镜像、容器与数据卷的区别需要观察持久化现象；Docker 官方已有完整 PostgreSQL 演练，无需自行编造实验。",
+      "sourceIds": [
+        "app-docker-volume"
+      ],
+      "additions": [
+        {
+          "id": "en12-volume-lab",
+          "kind": "lab",
+          "title": "删除容器后，数据去哪了？",
+          "body": "前提：Docker Desktop，可拉取 PostgreSQL 镜像，并使用独立练习容器和卷。Docker 官方教程的 Try it out 提供全过程。\n\n1. 按教程启动挂载命名卷的数据库，建立表并写入记录。\n2. 移除练习容器，用同一卷创建新容器。\n3. 查询记录，观察容器生命周期与卷生命周期的区别。",
+          "sourceIds": [
+            "app-docker-volume"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "en13",
+      "decision": "add",
+      "reason": "原题涉及缓存和密钥泄漏；补官方构建密钥机制能精确说明 ARG、ENV 为什么不是密钥存储位置。",
+      "sourceIds": [
+        "app-docker-secrets"
+      ],
+      "additions": [
+        {
+          "id": "en13-build-secret-boundary",
+          "kind": "reference",
+          "title": "构建时密钥的交付边界",
+          "body": "Docker Build secrets提供临时 secret mount 与 SSH mount。构建密钥不宜通过 `ARG` 或 `ENV` 传递，因为可能留在镜像中。\n\n这是构建阶段的机制；运行期凭据管理需要另行设计，不能由“镜像构建成功”推断已解决。",
+          "sourceIds": [
+            "app-docker-secrets"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "en14",
+      "decision": "keep",
+      "reason": "静态检查、测试、构建与部署健康之间的证据边界已明确；尚未确定 CI 平台，不添加供应商工作流模板。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "js01",
+      "decision": "add",
+      "reason": "数字输出题解释了闭包，但缺少错误如何影响界面的直觉；MDN 有现成表单帮助文字案例可承接。",
+      "sourceIds": [
+        "app-closures"
+      ],
+      "additions": [
+        {
+          "id": "js01-closure-lab",
+          "kind": "lab",
+          "title": "三个输入框为什么显示同一句帮助？",
+          "body": "前提：能运行简单 HTML 与 JavaScript。MDN Closures的循环闭包案例已有姓名、邮箱、年龄三个输入框。\n\n1. 运行使用 `var` 的示例，依次聚焦三个字段。\n2. 对照官方的函数工厂或 `let` 修复。\n3. 观察每个回调捕获的是共享绑定还是各自绑定。",
+          "sourceIds": [
+            "app-closures"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "js02",
+      "decision": "keep",
+      "reason": "浅拷贝与嵌套对象共享已由输出直接证明；继续添加对象图的收益低于保持该题的短小对照。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "js03",
+      "decision": "keep",
+      "reason": "原题已包含 0、空字符串与 nullish 的关键差别；额外列举完整类型转换表会超出本题目标。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "js04",
+      "decision": "add",
+      "reason": "本题输出顺序正确但队列层次容易只靠背诵；执行模型可改绘为同步栈、微任务与下一任务的时间顺序。",
+      "sourceIds": [
+        "app-execution"
+      ],
+      "additions": [
+        {
+          "id": "js04-event-order",
+          "kind": "diagram",
+          "title": "A、D、C、B 分属哪一轮？",
+          "body": "据 MDN 执行模型资料重绘，限定本题浏览器场景。\n\n```mermaid\nflowchart TD\n  A[当前任务：输出 A] --> D[继续同步代码：输出 D]\n  D --> C[当前任务结束后处理微任务：输出 C]\n  C --> B[后续定时器任务：输出 B]\n```\n\n`setTimeout(..., 0)` 不会插入正在执行的同步代码；此图不是所有宿主环境的完整事件循环规范。",
+          "sourceIds": [
+            "app-execution"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "js05",
+      "decision": "keep",
+      "reason": "async 函数在首个 await 前同步执行已通过 3、1、4、2 的逐步解释呈现；与 JS04 共用概念，不重复堆第二张队列图。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "js06",
+      "decision": "add",
+      "reason": "Promise.all 常被误读为按完成顺序输出；补官方可运行例子的观察点即可，不需要增加并发框架。",
+      "sourceIds": [
+        "app-promise-all"
+      ],
+      "additions": [
+        {
+          "id": "js06-promise-order",
+          "kind": "aside",
+          "title": "结果位置对应输入位置",
+          "body": "MDN Promise.all()的 Try it 示例混合普通值与延迟 Promise。\n\n无论完成先后，成功结果的位置对应输入位置；任一输入拒绝时，聚合 Promise 会拒绝。区分“聚合结果已失败”和“底层工作已停止”，后者需要具体任务的取消机制。",
+          "sourceIds": [
+            "app-promise-all"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "js07",
+      "decision": "keep",
+      "reason": "默认字典序和原地修改的两个陷阱已有具体输入输出；不增加排序算法教学，以免偏离 JavaScript API 使用边界。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "js08",
+      "decision": "keep",
+      "reason": "箭头函数词法 this 与普通函数调用绑定已说明；框架事件绑定会引入另一层规则，暂不混入。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "js09",
+      "decision": "keep",
+      "reason": "forEach 不等待回调、串行 for...of、并发 Promise.all 的选择已明确；有界并发已有 LAB04 独立练习，不在此重复。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "js10",
+      "decision": "add",
+      "reason": "静态类型收窄适合在编译器中观察；TypeScript 官方页面提供可直接打开的 Try 示例。",
+      "sourceIds": [
+        "app-ts-narrowing"
+      ],
+      "additions": [
+        {
+          "id": "js10-narrowing-lab",
+          "kind": "lab",
+          "title": "让编译器展示收窄发生在哪里",
+          "body": "前提：基础 TypeScript 与浏览器。官方 Narrowing中的 `printAll` 示例带 Try 入口。\n\n1. 打开 `typeof` 类型守卫对应示例。\n2. 查看分支内变量类型与编译提示。\n3. 对照空值检查后的版本，观察 `typeof null` 的陷阱。\n\n类型收窄依赖检查逻辑，不替外部数据自动完成运行期验证。",
+          "sourceIds": [
+            "app-ts-narrowing"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "js11",
+      "decision": "keep",
+      "reason": "接口在编译后擦除、外部 JSON 仍需运行期校验已经点明；不指定 schema 库可保留本节的通用性。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "js12",
+      "decision": "keep",
+      "reason": "浮点误差与安全整数范围属于两个不同边界，原答已有例子；无需新增没有业务精度约束的金额处理方案。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "fe01",
+      "decision": "add",
+      "reason": "表单语义需要通过焦点和标签关联感知；MDN 的首个表单练习能验证这些细节，不必接后端。",
+      "sourceIds": [
+        "app-form"
+      ],
+      "additions": [
+        {
+          "id": "fe01-form-lab",
+          "kind": "lab",
+          "title": "从点击标签开始检查表单",
+          "body": "前提：基础 HTML 与浏览器。Your first form 中已有姓名、邮箱、消息表单。\n\n1. 打开页面末尾的表单示例，点击字段标签，观察焦点。\n2. 使用 Tab 依次访问输入框与按钮。\n3. 对照 `label for` 与输入框 `id`，检查关联。\n\n该页面示例不实现服务端提交。",
+          "sourceIds": [
+            "app-form"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "fe02",
+      "decision": "add",
+      "reason": "盒模型的数字计算已有答案；MDN 现成双盒子练习可让尺寸差异直接可见。",
+      "sourceIds": [
+        "app-box"
+      ],
+      "additions": [
+        {
+          "id": "fe02-box-model-lab",
+          "kind": "lab",
+          "title": "让两个盒子占用相同宽度",
+          "body": "前提：基础 HTML/CSS。Box model 的 Playing with box models 提供两个盒子的可编辑练习。\n\n1. 运行默认盒子与 `border-box` 盒子的原示例。\n2. 按练习要求调整第二个盒子的宽高，使外部尺寸一致。\n3. 在开发者工具的盒模型图中核对内容、内边距与边框。",
+          "sourceIds": [
+            "app-box"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "fe03",
+      "decision": "keep",
+      "reason": "flex:1、min-width:0 和固定侧栏禁止收缩已直指实际布局问题；再加通用 Flexbox 课程会冲淡本题的溢出边界。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "fe04",
+      "decision": "add",
+      "reason": "setState 快照的差别已说明；React 官方请求计数挑战能把这一概念连到真实的异步 UI 故障。",
+      "sourceIds": [
+        "app-react-queue"
+      ],
+      "additions": [
+        {
+          "id": "fe04-state-queue-lab",
+          "kind": "lab",
+          "title": "修复请求计数器",
+          "body": "前提：JavaScript 与 React state 基础。Queueing a Series of State Updates 页面底部有 Fix a request counter 挑战。\n\n1. 在官方沙盒中连续点击 Buy，观察等待数和完成数。\n2. 对照每次事件所读到的 state 快照。\n3. 完成挑战后重复快速点击，核对更新函数是否消除了旧值计算问题。",
+          "sourceIds": [
+            "app-react-queue"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "fe05",
+      "decision": "keep",
+      "reason": "不可变更新已有数组和对象的具体处理方式；不加入状态管理库或深拷贝技巧，避免让简单更新问题变复杂。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "fe06",
+      "decision": "add",
+      "reason": "Effect 清理只读文字较抽象；官方聊天室案例可以直接观察连接生命周期。",
+      "sourceIds": [
+        "app-react-effects"
+      ],
+      "additions": [
+        {
+          "id": "fe06-effect-cleanup-lab",
+          "kind": "lab",
+          "title": "观察连接是否成对释放",
+          "body": "前提：React Effect 基础。Synchronizing with Effects 的聊天室示例提供连接与断开日志。\n\n1. 运行示例，观察开发环境的连接、清理、再连接。\n2. 对照加入 cleanup 前后的日志。\n3. 核对离开组件时是否断开连接。\n\n不要把开发环境重挂载检查误判为生产环境必定重复执行。",
+          "sourceIds": [
+            "app-react-effects"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "fe07",
+      "decision": "add",
+      "reason": "原题的慢请求覆盖问题已具体；补取消与忽略结果的区别，避免只调用 abort 就认为竞态已经解决。",
+      "sourceIds": [
+        "app-react-effects"
+      ],
+      "additions": [
+        {
+          "id": "fe07-stale-response-boundary",
+          "kind": "comparison",
+          "title": "请求结束与允许更新是两回事",
+          "body": "| 阶段 | 要检查的条件 |\n| --- | --- |\n| 发出请求 | 当前参数对应哪个请求？ |\n| 收到结果 | 它是否仍属于当前界面？ |\n| 清理旧 Effect | 中止请求或忽略后续结果 |\n\nReact 的 Fetching data 示例用 `ignore` 阻止旧响应更新 state。此表据示例整理；已经发生的外部操作无法靠清理函数撤销。",
+          "sourceIds": [
+            "app-react-effects"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "fe08",
+      "decision": "add",
+      "reason": "原答指出稳定 key；补身份语义可避免把 key 仅当成消除警告或提升性能的属性。",
+      "sourceIds": [
+        "app-react-keys"
+      ],
+      "additions": [
+        {
+          "id": "fe08-key-identity",
+          "kind": "reference",
+          "title": "key 表示列表成员身份",
+          "body": "Rendering Lists 文档强调：列表重排、插入或删除时，React 用稳定 key 对应同一成员。\n\n本题的检查点是“数据身份是否稳定”，而非索引是否唯一。不要在渲染时随机生成 key；key 也不会自动作为普通 prop 传入子组件。",
+          "sourceIds": [
+            "app-react-keys"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "fe09",
+      "decision": "keep",
+      "reason": "XSS、CSRF 与 HttpOnly 的能力边界已区分；没有实际认证方式和威胁模型时，不增加一套看似通用的防护配置。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "fe10",
+      "decision": "add",
+      "reason": "先测量后优化需要低门槛入口；Chrome 已有 Performance monitor 操作教程，适合先观察而不是直接套 useMemo。",
+      "sourceIds": [
+        "app-perf-monitor"
+      ],
+      "additions": [
+        {
+          "id": "fe10-performance-monitor-lab",
+          "kind": "lab",
+          "title": "先找到增长的指标",
+          "body": "前提：Chrome 与可操作的页面。Performance monitor 文档提供 DevTools 面板打开方法。\n\n1. 打开 Performance monitor，选择 CPU、JS 堆和 DOM 节点指标。\n2. 在同一页面重复原本感觉卡顿的操作。\n3. 记录哪些指标持续增长，再选择更深入的性能分析。\n\n这些指标是排查线索，不是单独证明某组件慢的结论。",
+          "sourceIds": [
+            "app-perf-monitor"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "lab01",
+      "decision": "keep",
+      "reason": "已有严格 JSON、字段集合、bool 与非有限数值等完整契约和样例；引入外部 schema 框架会改变标准库练习的目标。",
+      "sourceIds": [
+        "app-structured"
+      ],
+      "additions": []
+    },
+    {
+      "sectionId": "lab02",
+      "decision": "keep",
+      "reason": "请求组装、历史角色、截断和可变默认值已有可重复夹具；接入真实模型会增加费用和非确定性，不补外部调用教程。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "lab03",
+      "decision": "keep",
+      "reason": "模拟 HTTP 失败序列和有限重试边界已经可本地验收；不引入真实故障注入或外部服务来扩大本题。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "lab04",
+      "decision": "keep",
+      "reason": "Semaphore、峰值并发和异常返回都有明确观察点；官方泛用 asyncio 示例不能替代本题的峰值断言，保留现有练习。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "lab05",
+      "decision": "keep",
+      "reason": "工具分发题已限定 add、严格参数和禁止 eval；官方工具接口流程在 AI07 展示，避免这里混入供应商网络协议。",
+      "sourceIds": [
+        "app-tools"
+      ],
+      "additions": []
+    },
+    {
+      "sectionId": "lab06",
+      "decision": "keep",
+      "reason": "轮次上限、call_id、重复回执与参数冲突都有独立断言；保留确定性的本地模拟，不拿真实模型输出作为验收依赖。",
+      "sourceIds": [
+        "app-tools"
+      ],
+      "additions": []
+    },
+    {
+      "sectionId": "lab07",
+      "decision": "keep",
+      "reason": "本题刻意用词集匹配形成稳定 TopK 基线；引入向量服务会遮住排序与去重逻辑，暂不添加。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "lab08",
+      "decision": "add",
+      "reason": "题目已提供精确夹具；增加实际搜索引擎的定义来源，能校准 Recall 与 MRR 的分母和排名含义。",
+      "sourceIds": [
+        "app-rank-eval"
+      ],
+      "additions": [
+        {
+          "id": "lab08-ranking-metrics",
+          "kind": "reference",
+          "title": "先固定标注，再解释指标",
+          "body": "Ranking evaluation 文档使用查询、候选文档和相关性标注计算排名质量。Recall@k 关注相关结果覆盖，MRR 关注首个相关结果的位置。\n\n本题的空相关集合、重复候选处理仍遵循题面契约；不能直接拿不同平台的默认聚合值比较。无需安装 Elasticsearch 即可核对这些定义。",
+          "sourceIds": [
+            "app-rank-eval"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "lab09",
+      "decision": "add",
+      "reason": "本节刻意实现 SSE 子集；补标准层次图能防止把网络分片、事件边界和业务 JSON 混为一层。",
+      "sourceIds": [
+        "app-sse"
+      ],
+      "additions": [
+        {
+          "id": "lab09-sse-layers",
+          "kind": "diagram",
+          "title": "分片、行、事件、业务内容",
+          "body": "据 WHATWG SSE 规范重绘；虚线标出本题未实现的字节解码层。\n\n```mermaid\nflowchart TD\n  B[网络字节分片] -.UTF-8 增量解码.-> T[文本片段]\n  T --> L[按行累积]\n  L --> E[空行触发事件]\n  E --> A[应用处理 data 内容]\n```\n\n完整标准支持 CRLF、CR、LF；本题仅接受已解码的 LF 文本。EOF 前未用空行结束的事件应丢弃；`[DONE]` 属于题目应用约定。",
+          "sourceIds": [
+            "app-sse"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "lab10",
+      "decision": "keep",
+      "reason": "LEFT JOIN、COUNT(j.id)、参数化查询与零任务用户已组成完整 SQL 练习；不追加数据库部署教程。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "lab11",
+      "decision": "keep",
+      "reason": "串行持久化幂等练习明确排除了并发和外部副作用 exactly-once；新增消息队列架构会使其能力边界失真。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "lab12",
+      "decision": "keep",
+      "reason": "六组测试已经对应 LAB03 的具体失败路径；EN03 提供官方 Mock 操作入口，这里不再复制同一组文档步骤。",
+      "sourceIds": [
+        "app-mock"
+      ],
+      "additions": []
+    },
+    {
+      "sectionId": "lab13",
+      "decision": "keep",
+      "reason": "可变默认参数、sort 返回 None 和独立回归用例已是完整修复任务；无需再加一个相似 bug 故事。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "lab14",
+      "decision": "keep",
+      "reason": "状态码、内容类型、旧请求成功与失败覆盖已有审查要求；保留代码审查练习，不添加远程 PR 或真实接口调用步骤。",
+      "sourceIds": [
+        "app-react-effects"
+      ],
+      "additions": []
+    },
+    {
+      "sectionId": "al01",
+      "decision": "keep",
+      "reason": "题面特别要求字典序最小下标对，已指出不能遇到首个解就返回；通用 Two Sum 教程往往不满足这一契约，不直接嫁接。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "al02",
+      "decision": "keep",
+      "reason": "稳定保留首次出现元素的要求、复杂度和样例足够明确；外部去重 API 会弱化对有序输出的理解。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "al03",
+      "decision": "keep",
+      "reason": "括号匹配的空栈、类型错配和最终栈空已有验收；栈的基础动效不足以新增信息，保留简短实现题。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "al04",
+      "decision": "keep",
+      "reason": "lower_bound 的半开区间与无答案返回已有完整边界；一般二分查找动画可能搜索任意相等项，不强行作为本题教程。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "al05",
+      "decision": "keep",
+      "reason": "排序双指针的计数条件和 64 位累计已给出；额外动画应保留重复值与整段计数语义，本轮未选到更贴合的来源。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "al06",
+      "decision": "keep",
+      "reason": "滑动窗口左边界不能后退和并列时最早结果已写清；泛用最长子串题常无该并列规则，保留原题的精确契约。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "al07",
+      "decision": "keep",
+      "reason": "前缀和差值、负数与大数范围已涵盖核心；不混入只适用于非负数的滑动窗口材料。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "al08",
+      "decision": "keep",
+      "reason": "原节对闭区间、相接合并与不合并相邻整数已有详细清单；通用合并区间讲解可能使用不同端点规则，不追加。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "al09",
+      "decision": "keep",
+      "reason": "最小堆根节点的最差候选及频次同分排序已明确；外部 TopK 图解若不含次级排序会掩盖本题难点。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "al10",
+      "decision": "keep",
+      "reason": "保存 next、反转指针和常数空间步骤已完整；现有三指针解释足以支撑练习，无需再添泛用链表课程入口。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "al11",
+      "decision": "keep",
+      "reason": "队列逐层处理与每轮固定层长度已具体；BFS 动画集中放在 AL12，让这一节保留树结构输出练习。",
+      "sourceIds": [
+        "app-bfs"
+      ],
+      "additions": []
+    },
+    {
+      "sectionId": "al12",
+      "decision": "add",
+      "reason": "BFS 的分层与首次入队标记适合动态观察；VisuAlgo 已有逐步图遍历，且能呈现无权最短路关系。",
+      "sourceIds": [
+        "app-bfs"
+      ],
+      "additions": [
+        {
+          "id": "al12-bfs-lab",
+          "kind": "lab",
+          "title": "按步观察 BFS 的队列",
+          "body": "前提：浏览器与队列基础。VisuAlgo 的 Graph Traversal 提供 Explore 与 BFS 动画。\n\n1. 运行页面已有 BFS 示例，暂停后逐步前进。\n2. 同时观察队列、首次发现的顶点和遍历树。\n3. 对照本题的无向图要求检查边方向；页面的有向图示例不能直接当成无向输入，必要时按页面功能加入反向边。\n\n关注首次入队和层次，不要求同层顶点具有唯一访问顺序。",
+          "sourceIds": [
+            "app-bfs"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "al13",
+      "decision": "keep",
+      "reason": "本题要求字典序最小拓扑序，已明确用最小堆而非普通队列并拒绝环的部分结果；通用 DFS 拓扑动画不满足该输出要求。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "al14",
+      "decision": "keep",
+      "reason": "网格连通性与大输入下递归深度风险已覆盖；本题指定显式栈，避免加入递归演示误导实现选择。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "al15",
+      "decision": "keep",
+      "reason": "dp[0]=1 的含义与滚动状态已说明；更多递推图对这道短题的增益较小，保留边界测试为主。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "al16",
+      "decision": "keep",
+      "reason": "滚动数组里上方旧值与左方新值的含义已给出；将更需要分层辨识的状态依赖图留给相邻 0/1 背包题。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "al17",
+      "decision": "add",
+      "reason": "容量逆序很容易被记成口诀；MIT 讲义的跨物品层依赖可重绘为图，再推导一维更新方向。",
+      "sourceIds": [
+        "app-knapsack"
+      ],
+      "additions": [
+        {
+          "id": "al17-knapsack-dependency",
+          "kind": "diagram",
+          "title": "一次选取依赖上一层状态",
+          "body": "据 MIT 6.006 背包递推讲义重绘，层编号转换为本题的已处理物品数。\n\n```mermaid\nflowchart LR\n  A[上一层：容量 c] -->|不选当前物品| C[本层：容量 c 的较优值]\n  B[上一层：容量 c-w] -->|选择当前物品并加上价值| C\n```\n\n从该依赖推导本题的一维实现：容量逆序时，`dp[c-w]` 尚未被当前物品更新，才能保持“每件最多一次”。容量正序会改变这一语义。",
+          "sourceIds": [
+            "app-knapsack"
+          ]
+        }
+      ]
+    },
+    {
+      "sectionId": "al18",
+      "decision": "keep",
+      "reason": "哈希表定位、双向链表维护顺序与 O(1) 目标已清楚；未找到同时保留容量为零等题面细节的必要外部教程，保留现有契约。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "aic01",
+      "decision": "keep",
+      "reason": "该训练任务已包含严格整数、ASCII 规范化、校验先于去重、取整与排序规则；补一般日志教程反而可能引入不同口径。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "aic02",
+      "decision": "keep",
+      "reason": "校验、过滤、排序、分页和 total 计算顺序已经形成完整业务规格；不添加 Web 框架实现，以免把查询逻辑练习变成脚手架任务。",
+      "sourceIds": [],
+      "additions": []
+    },
+    {
+      "sectionId": "aic03",
+      "decision": "keep",
+      "reason": "可注入时钟、过期等号、非法输入不修改状态的约束已完整；该题排除了 LRU 和并发，不扩展缓存系统架构。",
+      "sourceIds": [],
+      "additions": []
+    }
+  ]
+}

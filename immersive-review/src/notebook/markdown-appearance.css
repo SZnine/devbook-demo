@@ -1,0 +1,65 @@
+/* Craft's quiet page surfaces, VitePress's tinted Markdown containers.
+   These are presentation rules for the existing Markdown DOM, not new block types.
+   Keep source mode literal and leave code-token colors to the syntax theme. */
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) h1{color:#42335f}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) h2{color:#514078}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) :is(h3,h4,h5,h6){color:#645087}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) strong{color:#34334b}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) a{color:#2867bf;text-decoration-color:#a4c2eb;text-decoration-thickness:1px;text-underline-offset:3px}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) a:hover{color:#1c56a8;text-decoration-color:currentColor}
+/* Vditor's editable root is itself a pre; data-marker identifies inline code. */
+.nb-craft .markdown code:not(pre code),
+.nb-craft .chapter-editor .vditor-reset code[data-marker]{color:#994369;background:#faf0f6;border:1px solid #f2deea;border-radius:5px;padding:1px 5px;font-size:.86em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) mark{color:#795416;background:#fff0b8;border-radius:3px;padding:1px 3px}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) kbd{color:#596478;background:#f4f6fb;border:1px solid #dce2ed;border-bottom-width:2px;border-radius:5px;padding:1px 5px}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) blockquote{color:#75613e;background:#fff8e9;border-left:3px solid #d8a348;border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) blockquote>:last-child{margin-bottom:0}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) ul>li::marker{color:#3d81c3}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) ol>li::marker{color:#278a91;font-weight:600}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) input[type=checkbox]{accent-color:#27886a}
+.nb-craft .markdown input[type=checkbox]:disabled{appearance:none;opacity:1;vertical-align:-2px;border:1px solid #a5b7af;border-radius:4px;background:#fff}
+.nb-craft .markdown input[type=checkbox]:disabled:checked{border-color:#27886a;background:#27886a url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m3.5 8 3 3 6-6' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/13px no-repeat}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) table{width:100%;border-color:#e1deed;border-collapse:collapse;border-radius:8px;font-size:.9em}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) :is(th,td){padding:10px 14px;border:1px solid #e4e0ef}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) th{background:#f0edf9;color:#65518d;font-weight:600}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) tbody tr{background:#fff}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) tbody tr:nth-child(even){background:#faf9fd}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) hr{height:0;border:0;border-top:1px solid #ded9ed;margin:26px 0}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) details{margin:18px 0;padding:13px 16px;border:1px solid #dfe7f3;border-radius:8px;background:#f7f9fd}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) summary{cursor:pointer;color:#3b659e;font-weight:500}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) summary::marker{color:#6d95ce}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) details[open]>summary{margin-bottom:12px}
+
+/* VitePress-style type tints; callout type and title already come from Vditor. */
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) .callout{--callout-color:#3873b5;--callout-bg:#edf4fd;--callout-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='black' stroke-width='2'/%3E%3Cpath d='M12 10v7m0-10v.5' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");margin:18px 0;padding:16px 18px;border:0;border-radius:8px;color:#414956;background:var(--callout-bg)}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) .callout[data-subtype=TIP]{--callout-color:#218364;--callout-bg:#edf8f2;--callout-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 18h6m-5 3h4M8 14c-5-5-1-12 4-12s9 7 4 12l-1 3H9z' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) .callout[data-subtype=IMPORTANT]{--callout-color:#8250b9;--callout-bg:#f3edfb;--callout-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M21 12a9 9 0 0 1-9 9H3l2.7-2.7A9 9 0 1 1 21 12ZM12 7v6m0 3v.5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) .callout[data-subtype=WARNING]{--callout-color:#a37119;--callout-bg:#fcf5df;--callout-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 3 10 18H2zM12 9v5m0 3v.5' fill='none' stroke='black' stroke-width='1.8' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E")}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) .callout[data-subtype=CAUTION]{--callout-color:#bd425c;--callout-bg:#fceef1;--callout-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m8 2-6 6v8l6 6h8l6-6V8l-6-6ZM12 7v6m0 3v.5' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) .callout-info{display:flex;align-items:center;gap:8px;color:var(--callout-color);font-size:13px;font-weight:600;margin:0 0 8px}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) .callout-info::before{content:'';display:block;flex:0 0 17px;width:17px;height:17px;background:currentColor;mask:var(--callout-icon) center/contain no-repeat}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) .callout-icon{display:none}
+.nb-craft :is(.markdown,.chapter-editor .vditor-reset) .callout-content>:last-child{margin-bottom:0}
+
+/* More legible type icons. Keep a stable color from the palette to the content. */
+.nb-craft .markdown-insert-menu .mi-type-text{color:#64708b}
+.nb-craft .markdown-insert-menu .mi-type-heading{color:#8c57ba}
+.nb-craft .markdown-insert-menu .mi-type-bullet{color:#3783cc}
+.nb-craft .markdown-insert-menu .mi-type-numbered{color:#218e9e}
+.nb-craft .markdown-insert-menu .mi-type-todo{color:#269368}
+.nb-craft .markdown-insert-menu .mi-type-quote{color:#bc8a24}
+.nb-craft .markdown-insert-menu .mi-type-code{color:#218c7b}
+.nb-craft .markdown-insert-menu .mi-type-table{color:#8d66bf}
+.nb-craft .markdown-insert-menu .mi-type-link{color:#377fc9}
+.nb-craft .markdown-insert-menu .mi-type-image{color:#448bc4}
+.nb-craft .mi-tool:has(.mi-type-heading),.nb-craft .mi-tool:has(.mi-type-table){--type-hover:#f4eefb;--type-active:#ece0f8}
+.nb-craft .mi-tool:has(.mi-type-bullet),.nb-craft .mi-tool:has(.mi-type-link),.nb-craft .mi-tool:has(.mi-type-image){--type-hover:#edf5fd;--type-active:#e1eefc}
+.nb-craft .mi-tool:has(.mi-type-numbered),.nb-craft .mi-tool:has(.mi-type-code){--type-hover:#edf8f6;--type-active:#ddf1ec}
+.nb-craft .mi-tool:has(.mi-type-todo){--type-hover:#eff8f1;--type-active:#e0f1e6}
+.nb-craft .mi-tool:has(.mi-type-quote){--type-hover:#fcf7e9;--type-active:#f8edca}
+.nb-craft .floating-component-library .mi-tool:hover{background:var(--type-hover,#f1f3f7)}
+.nb-craft .floating-component-library .mi-tool:is([aria-pressed=true],[aria-expanded=true]){background:var(--type-active,#e8eaf2)}
+.nb-craft .floating-component-library .mi-type-code rect{stroke:#94c8bc;fill:#f0faf6}
+.nb-craft .floating-component-library .mi-type-code path[fill]{fill:#c5e8d8}
+.nb-craft .floating-component-library .mi-type-table rect{stroke:#b3a0d4}
+.nb-craft .floating-component-library .mi-type-table path[stroke]{stroke:#ad9bcd}

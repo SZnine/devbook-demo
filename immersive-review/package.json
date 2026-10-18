@@ -1,0 +1,59 @@
+{
+  "name": "immersive-review",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.14.0"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5174 --strictPort",
+    "memory": "npm run dev -- --open /",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && vite build && npm run build:server",
+    "build:demo": "tsc --noEmit && vite build --mode demo",
+    "build:server": "esbuild server/production.ts --bundle --platform=node --target=node22 --format=esm --outfile=build/server.mjs",
+    "start": "node --env-file-if-exists=../.env build/server.mjs",
+    "preview": "vite preview --host 127.0.0.1 --port 5174 --strictPort",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@expressive-code/plugin-line-numbers": "0.44.2",
+    "@noble/hashes": "2.0.1",
+    "dompurify": "3.4.17",
+    "expressive-code": "0.44.2",
+    "hast-util-from-html": "2.0.3",
+    "hast-util-to-jsx-runtime": "2.3.6",
+    "katex": "0.19.0",
+    "mermaid": "12.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-markdown": "^10.1.0",
+    "rehype-raw": "^7.0.0",
+    "rehype-sanitize": "^6.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "11.0.0",
+    "shiki": "4.0.2",
+    "unified": "11.0.5",
+    "vditor": "4.0.0"
+  },
+  "devDependencies": {
+    "@types/katex": "0.16.8",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "esbuild": "0.28.2",
+    "fake-indexeddb": "^6.2.0",
+    "postcss": "8.5.29",
+    "postcss-selector-parser": "7.1.6",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.0",
+    "vitest": "4.1.11"
+  },
+  "overrides": {
+    "postcss-nested": {
+      "postcss-selector-parser": "$postcss-selector-parser"
+    }
+  }
+}

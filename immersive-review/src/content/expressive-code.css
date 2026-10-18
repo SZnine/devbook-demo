@@ -1,0 +1,46 @@
+.markdown .code-presentation { position: relative; isolation: isolate; min-width: 0; margin: 20px 0; text-align: left; }
+.markdown .code-presentation .code-highlight { min-width: 0; }
+.markdown .code-presentation .expressive-code { margin: 0; }
+.markdown .code-presentation .expressive-code figure { margin: 0; }
+.markdown .code-presentation .expressive-code .header { padding-right: 44px; }
+/* Preserve the engine's line grid against the host Markdown and preview styles. */
+.markdown.markdown .code-presentation .expressive-code pre {
+  margin: 0; padding: 0; font: inherit; color: var(--ec-codeFg); background: var(--ec-codeBg);
+  border: var(--ec-brdWd) solid var(--ec-brdCol); border-radius: calc(var(--ec-brdRad) + var(--ec-brdWd));
+  overflow: auto; max-width: 100%; white-space: pre; tab-size: 4;
+}
+.markdown.markdown .code-presentation .expressive-code .has-title pre,
+.markdown.markdown .code-presentation .expressive-code .is-terminal pre { border-top-left-radius: 0; border-top-right-radius: 0; }
+.markdown.markdown .code-presentation .expressive-code pre > code {
+  padding: var(--ec-codePadBlk) 0; background: none; border-radius: 0;
+  font-family: var(--ec-codeFontFml); font-size: var(--ec-codeFontSize);
+  font-weight: var(--ec-codeFontWg); line-height: var(--ec-codeLineHt);
+}
+.markdown.markdown .code-presentation .expressive-code .frame:not(.has-title):not(.is-terminal) .ec-line:first-child .code { padding-right: 48px; }
+.markdown.markdown .code-presentation .code-fallback {
+  margin: 0; padding: 18px 20px; border: 1px solid #dce0e8; border-radius: 10px;
+  background: #eff1f5; color: #4c4f69; font: 13px/1.75 "Cascadia Code", Consolas, monospace;
+  overflow: auto; white-space: pre; tab-size: 4;
+}
+.markdown .code-presentation .code-copy {
+  position: absolute; z-index: 2; top: 0; right: 0; display: grid; place-items: center; width: 44px; height: 44px;
+  border: 0; border-radius: 8px; padding: 12px; color: #6c6f85; background: transparent;
+  cursor: pointer; opacity: 0; transition: opacity 140ms ease, color 140ms ease;
+}
+.markdown .code-presentation .code-copy svg { width: 17px; height: 17px; }
+.markdown .code-presentation:hover .code-copy,
+.markdown .code-presentation:focus-within .code-copy,
+.markdown .code-presentation .code-copy[data-state="copied"],
+.markdown .code-presentation .code-copy[data-state="failed"] { opacity: 1; }
+.markdown .code-presentation .code-copy:hover { color: #1e66f5; background: #1e66f50a; }
+.markdown .code-presentation .code-copy:focus-visible { opacity: 1; outline: 2px solid #a6bdde; outline-offset: -5px; }
+.markdown .code-presentation .code-copy[data-state="copied"] { color: #2c6e1e; }
+.markdown .code-presentation .code-copy[data-state="failed"] { color: #c00e34; }
+.notebook[data-theme="dark"] .markdown .code-presentation .code-fallback { border-color: #373a40; background: #141517; color: #e6e6e6; }
+.notebook[data-theme="dark"] .markdown .code-presentation .code-copy { color: #909296; }
+.notebook[data-theme="dark"] .markdown .code-presentation .code-copy:hover { color: #fff; background: #ffffff0d; }
+.notebook[data-theme="dark"] .markdown .code-presentation .code-copy[data-state="copied"] { color: #85e89d; }
+.notebook[data-theme="dark"] .markdown .code-presentation .code-copy[data-state="failed"] { color: #f97583; }
+.markdown .code-copy-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (hover: none) { .markdown .code-presentation .code-copy { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .markdown .code-presentation .code-copy { transition: none; } }

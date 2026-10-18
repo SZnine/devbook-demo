@@ -1,0 +1,46 @@
+/* VitePress's outline: a 1px guide, 2px location marker, and unboxed text links.
+   This layer starts below the app header. It never participates in its grid. */
+.notebook.nb-native-workspace{position:relative}
+.nb-native-workspace .nb-reader .nb-source{scroll-margin-top:76px}
+.nb-reference-outline{--nro-bg:#fafbfaf5;--nro-text:#606671;--nro-strong:#333b46;--nro-muted:#8c939d;--nro-line:#dfe3e9;--nro-hover:#e9edf3;--nro-active:#3974ba;position:absolute;top:72px;right:18px;bottom:22px;z-index:18;width:252px;max-width:calc(100% - 32px);pointer-events:none;color:var(--nro-text);font-size:13px;user-select:none}
+.nb-reference-outline *{box-sizing:border-box}
+.nb-reference-outline svg{width:16px;height:16px;flex:none}
+.nb-reference-outline .nro-drawer{display:flex;flex-direction:column;max-height:100%;padding:10px 10px 16px 16px;border:1px solid #d8dfe6a6;border-radius:12px;background:var(--nro-bg);box-shadow:0 4px 8px #17263c06,0 14px 40px #17263c12;backdrop-filter:blur(20px);opacity:0;visibility:hidden;transform:translateX(10px);transition:opacity 150ms ease,transform 180ms cubic-bezier(.2,.8,.2,1),visibility 180ms;pointer-events:none}
+.nb-reference-outline.is-open .nro-drawer{opacity:1;visibility:visible;transform:translateX(0);pointer-events:auto}
+.nb-reference-outline .nro-header{display:flex;align-items:center;justify-content:space-between;min-height:30px;padding:0 2px 0 0;flex:none}
+.nro-header>span{display:flex;align-items:center;gap:8px;color:var(--nro-strong)}
+.nro-header>span>svg{width:14px;height:14px;color:var(--nro-muted)}
+.nro-header strong{font-size:12px;font-weight:600}
+.nb-reference-outline .nro-close{width:26px;height:26px;display:grid;place-items:center;border-radius:6px;color:var(--nro-muted);transition:background 120ms ease,color 120ms ease}
+.nb-reference-outline .nro-close svg{width:13px;height:13px}
+.nb-reference-outline .nro-close:hover{background:var(--nro-hover);color:var(--nro-strong)}
+.nb-reference-outline .nro-context{flex:none;margin:10px 14px 12px 0;color:var(--nro-muted);font-size:11px;line-height:1.6;font-weight:400;overflow-wrap:anywhere}
+.nb-reference-outline .nro-list{min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#ccd2da transparent;padding:0 6px 1px 0;scroll-padding:8px}
+.nb-reference-outline .nro-links{position:relative;border-left:1px solid var(--nro-line);margin-left:1px}
+.nb-reference-outline .nro-row{position:relative;display:block;width:100%;padding:7px 5px 7px 16px;text-align:left;border-radius:0;background:none;color:var(--nro-text);font-size:12px;line-height:1.6;font-weight:400;transition:color 120ms ease}
+.nb-reference-outline .nro-row:hover{color:var(--nro-strong);background:none}
+.nb-reference-outline .nro-row[aria-current]{color:var(--nro-active);font-weight:500;background:none}
+.nb-reference-outline .nro-marker{position:absolute;left:-1px;width:2px;border-radius:2px;background:var(--nro-active);transition:top 180ms cubic-bezier(.2,.8,.2,1),height 180ms ease;pointer-events:none}
+.nro-label{display:block;overflow-wrap:anywhere}
+.nb-reference-outline .nro-empty{padding:10px 16px;color:var(--nro-muted);font-size:12px}
+.nb-reference-outline button:focus-visible{outline:2px solid var(--nro-active);outline-offset:-1px;border-radius:4px}
+.nb-reference-outline .nro-rail{position:absolute;top:2px;right:0;display:flex;align-items:center;flex-direction:column;gap:13px;width:32px;padding:10px 5px;pointer-events:auto;background:var(--nro-bg);border:1px solid #d8dfe66b;border-radius:9px;color:var(--nro-muted);opacity:1;visibility:visible;transition:color 120ms ease,background 120ms ease,opacity 120ms ease,visibility 120ms}
+.nb-reference-outline .nro-rail:hover{background:var(--nro-hover);color:var(--nro-active)}
+.nb-reference-outline.is-open .nro-rail{opacity:0;visibility:hidden;pointer-events:none}
+.nro-rail-lines{display:flex;flex-direction:column;align-items:flex-end;gap:7px;width:15px;max-height:160px;overflow:hidden}
+.nro-rail-lines i{display:block;flex:none;height:2px;width:10px;border-radius:1px;background:var(--nro-line);transition:width 120ms ease,background 120ms ease}
+.nro-rail-lines i:nth-child(3n+1){width:14px}
+.nro-rail-lines i.is-current{width:15px;background:var(--nro-active)}
+.nb-native-workspace .nb-page-header>.nb-reference-trigger[aria-expanded=true]{background:#e7eef8;color:#4b79b5!important}
+.notebook.nb-craft[data-theme="dark"] .nb-reference-outline{--nro-bg:#1a1b1ef7;--nro-text:#a9aeb7;--nro-strong:#e6e8eb;--nro-muted:#777f8a;--nro-line:#343940;--nro-hover:#282c32;--nro-active:#8bb7e7}
+.notebook.nb-craft[data-theme="dark"] .nro-drawer{border-color:#393e4599;box-shadow:0 4px 8px #0000000d,0 14px 40px #00000035}
+.notebook.nb-craft[data-theme="dark"] .nro-rail{border-color:#393e4580}
+.notebook.nb-craft[data-theme="dark"] .nro-list{scrollbar-color:#3b414a transparent}
+.notebook.nb-craft[data-theme="dark"] .nb-page-header>.nb-reference-trigger.nb-icon[aria-expanded=true]{background:#2c2e33;color:#8bb7e7!important}
+/* Reserve the reading gutter for the topic, not for the open state. The toolbar
+   still spans the entire main column, and toggling the outline never rewraps text. */
+@media(min-width:1240px){
+  .notebook.nb-native-workspace.has-reference-navigation .nb-reader{margin-left:auto;margin-right:max(280px,calc((100% - 880px)/2))}
+  .notebook.nb-native-workspace.has-reference-navigation .nro-drawer{background:transparent;border-color:transparent;box-shadow:none;backdrop-filter:none}
+}
+@media(prefers-reduced-motion:reduce){.nb-reference-outline .nro-drawer,.nb-reference-outline .nro-marker,.nb-reference-outline .nro-row,.nb-reference-outline .nro-rail,.nb-reference-outline .nro-close,.nro-rail-lines i{transition:none}}

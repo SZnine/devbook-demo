@@ -1,0 +1,21 @@
+# Allowlist: local data, keys, exports, screenshots and research never enter the build context.
+**
+!Dockerfile
+!immersive-review/
+!immersive-review/package.json
+!immersive-review/package-lock.json
+!immersive-review/index.html
+!immersive-review/tsconfig.json
+!immersive-review/vite.config.ts
+!immersive-review/src/
+!immersive-review/src/**
+!immersive-review/server/
+!immersive-review/server/**
+!immersive-review/public/
+!immersive-review/public/**
+**/.env*
+**/.local/**
+**/*.pem
+**/*.key
+**/*.log
+**/*.map

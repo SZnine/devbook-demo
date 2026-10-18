@@ -1,0 +1,35 @@
+name: read
+services:
+  read:
+    build: .
+    image: read-local:latest
+    restart: unless-stopped
+    init: true
+    ports:
+      - "${READ_BIND_ADDRESS:-127.0.0.1}:${READ_PORT:-5174}:5174"
+    environment:
+      READ_HOST: 0.0.0.0
+      READ_PORT: 5174
+      READ_DATA_DIR: /data
+      READ_ALLOWED_ORIGINS: ${READ_ALLOWED_ORIGINS:-http://localhost:${READ_PORT:-5174},http://127.0.0.1:${READ_PORT:-5174}}
+      READ_AI_TIMEOUT_MS: ${READ_AI_TIMEOUT_MS:-180000}
+      READ_MAX_BODY_BYTES: ${READ_MAX_BODY_BYTES:-1048576}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-}
+      DEEPSEEK_MODELS: ${DEEPSEEK_MODELS:-}
+      GLM_API_KEY: ${GLM_API_KEY:-}
+      GLM_BASE_URL: ${GLM_BASE_URL:-}
+      GLM_MODELS: ${GLM_MODELS:-}
+      CUSTOM_AI_API_KEY: ${CUSTOM_AI_API_KEY:-}
+      CUSTOM_AI_BASE_URL: ${CUSTOM_AI_BASE_URL:-}
+      CUSTOM_AI_MODELS: ${CUSTOM_AI_MODELS:-}
+    volumes:
+      - read-settings:/data
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  read-settings:

@@ -1,0 +1,50 @@
+.nb-context-menu {
+  position:fixed;
+  z-index:100;
+  min-width:188px;
+  max-width:calc(100vw - 16px);
+  max-height:calc(100dvh - 16px);
+  overflow:auto;
+  padding:5px;
+  border:1px solid #ffffffd9;
+  border-radius:10px;
+  background:#fffffff5;
+  color:#515862;
+  box-shadow:0 0 0 1px #2729360b,0 4px 10px #27293614,0 16px 36px #2729361a;
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  font:13px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI','Microsoft YaHei',sans-serif;
+  user-select:none;
+  scrollbar-width:thin;
+  animation:nb-context-appear 100ms ease-out;
+}
+.notebook .nb-context-menu button {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  width:100%;
+  min-height:32px;
+  padding:6px 9px;
+  border:0;
+  border-radius:5px;
+  background:transparent;
+  color:inherit;
+  text-align:left;
+  font:inherit;
+  line-height:20px;
+  cursor:pointer;
+  outline:none;
+}
+.notebook .nb-context-menu button:not(:disabled):is(:hover,:focus-visible) { background:#edf1f6; color:#303b4a; }
+.notebook .nb-context-menu button.is-danger { color:#c54143; }
+.notebook .nb-context-menu button.is-danger:not(:disabled):is(:hover,:focus-visible) { background:#fcf0ef; color:#b82f34; }
+.notebook .nb-context-menu button:disabled { cursor:default; opacity:.4; }
+.notebook.nb-craft.nb-native-workspace .nb-context-menu svg[data-icon] { width:16px; height:16px; flex:none; color:inherit; opacity:.8; }
+.nb-context-separator { height:1px; margin:4px 5px; background:#e9ebee; }
+.notebook[data-theme="dark"] .nb-context-menu { background:#25262bf5; border-color:#3a3c43; color:#d5d7dc; box-shadow:0 4px 10px #0004,0 16px 36px #0005,inset 0 1px 0 #ffffff05; }
+.notebook[data-theme="dark"] .nb-context-menu button:not(:disabled):is(:hover,:focus-visible) { background:#363940; color:#f1f3f5; }
+.notebook[data-theme="dark"] .nb-context-menu button.is-danger { color:#f18b8d; }
+.notebook[data-theme="dark"] .nb-context-menu button.is-danger:not(:disabled):is(:hover,:focus-visible) { background:#493033; color:#ffa8a8; }
+.notebook[data-theme="dark"] .nb-context-separator { background:#3a3c43; }
+@keyframes nb-context-appear { from { opacity:0; } to { opacity:1; } }
+@media(prefers-reduced-motion:reduce) { .nb-context-menu { animation:none; } }

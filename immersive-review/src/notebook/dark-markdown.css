@@ -1,0 +1,53 @@
+/* Dark reading surfaces retain the same Markdown hierarchy and editing DOM. */
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor){color:#e9ecef;background:transparent}
+.nb-craft[data-theme="dark"] .chapter-editor .vditor{--border-color:#373a40;--toolbar-background-color:#25262b;--toolbar-icon-color:#a6a7ab;--toolbar-icon-hover-color:#f1f3f5;--toolbar-icon-hover-background:#2c2e33;--textarea-background-color:transparent;--textarea-text-color:#e9ecef;--panel-background-color:#25262b}
+.nb-craft[data-theme="dark"] .chapter-editor :is(.vditor-reset,.vditor-sv){color:#e9ecef;background:transparent;caret-color:#f1f3f5}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) :is(h1,h2,h3,h4,h5,h6){color:#f1f3f5}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) strong{color:#f8f9fa}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) a{color:#4dabf7;text-decoration-color:#1971c2}
+.nb-craft[data-theme="dark"] .markdown code:not(pre code),.nb-craft[data-theme="dark"] .chapter-editor .vditor-reset code[data-marker]{color:#e599f7;background:#25262b;border-color:#373a40}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) mark{color:#f3dca0;background:#55492b}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) kbd{color:#c1c2c5;background:#25262b;border-color:#373a40}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) blockquote{color:#c1c2c5;background:#202124;border-left-color:#5c5f66}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) ul>li::marker{color:#89b5ec}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) ol>li::marker{color:#81c9cb}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) input[type=checkbox]{accent-color:#7bbfa1}
+.nb-craft[data-theme="dark"] .markdown input[type=checkbox]:disabled{background-color:#242b2b;border-color:#678679}
+.nb-craft[data-theme="dark"] .markdown input[type=checkbox]:disabled:checked{background-color:#387c60;border-color:#71ac92}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) :is(table,th,td){border-color:#373a40}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) th{background:#25262b;color:#f1f3f5}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) tbody tr{background:#1a1b1e}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) tbody tr:nth-child(even){background:#202124}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) hr{border-color:#373a40}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) details{background:#202124;border-color:#373a40}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) summary{color:#c1c2c5}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) .callout{--callout-color:#95bdf1;--callout-bg:#1e252c;color:#e9ecef}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) .callout[data-subtype=TIP]{--callout-color:#85caae;--callout-bg:#1e2925}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) .callout[data-subtype=IMPORTANT]{--callout-color:#c7a4ed;--callout-bg:#28232c}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) .callout[data-subtype=WARNING]{--callout-color:#e6c07e;--callout-bg:#2c281e}
+.nb-craft[data-theme="dark"] :is(.markdown,.chapter-editor .vditor-reset) .callout[data-subtype=CAUTION]{--callout-color:#f0a2b4;--callout-bg:#2c2225}
+.nb-craft[data-theme="dark"] .chapter-editor :is(.vditor-panel,.vditor-hint,.vditor-wysiwyg__popover){color:#e9ecef;background:#25262b;border-color:#373a40;box-shadow:0 8px 24px #0004}
+.nb-craft[data-theme="dark"] .chapter-editor .vditor-toolbar{background:#25262b;border-color:#373a40}
+.nb-craft[data-theme="dark"] .chapter-editor :is(.chapter-editor-loading,.chapter-editor-hint,.chapter-flow-end,.chapter-flow-end button){color:#909296}
+.nb-craft[data-theme="dark"] .chapter-editor :is(.chapter-editor-error,.chapter-editor-live-status.has-error){color:#f0a2a2}
+.nb-craft[data-theme="dark"] .chapter-editor .vditor-wysiwyg [data-editor-placeholder]::after{color:#909296}
+.nb-craft[data-theme="dark"] .chapter-block-control select{color:#a6a7ab;background:#1a1b1e}
+.nb-craft[data-theme="dark"] .chapter-block-control select:hover{border-color:#5c5f66;color:#f1f3f5}
+.nb-craft[data-theme="dark"] .chapter-flow-end button:hover{background:#2c2e33;color:#c1c2c5}
+.nb-craft[data-theme="dark"] .chapter-flow-end kbd{color:#909296}
+.nb-craft[data-theme="dark"] .chapter-editor .vditor-sv :is(.vditor-sv__marker,.vditor-sv__marker--br,.vditor-sv__marker--bi){color:#a6a7ab}
+.nb-craft[data-theme="dark"] .chapter-editor .vditor-sv :is(.vditor-sv__marker--link,.vditor-sv__marker--info){color:#79c0ff}
+.nb-craft[data-theme="dark"] .chapter-editor .vditor-sv .vditor-sv__marker--heading{color:#c1c2c5}
+.nb-craft[data-theme="dark"] .chapter-editor .vditor-reset pre,
+.nb-craft[data-theme="dark"] .chapter-editor .vditor-wysiwyg [data-type="code-block"]>pre,
+.nb-craft[data-theme="dark"] .chapter-editor .vditor-reset [data-type="code-block"].vditor-ir__node--expand{color:#e6e6e6;background:#141517;border-color:#373a40}
+.nb-craft[data-theme="dark"] .chapter-editor .vditor-reset pre>code,
+.nb-craft[data-theme="dark"] .chapter-editor .vditor-reset pre>code:not(.hljs):not(.highlight-chroma){color:#e6e6e6;background:transparent;border:0}
+.nb-craft[data-theme="dark"] .chapter-block-control-code select{background:#141517;color:#a6a7ab}
+.nb-craft[data-theme="dark"] .nb-source-body .md-curated>aside{background:#202124;border-left-color:#5c5f66}
+.nb-craft[data-theme="dark"] .nb-source-body :is(.starlight-aside__title,.md-research-detail>summary,figure>h3){color:#c1c2c5}
+.nb-craft[data-theme="dark"] .nb-source-body .md-research-detail{border-top-color:#373a40}
+.nb-craft[data-theme="dark"] .nb-source-body .sl-link-card{background:#202124;border-color:#373a40}
+.nb-craft[data-theme="dark"] .nb-source-body :is(.sl-link-card .description,figcaption,.md-resource-type){color:#909296}
+.notebook.nb-craft[data-theme="dark"] .nb-composer .chapter-editor :is(.vditor-reset,.vditor-sv){color:#e9ecef;background:transparent;caret-color:#f1f3f5}
+.notebook.nb-craft[data-theme="dark"] .chapter-editor [contenteditable][placeholder]::before{color:#909296}
