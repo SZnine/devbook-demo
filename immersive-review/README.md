@@ -12,7 +12,7 @@ npm start           # http://127.0.0.1:5174
 npm run build:demo  # static demo without server APIs
 ```
 
-The production server serves `dist`, the assistant API and `/healthz`. Docker uses this server, not Vite.
+The production server serves `dist`, the assistant API and `/healthz`.
 
 For GitHub Pages, select **GitHub Actions** in the repository's Pages settings. The workflow deploys `main` with the repository path configured automatically. Other static hosts can set `READ_PUBLIC_BASE` before building; the default is `/`.
 
@@ -29,4 +29,6 @@ For GitHub Pages, select **GitHub Actions** in the repository's Pages settings. 
 
 English is the default. Users can switch to **简体中文** in **Settings → General → Language**; content is never translated automatically.
 
-Keep existing database names, content IDs and migrations when changing storage. Run browser checks on a separate origin with test data and placeholder credentials. Before publishing, run `node scripts/check-publish.mjs` from the repository root.
+Keep existing database names, content IDs and migrations when changing storage. Run browser checks on a separate origin with test data. Before publishing, run `node scripts/check-publish.mjs` from the repository root.
+
+[Interface](DESIGN.md) · [Content model](docs/BLOCKS.md)

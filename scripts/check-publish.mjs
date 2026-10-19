@@ -46,7 +46,7 @@ try {
   if (findings.length) {
     console.error('Publish check failed (values are intentionally omitted):\n' + findings.join('\n'));
     process.exitCode = 1;
-  } else console.log(`Publish check passed: ${candidates.length} candidate files; no matched secret, private path or generated-file rules. This is a heuristic check, not proof that every document is public.`);
+  } else console.log(`Publish check passed: ${candidates.length} files checked.`);
 } catch {
   console.error('Cannot inspect the Git file set. Run git init -b main in the project root first.');
   process.exitCode = 1;

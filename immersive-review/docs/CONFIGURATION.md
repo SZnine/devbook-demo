@@ -16,7 +16,7 @@ Copy the root `.env.example` to `.env`. Both Docker Compose and `npm start` read
 
 The container listens on port 5174. For example, `READ_PORT=5274` makes it available at `http://127.0.0.1:5274/`. A different host or port has separate browser storage.
 
-Read is a single-user application without account authentication. A reverse proxy must preserve `Host`, use an allowed origin and provide access control. The server does not trust `X-Forwarded-*` headers; origin checks do not replace authentication.
+For remote access, place this single-user application behind an authenticated reverse proxy. Preserve `Host` and configure an allowed origin. The server does not trust `X-Forwarded-*` headers.
 
 ## Settings
 
@@ -50,7 +50,7 @@ Environment variables can supply initial values for `GLM`, `DEEPSEEK` and `CUSTO
 
 **Saved settings override environment values, which override defaults.** Leave the key field blank to keep an existing key. Select **Remove saved key** and save to clear it; restarting will not restore the environment key.
 
-Keys are stored unencrypted in `assistant-config.json`, under `immersive-review/.local/` for native Node or `/data/` in Docker. They are not returned to the browser. Keep this writable directory outside `dist` and out of version control. Entering keys through settings also keeps them out of Compose environment output.
+Keys are stored unencrypted in `assistant-config.json`, under `immersive-review/.local/` for native Node or `/data/` in Docker. Keep this writable directory outside `dist` and out of version control. Saved keys are omitted from browser responses.
 
 The static demo supports editing and exports. Provider configuration and requests require a local installation.
 
@@ -58,7 +58,7 @@ The static demo supports editing and exports. Provider configuration and request
 
 **Settings → Files** can remember a local export folder in desktop browsers that support the File System Access API. The browser may request write permission again. Without folder access, exports use normal browser downloads.
 
-The folder is an export destination, not automatic synchronization or container storage. Markdown exports contain notes and book content. JSON data copies include content, drafts, archived and deleted items, reading records, conversations and preferences; they exclude API keys, directory permissions and linked media. **JSON import is not available yet.**
+The folder stores exports. Markdown exports contain notes and book content. JSON exports include content, drafts, archived and deleted items, reading records, conversations and preferences; API keys, directory permissions and linked media are excluded. JSON import is not supported.
 
 | Data | Storage |
 | --- | --- |

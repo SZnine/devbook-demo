@@ -2,7 +2,7 @@
 
 A place for quick notes, growing books, and focused reading.
 
-[Configuration](immersive-review/docs/CONFIGURATION.md) · [Development](immersive-review/README.md)
+[Live demo](https://sznine.github.io/devbook-demo/) · [Configuration](immersive-review/docs/CONFIGURATION.md) · [Development](immersive-review/README.md)
 
 ## Capture
 
