@@ -5,6 +5,9 @@ import { enrollMemory, memoryId, readMemoryState, recordMemoryExposure, removeMe
 import type { MemoryPriorityAssessment } from './memory-priority-client';
 import * as legacy from '../manual-demo/business-store';
 import manual from '../manual-demo/manual.json';
+import { IS_DEMO_MODE } from '../demo';
+import { t } from '../i18n';
+import { createDemoContent } from './demo-content';
 
 export type Ref = { kind: 'note' | 'section'; id: string };
 export type ChapterRef = { kind: 'chapter'; id: string };
@@ -72,8 +75,8 @@ function openDatabase(): Promise<IDBDatabase> {
       request.result.onversionchange = () => request.result.close();
       resolve(request.result);
     };
-    request.onerror = () => reject(new Error('无法打开本地笔记。'));
-    request.onblocked = () => { blocked = true; reject(new Error('笔记存储被其他页面占用，请关闭后重试。')); };
+    request.onerror = () => reject(new Error(t('无法打开本地笔记。', 'Could not open local notes.')));
+    request.onblocked = () => { blocked = true; reject(new Error(t('笔记存储被其他页面占用，请关闭后重试。', 'Close other Read tabs and try again.'))); };
   });
 }
 async function snapshot(): Promise<{ workspace: Workspace; migrated: boolean }> {
@@ -83,7 +86,7 @@ async function snapshot(): Promise<{ workspace: Workspace; migrated: boolean }> 
     const value = tx.objectStore('workspace').get('root');
     const migration = tx.objectStore('metadata').get('manual-memos-v1');
     tx.oncomplete = () => { db.close(); resolve({ workspace: value.result ?? empty(), migrated: migration.result === true }); };
-    tx.onabort = () => { db.close(); reject(new Error('笔记读取失败，原记录未修改。')); };
+    tx.onabort = () => { db.close(); reject(new Error(t('笔记读取失败，原记录未修改。', 'Could not read notes. Your data is unchanged.'))); };
   });
 }
 /** One transaction owns every change, including the one-time migration marker. */
@@ -104,7 +107,7 @@ async function change<T>(update: (workspace: Workspace) => T, markMigrated = fal
       } catch (reason) { failure = reason; tx.abort(); }
     };
     tx.oncomplete = () => { db.close(); resolve(result); };
-    tx.onabort = () => { db.close(); reject(failure ?? new Error('保存失败，本次修改未计入。')); };
+    tx.onabort = () => { db.close(); reject(failure ?? new Error(t('保存失败，本次修改未计入。', 'Could not save this change.'))); };
   });
 }
 async function ensureMigrated() {
@@ -123,6 +126,34 @@ async function ensureMigrated() {
     }
   }, true);
 }
+async function ensureDemoSeeded(hasReadingHistory: boolean) {
+  if (!IS_DEMO_MODE) return;
+  const db = await openDatabase();
+  return new Promise<void>((resolve, reject) => {
+    const tx = db.transaction(['workspace', 'metadata'], 'readwrite');
+    const workspaceStore = tx.objectStore('workspace');
+    const metadata = tx.objectStore('metadata');
+    const marker = metadata.get('english-demo-v1');
+    marker.onsuccess = () => {
+      if (marker.result === true) return;
+      const request = workspaceStore.get('root');
+      request.onsuccess = () => {
+        const workspace: Workspace = request.result ?? empty();
+        // Even a draft or archived record belongs to the user. Never mix examples
+        // into an existing workspace, including one cleared after the first visit.
+        const unused = !hasReadingHistory && !workspace.notes.length && !workspace.collections.length && !workspace.legacyDrafts.length
+          && !(workspace.deletedContent?.length) && !workspace.draft.markdown && !workspace.draft.editingId && !workspace.draft.source;
+        if (unused) {
+          const sample = createDemoContent();
+          workspaceStore.put({ ...workspace, ...sample }, 'root');
+        }
+        metadata.put(true, 'english-demo-v1');
+      };
+    };
+    tx.oncomplete = () => { db.close(); resolve(); };
+    tx.onabort = () => { db.close(); reject(new Error(t('示例内容加载失败。', 'Could not load sample content.'))); };
+  });
+}
 function operation<T>(update: (workspace: Workspace) => T, committed?: (result: T) => void): Promise<T> {
   return serialize(async () => {
     await ensureMigrated();
@@ -132,20 +163,20 @@ function operation<T>(update: (workspace: Workspace) => T, committed?: (result: 
   });
 }
 function requireMarkdown(markdown: string) {
-  if (typeof markdown !== 'string' || markdown.length > 2_000_000) throw new Error('笔记内容无效或过长。');
+  if (typeof markdown !== 'string' || markdown.length > 2_000_000) throw new Error(t('笔记内容无效或过长。', 'Note content is invalid or too long.'));
 }
 function requireNote(workspace: Pick<Workspace, 'notes'>, id: string) {
   const note = workspace.notes.find(item => item.id === id);
-  if (!note) throw new Error('这条笔记不存在。');
+  if (!note) throw new Error(t('这条笔记不存在。', 'This note no longer exists.'));
   return note;
 }
 function requireRef(workspace: Pick<Workspace, 'notes'>, ref: Ref) {
   if (ref.kind === 'note') return requireNote(workspace, ref.id);
-  if (ref.kind !== 'section' || !sectionIds.has(ref.id)) throw new Error('这一节不存在。');
+  if (ref.kind !== 'section' || !sectionIds.has(ref.id)) throw new Error(t('这一节不存在。', 'This section no longer exists.'));
 }
 function requireCollection(workspace: Workspace, id: string) {
   const collection = workspace.collections.find(item => item.id === id);
-  if (!collection) throw new Error('这个阅读合集不存在。');
+  if (!collection) throw new Error(t('这个阅读合集不存在。', 'This book or chapter no longer exists.'));
   return collection;
 }
 const sameRef = (left: ContentRef, right: ContentRef) => left.kind === right.kind && left.id === right.id;
@@ -170,7 +201,7 @@ export function isCollectionDeleted(id: string, state: Pick<NotebookState, 'coll
 }
 function requireNotDeletedCollection(workspace: Workspace, id: string) {
   const collection = requireCollection(workspace, id);
-  if (isCollectionDeleted(id, workspace)) throw new Error('请先从回收站恢复这本书或章节。');
+  if (isCollectionDeleted(id, workspace)) throw new Error(t('请先从回收站恢复这本书或章节。', 'Restore this book or chapter from Trash first.'));
   return collection;
 }
 function requireActiveCollection(workspace: Workspace, id: string) {
@@ -178,7 +209,7 @@ function requireActiveCollection(workspace: Workspace, id: string) {
   let current: Collection | undefined = collection;
   const seen = new Set<string>();
   while (current && !seen.has(current.id)) {
-    if (current.archivedAt !== undefined) throw new Error('请先恢复归档的章节，再进行整理。');
+    if (current.archivedAt !== undefined) throw new Error(t('请先恢复归档的章节，再进行整理。', 'Restore the archived chapter first.'));
     seen.add(current.id);
     current = parentOf(workspace, current.id);
   }
@@ -193,14 +224,14 @@ function collectionTitles(workspace: Workspace, id: string): string[] {
   return path;
 }
 function copyMemoSource(source: MemoSource): MemoSource {
-  if (!source || !['summary', 'content'].includes(source.kind) || typeof source.collectionId !== 'string' || !source.collectionId || source.collectionId.length > 240) throw new Error('随笔来源无效。');
-  if (typeof source.title !== 'string' || source.title.length > 500 || !Array.isArray(source.path) || source.path.length > 100 || source.path.some(part => typeof part !== 'string' || part.length > 240)) throw new Error('随笔来源标题无效。');
-  if (typeof source.quote !== 'string' || !source.quote.trim() || source.quote.length > 2_000_000 || [source.before, source.after].some(part => part !== undefined && (typeof part !== 'string' || part.length > 20_000))) throw new Error('引用内容或上下文无效。');
-  if (source.quoteFormat !== undefined && source.quoteFormat !== 'markdown') throw new Error('引用格式无效。');
-  if (source.contextMarkdown !== undefined && (typeof source.contextMarkdown !== 'string' || source.contextMarkdown.length > 2_000_000)) throw new Error('引用上下文无效。');
-  if (source.contextTitle !== undefined && (typeof source.contextTitle !== 'string' || source.contextTitle.length > 10_000)) throw new Error('引用上下文标题无效。');
-  if (!Number.isSafeInteger(source.capturedAt) || source.capturedAt < 0 || source.capturedAt > 8_640_000_000_000_000) throw new Error('引用时间无效。');
-  if (source.kind === 'content' && (!source.ref || !['note', 'section'].includes(source.ref.kind) || typeof source.ref.id !== 'string' || !source.ref.id || source.ref.id.length > 240)) throw new Error('引用位置无效。');
+  if (!source || !['summary', 'content'].includes(source.kind) || typeof source.collectionId !== 'string' || !source.collectionId || source.collectionId.length > 240) throw new Error(t('随笔来源无效。', 'Invalid note source.'));
+  if (typeof source.title !== 'string' || source.title.length > 500 || !Array.isArray(source.path) || source.path.length > 100 || source.path.some(part => typeof part !== 'string' || part.length > 240)) throw new Error(t('随笔来源标题无效。', 'Invalid source title.'));
+  if (typeof source.quote !== 'string' || !source.quote.trim() || source.quote.length > 2_000_000 || [source.before, source.after].some(part => part !== undefined && (typeof part !== 'string' || part.length > 20_000))) throw new Error(t('引用内容或上下文无效。', 'Invalid quotation or context.'));
+  if (source.quoteFormat !== undefined && source.quoteFormat !== 'markdown') throw new Error(t('引用格式无效。', 'Invalid quotation format.'));
+  if (source.contextMarkdown !== undefined && (typeof source.contextMarkdown !== 'string' || source.contextMarkdown.length > 2_000_000)) throw new Error(t('引用上下文无效。', 'Invalid quotation context.'));
+  if (source.contextTitle !== undefined && (typeof source.contextTitle !== 'string' || source.contextTitle.length > 10_000)) throw new Error(t('引用上下文标题无效。', 'Invalid context title.'));
+  if (!Number.isSafeInteger(source.capturedAt) || source.capturedAt < 0 || source.capturedAt > 8_640_000_000_000_000) throw new Error(t('引用时间无效。', 'Invalid quotation timestamp.'));
+  if (source.kind === 'content' && (!source.ref || !['note', 'section'].includes(source.ref.kind) || typeof source.ref.id !== 'string' || !source.ref.id || source.ref.id.length > 240)) throw new Error(t('引用位置无效。', 'Invalid quotation location.'));
   return { kind: source.kind, collectionId: source.collectionId, title: source.title, path: [...source.path], quote: source.quote, capturedAt: source.capturedAt,
     ...(source.ref ? { ref: { ...source.ref } } : {}), ...(source.quoteFormat ? { quoteFormat: source.quoteFormat } : {}),
     ...(source.contextMarkdown !== undefined ? { contextMarkdown: source.contextMarkdown } : {}), ...(source.contextTitle !== undefined ? { contextTitle: source.contextTitle } : {}),
@@ -211,27 +242,29 @@ function assertChapterDestination(workspace: Workspace, id: string, to: string) 
   const visited = new Set<string>();
   while (pending.length) {
     const current = pending.pop()!;
-    if (current === to) throw new Error('不能把章节移入自身或它的子章节。');
+    if (current === to) throw new Error(t('不能把章节移入自身或它的子章节。', 'A chapter cannot be moved into itself or a descendant.'));
     if (visited.has(current)) continue;
     visited.add(current);
     for (const ref of requireCollection(workspace, current).items) if (ref.kind === 'chapter') pending.push(ref.id);
   }
 }
 function cleanTitle(title: string) {
-  if (typeof title !== 'string' || !title.trim() || title.length > 240) throw new Error('请填写有效的合集名称。');
+  if (typeof title !== 'string' || !title.trim() || title.length > 240) throw new Error(t('请填写有效的合集名称。', 'Enter a valid name.'));
   return title.trim();
 }
 function noteReference(note: Note): MemoryReference {
   const hash = `sha256:${bytesToHex(sha256(new TextEncoder().encode(note.markdown)))}`;
-  return { documentId: NOTE_DOCUMENT, documentTitle: isMemo(note) ? '随笔' : '书籍正文', sectionId: note.id,
-    title: note.markdown.split('\n').find(line => line.trim())?.replace(/^#+\s*/, '').slice(0, 120) || '随笔',
+  return { documentId: NOTE_DOCUMENT, documentTitle: isMemo(note) ? t('随笔', 'Notes') : t('书籍正文', 'Book content'), sectionId: note.id,
+    title: note.markdown.split('\n').find(line => line.trim())?.replace(/^#+\s*/, '').slice(0, 120) || t('随笔', 'Notes'),
     contentHash: hash, documentRevision: hash, sectionVersion: Math.max(1, Math.floor(note.updatedAt)) };
 }
 
 export function loadNotebook(): Promise<NotebookState> {
   return serialize(async () => {
     await ensureMigrated();
-    const [{ workspace }, memory] = await Promise.all([snapshot(), readMemoryState()]);
+    const memory = await readMemoryState();
+    await ensureDemoSeeded(memory.entries.length > 0);
+    const { workspace } = await snapshot();
     return { ...workspace, deletedContent: workspace.deletedContent ?? [], entries: memory.entries.filter(entry => entry.documentId === NOTE_DOCUMENT || entry.documentId === SECTION_DOCUMENT), settings: memory.settings };
   });
 }
@@ -244,12 +277,12 @@ export async function saveNote(input: { id?: string; markdown: string; sourceSec
   const source = input.source ? copyMemoSource(input.source) : undefined;
   return operation(workspace => {
     requireMarkdown(markdown);
-    if (!Number.isSafeInteger(now) || now < 0 || now > 8_640_000_000_000_000) throw new Error('记录时间无效。');
-    if (sourceSectionId && !sectionIds.has(sourceSectionId)) throw new Error('来源章节不存在。');
+    if (!Number.isSafeInteger(now) || now < 0 || now > 8_640_000_000_000_000) throw new Error(t('记录时间无效。', 'Invalid timestamp.'));
+    if (sourceSectionId && !sectionIds.has(sourceSectionId)) throw new Error(t('来源章节不存在。', 'The source chapter no longer exists.'));
     const previous = id ? requireNote(workspace, id) : undefined;
-    if (!previous && !markdown.trim() && !source) throw new Error('请先写下笔记内容。');
-    if (previous?.archivedAt !== undefined) throw new Error('请先恢复这条笔记，再进行编辑。');
-    if (previous?.kind === 'document' && !workspace.collections.some(collection => !isCollectionDeleted(collection.id, workspace) && collection.items.some(ref => ref.kind === 'note' && ref.id === previous.id))) throw new Error('正文已被删除，请先从回收站恢复。');
+    if (!previous && !markdown.trim() && !source) throw new Error(t('请先写下笔记内容。', 'Write some content first.'));
+    if (previous?.archivedAt !== undefined) throw new Error(t('请先恢复这条笔记，再进行编辑。', 'Restore this note before editing.'));
+    if (previous?.kind === 'document' && !workspace.collections.some(collection => !isCollectionDeleted(collection.id, workspace) && collection.items.some(ref => ref.kind === 'note' && ref.id === previous.id))) throw new Error(t('正文已被删除，请先从回收站恢复。', 'This content was deleted. Restore it from Trash first.'));
     const note: Note = { ...previous, id: id ?? crypto.randomUUID(), markdown, createdAt: previous?.createdAt ?? now, updatedAt: now,
       ...(!previous ? { kind: 'memo' as const } : {}), ...(sourceSectionId ? { sourceSectionId } : {}), ...(source ? { source } : {}) };
     workspace.notes = [...workspace.notes.filter(item => item.id !== note.id), note];
@@ -262,7 +295,7 @@ export async function saveDraft(input: Draft): Promise<Draft> {
   const source = input.source ? copyMemoSource(input.source) : undefined;
   return operation(workspace => {
     requireMarkdown(markdown);
-    if (editingId && requireNote(workspace, editingId).archivedAt !== undefined) throw new Error('请先恢复这条笔记。');
+    if (editingId && requireNote(workspace, editingId).archivedAt !== undefined) throw new Error(t('请先恢复这条笔记。', 'Restore this note first.'));
     workspace.draft = { markdown, ...(editingId ? { editingId } : {}), ...(source ? { source } : {}) };
     return workspace.draft;
   });
@@ -270,7 +303,7 @@ export async function saveDraft(input: Draft): Promise<Draft> {
 export function archiveNote(id: string): Promise<Note> {
   return operation(workspace => {
     const note = requireNote(workspace, id);
-    if (workspace.draft.editingId === id) throw new Error('请先保存或取消当前编辑。');
+    if (workspace.draft.editingId === id) throw new Error(t('请先保存或取消当前编辑。', 'Save or cancel the current edit first.'));
     note.archivedAt ??= Date.now();
     return note;
   });
@@ -290,7 +323,7 @@ export function createCollection(title: string, parentId?: string): Promise<Coll
 export function saveCollectionSummary(id: string, summary: string): Promise<Collection> {
   return operation(workspace => {
     const collection = requireActiveCollection(workspace, id);
-    if (typeof summary !== 'string' || summary.length > 2_000_000) throw new Error('章节摘要无效或过长。');
+    if (typeof summary !== 'string' || summary.length > 2_000_000) throw new Error(t('章节摘要无效或过长。', 'Summary is invalid or too long.'));
     collection.summary = summary;
     return collection;
   });
@@ -300,9 +333,9 @@ export function createNoteInCollection(collectionId: string, markdown: string, b
   return operation(workspace => {
     const collection = requireActiveCollection(workspace, collectionId);
     requireMarkdown(markdown);
-    if (!markdown.trim()) throw new Error('请先写下笔记内容。');
+    if (!markdown.trim()) throw new Error(t('请先写下笔记内容。', 'Write some content first.'));
     const index = position ? collection.items.findIndex(item => sameRef(item, position)) : collection.items.length;
-    if (index < 0) throw new Error('放置位置已变化，请重试。');
+    if (index < 0) throw new Error(t('放置位置已变化，请重试。', 'The destination changed. Try again.'));
     const now = Date.now();
     const note: Note = { id: crypto.randomUUID(), kind: 'document', markdown, createdAt: now, updatedAt: now };
     workspace.notes.push(note);
@@ -319,9 +352,9 @@ export function saveDocumentContent(input: { collectionId: string; id: string; m
     let index = collection.items.findIndex(ref => ref.kind === 'note' && ref.id === id);
     // A live editor may finish a second queued save with its pre-copy identity.
     if (index < 0) index = collection.items.findIndex(ref => ref.kind === 'note' && workspace.notes.some(note => note.id === ref.id && note.kind === 'document' && note.editingOriginId === id));
-    if (index < 0) throw new Error('正文已被删除或移走，本次编辑未重新添加。');
+    if (index < 0) throw new Error(t('正文已被删除或移走，本次编辑未重新添加。', 'This content was deleted or moved.'));
     const previous = requireNote(workspace, collection.items[index].id);
-    if (previous.archivedAt !== undefined) throw new Error('请先恢复这条笔记，再进行编辑。');
+    if (previous.archivedAt !== undefined) throw new Error(t('请先恢复这条笔记，再进行编辑。', 'Restore this note before editing.'));
     const shared = workspace.collections.filter(owner => owner.items.some(ref => ref.kind === 'note' && ref.id === previous.id)).length > 1;
     if (!isMemo(previous) && !shared) {
       previous.markdown = markdown; previous.updatedAt = Date.now();
@@ -343,18 +376,18 @@ export function copyIntoCollection(input: { to: string; refs: Ref[]; before?: Co
   return operation(workspace => {
     const target = requireActiveCollection(workspace, input.to);
     const index = before ? target.items.findIndex(ref => sameRef(ref, before)) : target.items.length;
-    if (index < 0) throw new Error('放置位置已变化，请重试。');
+    if (index < 0) throw new Error(t('放置位置已变化，请重试。', 'The destination changed. Try again.'));
     for (const ref of refs) requireRef(workspace, ref);
     const now = Date.now();
     const additions = refs.map(ref => {
       const original = ref.kind === 'note' ? requireNote(workspace, ref.id) : undefined;
-      if (original?.archivedAt !== undefined) throw new Error('请先恢复这条笔记，再加入书籍。');
+      if (original?.archivedAt !== undefined) throw new Error(t('请先恢复这条笔记，再加入书籍。', 'Restore this note before adding it to a book.'));
       let markdown = readingMarkdown(ref, workspace);
       if (original && isMemo(original) && original.source) {
         const citation = original.source;
         const escapeText = (value: string) => value.replace(/([\\`*_{}\[\]<>])/g, '\\$1').replace(/[\r\n]+/g, ' ');
-        const attribution = [...citation.path, citation.kind === 'summary' ? '摘要' : citation.title].filter(Boolean).map(escapeText).join(' / ');
-        markdown = `> ${citation.quote.replace(/\r\n?/g, '\n').split('\n').join('\n> ')}\n\n出处：${attribution}${markdown.trim() ? `\n\n${markdown}` : ''}`;
+        const attribution = [...citation.path, citation.kind === 'summary' ? t('摘要', 'Summary') : citation.title].filter(Boolean).map(escapeText).join(' / ');
+        markdown = `> ${citation.quote.replace(/\r\n?/g, '\n').split('\n').join('\n> ')}\n\n${t('出处：', 'Source: ')}${attribution}${markdown.trim() ? `\n\n${markdown}` : ''}`;
       }
       const note: Note = { id: crypto.randomUUID(), kind: 'document', markdown, createdAt: now, updatedAt: now,
         ...(original?.source ? { source: copyMemoSource(original.source) } : {}),
@@ -379,7 +412,7 @@ export function trashCollection(id: string): Promise<Collection> {
 function restoreCollectionInWorkspace(workspace: Workspace, id: string): Collection {
   const collection = requireCollection(workspace, id);
   const parent = parentOf(workspace, id);
-  if (parent && isCollectionDeleted(parent.id, workspace)) throw new Error('请先从回收站恢复上级书籍或章节。');
+  if (parent && isCollectionDeleted(parent.id, workspace)) throw new Error(t('请先从回收站恢复上级书籍或章节。', 'Restore the parent book or chapter first.'));
   delete collection.deletedAt;
   return collection;
 }
@@ -389,9 +422,9 @@ export function restoreDeletedCollection(id: string): Promise<Collection> {
 export function deleteCollectionSummary(id: string): Promise<DeletedContent> {
   return operation(workspace => {
     const collection = requireActiveCollection(workspace, id);
-    if (!collection.summary?.trim()) throw new Error('摘要已经为空。');
+    if (!collection.summary?.trim()) throw new Error(t('摘要已经为空。', 'The summary is already empty.'));
     const deleted: DeletedContent = { id: crypto.randomUUID(), kind: 'summary', collectionId: id, collectionTitle: collection.title,
-      path: collectionTitles(workspace, id), title: `${collection.title} · 摘要`, markdown: collection.summary, deletedAt: Date.now() };
+      path: collectionTitles(workspace, id), title: `${collection.title} · ${t('摘要', 'Summary')}`, markdown: collection.summary, deletedAt: Date.now() };
     (workspace.deletedContent ??= []).push(deleted);
     collection.summary = '';
     return deleted;
@@ -402,12 +435,12 @@ export function deleteContent(collectionId: string, ref: Ref): Promise<DeletedCo
   return operation(workspace => {
     const collection = requireActiveCollection(workspace, collectionId);
     const index = collection.items.findIndex(item => sameRef(item, copied));
-    if (index < 0) throw new Error('正文已被删除或移走。');
+    if (index < 0) throw new Error(t('正文已被删除或移走。', 'This content was deleted or moved.'));
     requireRef(workspace, copied);
     const markdown = readingMarkdown(copied, workspace);
     const alias = collection.titles?.[refKey(copied)];
     const deleted: DeletedContent = { id: crypto.randomUUID(), kind: 'content', collectionId, collectionTitle: collection.title,
-      path: collectionTitles(workspace, collectionId), title: alias ?? markdown.split('\n').find(line => line.trim())?.replace(/^#+\s*/, '').slice(0, 120) ?? '正文',
+      path: collectionTitles(workspace, collectionId), title: alias ?? markdown.split('\n').find(line => line.trim())?.replace(/^#+\s*/, '').slice(0, 120) ?? t('正文', 'Content'),
       markdown, deletedAt: Date.now(), ref: copied, index, ...(alias ? { alias } : {}) };
     (workspace.deletedContent ??= []).push(deleted);
     collection.items.splice(index, 1);
@@ -417,14 +450,14 @@ export function deleteContent(collectionId: string, ref: Ref): Promise<DeletedCo
 }
 function restoreContentInWorkspace(workspace: Workspace, id: string): Collection {
   const deleted = workspace.deletedContent?.find(item => item.id === id);
-  if (!deleted) throw new Error('这条回收站记录不存在。');
+  if (!deleted) throw new Error(t('这条回收站记录不存在。', 'This item is no longer in Trash.'));
   const collection = requireActiveCollection(workspace, deleted.collectionId);
   if (deleted.kind === 'summary') {
-    if (collection.summary?.trim()) throw new Error('当前已有摘要，请先移走当前摘要再恢复。');
+    if (collection.summary?.trim()) throw new Error(t('当前已有摘要，请先移走当前摘要再恢复。', 'Move the current summary before restoring this one.'));
     collection.summary = deleted.markdown;
   } else {
     requireRef(workspace, deleted.ref);
-    if (collection.items.some(ref => sameRef(ref, deleted.ref))) throw new Error('正文已在当前章节中，请先确认现有内容。');
+    if (collection.items.some(ref => sameRef(ref, deleted.ref))) throw new Error(t('正文已在当前章节中，请先确认现有内容。', 'This content is already in the chapter.'));
     let ref = deleted.ref;
     if (readingMarkdown(ref, workspace) !== deleted.markdown) {
       const now = Date.now();
@@ -471,11 +504,11 @@ export function groupIntoChapter(fromId: string, refs: ContentRef[], title: stri
   const selected = refs.map(ref => ({ ...ref }));
   return operation(workspace => {
     const source = requireActiveCollection(workspace, fromId);
-    if (!selected.length) throw new Error('请先选择要组成章节的内容。');
+    if (!selected.length) throw new Error(t('请先选择要组成章节的内容。', 'Select content for the new chapter.'));
     for (const ref of selected) {
       requireContent(workspace, ref);
       if (ref.kind === 'chapter') requireActiveCollection(workspace, ref.id);
-      if (!source.items.some(item => sameRef(item, ref))) throw new Error('待整理内容已不在来源合集中。');
+      if (!source.items.some(item => sameRef(item, ref))) throw new Error(t('待整理内容已不在来源合集中。', 'The selected content is no longer in its source.'));
     }
     const items = source.items.filter(ref => selected.some(item => sameRef(item, ref)));
     const index = source.items.findIndex(ref => selected.some(item => sameRef(item, ref)));
@@ -498,9 +531,9 @@ export function ungroupChapter(chapterId: string): Promise<Collection> {
   return operation(workspace => {
     const chapter = requireActiveCollection(workspace, chapterId);
     const parent = parentOf(workspace, chapterId);
-    if (!parent) throw new Error('书籍没有上级，无法展开到上级。');
-    if (chapter.summary?.trim()) throw new Error('章节仍有摘要，请先将摘要移至上级或清空后再展开。');
-    if (workspace.deletedContent?.some(item => item.collectionId === chapterId)) throw new Error('请先恢复该章节回收站中的内容，再展开到上级。');
+    if (!parent) throw new Error(t('书籍没有上级，无法展开到上级。', 'This book has no parent location.'));
+    if (chapter.summary?.trim()) throw new Error(t('章节仍有摘要，请先将摘要移至上级或清空后再展开。', 'Move or clear the chapter summary first.'));
+    if (workspace.deletedContent?.some(item => item.collectionId === chapterId)) throw new Error(t('请先恢复该章节回收站中的内容，再展开到上级。', 'Restore this chapter’s deleted content first.'));
     const index = parent.items.findIndex(ref => ref.kind === 'chapter' && ref.id === chapterId);
     // A note may already be referenced by the parent. Keep that existing occurrence and its alias.
     const additions = chapter.items.filter(ref => !parent.items.some(item => sameRef(item, ref)));
@@ -528,7 +561,7 @@ export function moveChapter(id: string, to: string | null, before?: ContentRef):
       const exists = target
         ? target.items.some(item => sameRef(item, position))
         : position.kind === 'chapter' && workspace.collections.some(item => item.id === position.id) && !parentOf(workspace, position.id);
-      if (!exists) throw new Error('放置位置已变化，请重试。');
+      if (!exists) throw new Error(t('放置位置已变化，请重试。', 'The destination changed. Try again.'));
       if (position.kind === 'chapter' && position.id === id) return chapter;
     }
     if (source) {
@@ -554,11 +587,11 @@ export function moveContent(input: { from?: string; to: string | null; refs: Con
   return operation(workspace => {
     const source = from === undefined ? undefined : requireActiveCollection(workspace, from);
     const target = to === null ? undefined : requireActiveCollection(workspace, to);
-    if (!target && selected.some(ref => ref.kind !== 'chapter')) throw new Error('只有章节可以移动到阅读站根目录。');
+    if (!target && selected.some(ref => ref.kind !== 'chapter')) throw new Error(t('只有章节可以移动到阅读站根目录。', 'Only chapters can be moved to the Library root.'));
     // Validate every member and every ancestor before changing any source or destination.
     for (const ref of selected) {
       requireContent(workspace, ref);
-      if (source && !source.items.some(item => sameRef(item, ref))) throw new Error('待整理内容已不在来源合集中。');
+      if (source && !source.items.some(item => sameRef(item, ref))) throw new Error(t('待整理内容已不在来源合集中。', 'The selected content is no longer in its source.'));
       if (ref.kind === 'chapter') {
         requireActiveCollection(workspace, ref.id);
         if (target) assertChapterDestination(workspace, ref.id, target.id);
@@ -604,7 +637,7 @@ export function reorderContent(collectionId: string, refs: ContentRef[]): Promis
     const collection = requireActiveCollection(workspace, collectionId);
     const keys = new Set(ordered.map(refKey));
     if (ordered.length !== collection.items.length || keys.size !== ordered.length || collection.items.some(ref => !keys.has(refKey(ref)))) {
-      throw new Error('排序内容已变化，请刷新后重试。');
+      throw new Error(t('排序内容已变化，请刷新后重试。', 'Content order changed. Refresh and try again.'));
     }
     collection.items = ordered;
     return collection;
@@ -636,7 +669,7 @@ export function renameItem(id: string, ref: Ref, title: string): Promise<Collect
   const copied = { ...ref };
   return operation(workspace => {
     const collection = requireActiveCollection(workspace, id);
-    if (!collection.items.some(item => sameRef(item, copied))) throw new Error('内容不在这个阅读合集中。');
+    if (!collection.items.some(item => sameRef(item, copied))) throw new Error(t('内容不在这个阅读合集中。', 'This content is not in this book or chapter.'));
     collection.titles ??= {};
     collection.titles[refKey(copied)] = cleanTitle(title);
     return collection;
@@ -647,15 +680,15 @@ export function transferItems(input: { from?: string; to: string; refs: Ref[]; m
   const refs = input.refs.map(ref => ({ ...ref }));
   const before = input.before ? { ...input.before } : undefined;
   return operation(workspace => {
-    if (mode !== 'copy' && mode !== 'move') throw new Error('整理方式无效。');
+    if (mode !== 'copy' && mode !== 'move') throw new Error(t('整理方式无效。', 'Invalid organization action.'));
     const target = requireActiveCollection(workspace, to);
     const source = from ? requireActiveCollection(workspace, from) : undefined;
     const selected = refs.filter((ref, index) => refs.findIndex(item => sameRef(item, ref)) === index);
     for (const ref of selected) {
       requireRef(workspace, ref);
-      if (source && !source.items.some(item => sameRef(item, ref))) throw new Error('待整理内容已不在来源合集中。');
+      if (source && !source.items.some(item => sameRef(item, ref))) throw new Error(t('待整理内容已不在来源合集中。', 'The selected content is no longer in its source.'));
     }
-    if (before && !target.items.some(item => sameRef(item, before))) throw new Error('放置位置已变化，请重试。');
+    if (before && !target.items.some(item => sameRef(item, before))) throw new Error(t('放置位置已变化，请重试。', 'The destination changed. Try again.'));
     if (!selected.length) return [];
     if (source === target) {
       if (before && selected.some(ref => sameRef(ref, before))) return [target];
@@ -686,10 +719,10 @@ export function transferItems(input: { from?: string; to: string; refs: Ref[]; m
 export function moveInCollection(id: string, ref: ContentRef, direction: -1 | 1): Promise<Collection> {
   const copied = { ...ref };
   return operation(workspace => {
-    if (direction !== -1 && direction !== 1) throw new Error('移动方向无效。');
+    if (direction !== -1 && direction !== 1) throw new Error(t('移动方向无效。', 'Invalid move direction.'));
     const collection = requireActiveCollection(workspace, id);
     const index = collection.items.findIndex(item => sameRef(item, copied));
-    if (index < 0) throw new Error('内容不在这个阅读合集中。');
+    if (index < 0) throw new Error(t('内容不在这个阅读合集中。', 'This content is not in this book or chapter.'));
     const next = index + direction;
     if (next >= 0 && next < collection.items.length) [collection.items[index], collection.items[next]] = [collection.items[next], collection.items[index]];
     return collection;
@@ -718,8 +751,8 @@ function memoryOperation(ref: Ref, kind: 'enroll' | 'remove'): Promise<MemoryEnt
     if (copied.kind === 'section') return kind === 'enroll' ? legacy.enroll(copied.id) : legacy.removeMemory(copied.id);
     const note = requireNote(workspace, copied.id);
     if (kind === 'remove') return removeMemory(memoryId(NOTE_DOCUMENT, copied.id));
-    if (note.archivedAt !== undefined) throw new Error('请先恢复这条笔记。');
-    if (note.kind === 'document' && !workspace.collections.some(collection => !isCollectionDeleted(collection.id, workspace) && collection.items.some(ref => sameRef(ref, copied)))) throw new Error('正文已被删除，请先从回收站恢复。');
+    if (note.archivedAt !== undefined) throw new Error(t('请先恢复这条笔记。', 'Restore this note first.'));
+    if (note.kind === 'document' && !workspace.collections.some(collection => !isCollectionDeleted(collection.id, workspace) && collection.items.some(ref => sameRef(ref, copied)))) throw new Error(t('正文已被删除，请先从回收站恢复。', 'This content was deleted. Restore it from Trash first.'));
     const reference = noteReference(note);
     return enrollMemory(reference);
   });
@@ -732,10 +765,10 @@ export function recordRef(ref: Ref, evidence: { source: 'focus' | 'manual'; sess
     await ensureMigrated();
     const { workspace } = await snapshot();
     const reference = readingReference(ref, workspace);
-    if (ref.kind === 'note' && requireNote(workspace, ref.id).archivedAt !== undefined) throw new Error('请先恢复这条笔记。');
-    if (ref.kind === 'note' && requireNote(workspace, ref.id).kind === 'document' && !workspace.collections.some(collection => !isCollectionDeleted(collection.id, workspace) && collection.items.some(item => sameRef(item, ref)))) throw new Error('正文已被删除，本次停留未计入。');
-    if (evidence.contentHash && evidence.contentHash !== reference.contentHash) throw new Error('内容已变更，本次停留未计入新版。');
-    if (evidence.source === 'focus' && (evidence.activeMs ?? 0) < requiredActiveMs(estimateSeconds(readingMarkdown(ref, workspace)))) throw new Error('有效阅读时间不足。');
+    if (ref.kind === 'note' && requireNote(workspace, ref.id).archivedAt !== undefined) throw new Error(t('请先恢复这条笔记。', 'Restore this note first.'));
+    if (ref.kind === 'note' && requireNote(workspace, ref.id).kind === 'document' && !workspace.collections.some(collection => !isCollectionDeleted(collection.id, workspace) && collection.items.some(item => sameRef(item, ref)))) throw new Error(t('正文已被删除，本次停留未计入。', 'This content was deleted. Reading time was not recorded.'));
+    if (evidence.contentHash && evidence.contentHash !== reference.contentHash) throw new Error(t('内容已变更，本次停留未计入新版。', 'Content changed. Reading time was not applied to the new version.'));
+    if (evidence.source === 'focus' && (evidence.activeMs ?? 0) < requiredActiveMs(estimateSeconds(readingMarkdown(ref, workspace)))) throw new Error(t('有效阅读时间不足。', 'Not enough active reading time.'));
     return recordMemoryExposure(reference, evidence, now);
   });
 }
@@ -753,10 +786,10 @@ export function applyAiPriorities(results: MemoryPriorityAssessment[]) {
     const checked = results.map(result => {
       const separator = result.id.indexOf(':');
       const kind = result.id.slice(0, separator);
-      if (kind !== 'note' && kind !== 'section') throw new Error('评分内容标识无效。');
+      if (kind !== 'note' && kind !== 'section') throw new Error(t('评分内容标识无效。', 'Invalid content identifier.'));
       const ref: Ref = { kind, id: result.id.slice(separator + 1) };
       const reference = readingReference(ref, workspace);
-      if (reference.contentHash !== result.contentHash) throw new Error('评分期间内容已变更，请重新评分。');
+      if (reference.contentHash !== result.contentHash) throw new Error(t('评分期间内容已变更，请重新评分。', 'Content changed during scoring. Try again.'));
       return { reference, result };
     });
     await saveMemoryAiPriorities(checked.map(({ reference, result }) => ({ id: memoryId(reference.documentId, reference.sectionId), assessment: result })));

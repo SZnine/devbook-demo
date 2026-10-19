@@ -1,3 +1,4 @@
+import { t, getLanguage, useLanguage } from '../i18n';
 import { useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type MouseEvent } from 'react';
 import { flushSync } from 'react-dom';
 import type Vditor from 'vditor';
@@ -34,10 +35,11 @@ const nativeMode = (mode: 'ir' | 'sv') => mode === 'sv' ? 'sv' : 'wysiwyg';
 let editorAssets: Promise<unknown> | undefined;
 let editorConstructor: typeof Vditor | undefined;
 let editorRuntime: Promise<typeof Vditor> | undefined;
+const editorLocales: Partial<Record<'en' | 'zh-CN', Window['VditorI18n']>> = {};
 type LocalHighlighter = { getLanguage: (name: string) => unknown; highlight: (source: string, options: { language: string; ignoreIllegals: boolean }) => { value: string } };
 type HighlightRuntime = { Highlight?: new (...ranges: Range[]) => unknown; CSS?: { highlights?: Map<string, unknown> } };
 const codeColors = Object.fromEntries(Object.entries(codeTokenColors).map(([kind, color]) => [kind, `var(--read-code-${kind}, ${color})`]));
-const codeLanguages = [['plaintext', '纯文本'], ['python', 'Python'], ['javascript', 'JavaScript'], ['typescript', 'TypeScript'], ['json', 'JSON'], ['bash', 'Shell'], ['sql', 'SQL'], ['html', 'HTML'], ['css', 'CSS']];
+const getCodeLanguages = () => [['plaintext', t("纯文本", "Plain text")], ['python', 'Python'], ['javascript', 'JavaScript'], ['typescript', 'TypeScript'], ['json', 'JSON'], ['bash', 'Shell'], ['sql', 'SQL'], ['html', 'HTML'], ['css', 'CSS']];
 type BlockControl = { kind: 'heading' | 'code'; node: HTMLElement; value: string; top: number; left: number };
 type CodeToken = { start: number; end: number; kind: string };
 
@@ -56,7 +58,7 @@ function loadLocalScript(path: string, id: string) {
     const script = document.createElement('script');
     script.src = `${assetRoot}/${path}`;
     script.onload = () => { script.id = id; resolve(); };
-    script.onerror = () => { script.remove(); reject(new Error('编辑器资源未能加载')); };
+    script.onerror = () => { script.remove(); reject(new Error(t("编辑器资源未能加载", "Editor unavailable"))); };
     document.head.appendChild(script);
   });
 }
@@ -66,7 +68,20 @@ function loadEditorAssets() {
   // rapidly unmounted editor. Every executable resource is served locally.
   editorAssets ??= Promise.all([
     loadLocalScript('dist/js/lute/lute.min.js', 'vditorLuteScript'),
-    loadLocalScript('dist/js/i18n/zh_CN.js', 'vditorI18nScriptzh_CN'),
+    // Vditor's locale bundles assign a global. Load them in order and retain
+    // both dictionaries so switching language never resets the document.
+    (async () => {
+      for (const [language, locale] of [['zh-CN', 'zh_CN'], ['en', 'en_US']] as const) {
+        if (editorLocales[language]) continue;
+        const scriptId = `vditorI18nScript${locale}`;
+        // A development hot reload may retain a script after this module's
+        // dictionary cache is replaced. Reload that local bundle explicitly.
+        document.getElementById(scriptId)?.remove();
+        await loadLocalScript(`dist/js/i18n/${locale}.js`, scriptId);
+        editorLocales[language] = window.VditorI18n;
+      }
+      window.VditorI18n = editorLocales[getLanguage()]!;
+    })(),
     loadLocalScript('dist/js/icons/ant.js', 'chapterVditorIcons'),
     loadLocalScript('dist/js/highlight.js/highlight.min.js', 'vditorHljsScript'),
   ]).catch(error => { editorAssets = undefined; throw error; });
@@ -84,7 +99,9 @@ function loadEditorRuntime() {
 // empty editor hosts have already been painted. Failures still retry on mount.
 void loadEditorRuntime().catch(() => {});
 
-export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, label = '章节正文', placeholder = '从这里开始写…', mode = 'ir', live = false, initiallyDirty = false, allowEmpty = false, onCommit, onFocus, onLeaveEmpty }: ChapterEditorProps) {
+export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, label = t("章节正文", "Chapter content"), placeholder = t("从这里开始写…", "Start writing…"), mode = 'ir', live = false, initiallyDirty = false, allowEmpty = false, onCommit, onFocus, onLeaveEmpty }: ChapterEditorProps) {
+  const { language } = useLanguage();
+  const codeLanguages = getCodeLanguages();
   const library = useComponentLibrary();
   const libraryRef = useRef(library);
   libraryRef.current = library;
@@ -200,7 +217,7 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
     const isCode = visible.tagName === 'CODE';
     const isHeading = /^H[1-6]$/.test(visible.tagName);
     const listItem = visible.closest('li');
-    visible.dataset.editorPlaceholder = isCode ? '输入或粘贴代码…' : isHeading ? '标题' : listItem ? listItem.classList.contains('vditor-task') ? '待办事项' : '列表项' : visible.closest('blockquote') ? '引用内容' : '开始输入…';
+    visible.dataset.editorPlaceholder = isCode ? t("输入或粘贴代码…", "Write or paste code…") : isHeading ? t("标题", "Heading") : listItem ? listItem.classList.contains('vditor-task') ? t("待办事项", "Task list") : t("列表项", "List item") : visible.closest('blockquote') ? t("引用内容", "Quote") : t("开始输入…", "Start writing…");
   }
 
   function syncBlockControl() {
@@ -597,7 +614,7 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
       // Markdown table cells cannot hold headings/lists/fenced blocks. Do
       // not split a partly selected table into invalid header fragments.
       if (inTable(range?.startContainer) || inTable(range?.endContainer)) {
-        setEditingHint('表格内可调整文字格式；Ctrl+Enter 可在表格后继续正文。');
+        setEditingHint(t("表格内可调整文字格式；Ctrl+Enter 可在表格后继续正文。", "Press Ctrl+Enter to continue below the table."));
         return;
       }
     }
@@ -992,7 +1009,8 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
         value: current.current,
         mode: nativeMode(callbacks.current.mode),
         cdn: assetRoot,
-        i18n: window.VditorI18n,
+        lang: getLanguage() === 'en' ? 'en_US' : 'zh_CN',
+        i18n: editorLocales[getLanguage()],
         // Icons have already been loaded; omit Vditor's synchronous XHR loader.
         icon: undefined,
         cache: { enable: false },
@@ -1036,10 +1054,10 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
             field.setAttribute('aria-label', callbacks.current.label);
             field.setAttribute('aria-multiline', 'true');
           });
-          element.querySelector('.vditor-toolbar')?.setAttribute('aria-label', '文本格式');
+          element.querySelector('.vditor-toolbar')?.setAttribute('aria-label', t("文本格式", "Text formatting"));
           element.querySelector('.vditor-toolbar')?.setAttribute('role', 'toolbar');
           const sourceMode = element.querySelector('[data-mode="sv"]');
-          if (sourceMode) sourceMode.textContent = 'Markdown 源码';
+          if (sourceMode) sourceMode.textContent = t("Markdown 源码", "Markdown source");
           // Vditor's after callback runs in its Lute-ready microtask. Remove the
           // loading row in the same paint as the populated editor, not one later.
           flushSync(() => setReady(true));
@@ -1048,7 +1066,7 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
         },
       });
     };
-    const fail = () => { if (!disposed) setError('编辑器未能加载。内容仍保留，请关闭后重试。'); };
+    const fail = () => { if (!disposed) setError(t("编辑器未能加载。内容仍保留，请关闭后重试。", "Editor unavailable. Your draft is safe.")); };
     if (editorConstructor) {
       try { initialize(editorConstructor); } catch { fail(); }
     } else {
@@ -1101,6 +1119,44 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
   useEffect(() => {
     host.current?.querySelectorAll('[role="textbox"]').forEach(field => field.setAttribute('aria-label', label));
   }, [label]);
+
+  useLayoutEffect(() => {
+    const instance = editor.current;
+    const dictionary = editorLocales[language];
+    if (!ready || !instance || !dictionary) return;
+    const previous = instance.vditor.options.i18n;
+    window.VditorI18n = dictionary;
+    instance.vditor.options.i18n = dictionary;
+    instance.vditor.options.lang = language === 'en' ? 'en_US' : 'zh_CN';
+    instance.vditor.options.placeholder = placeholder;
+    const toolbar = host.current?.querySelector<HTMLElement>('.vditor-toolbar');
+    // Translate only package-owned controls. Editable text and the undo stack
+    // remain untouched, including when a document contains either language.
+    if (toolbar && previous && previous !== dictionary) {
+      const entries = Object.entries(previous).sort((a, b) => b[1].length - a[1].length);
+      const translate = (value: string) => {
+        const match = entries.find(([, text]) => value === text || value.startsWith(`${text} `) || value.startsWith(`${text}<`));
+        return match ? dictionary[match[0]] + value.slice(match[1].length) : value;
+      };
+      toolbar.querySelectorAll<HTMLElement>('[aria-label], [title]').forEach(control => {
+        for (const attribute of ['aria-label', 'title']) {
+          const value = control.getAttribute(attribute);
+          if (value) control.setAttribute(attribute, translate(value));
+        }
+      });
+      const walker = document.createTreeWalker(toolbar, NodeFilter.SHOW_TEXT);
+      let node: Node | null;
+      while ((node = walker.nextNode())) if (node.nodeValue) node.nodeValue = translate(node.nodeValue);
+    }
+    toolbar?.setAttribute('aria-label', t('文本格式', 'Text formatting'));
+    const source = toolbar?.querySelector('[data-mode="sv"]');
+    if (source) source.textContent = t('Markdown 源码', 'Markdown source');
+    host.current?.querySelectorAll<HTMLElement>('[contenteditable="true"], textarea').forEach(field => {
+      field.setAttribute('placeholder', placeholder);
+      field.setAttribute('aria-label', label);
+    });
+    refreshEmptyBlocks();
+  }, [language, ready, placeholder, label]);
 
   useEffect(() => {
     // A freshly created draft gains an id after its first save. If its text
@@ -1194,9 +1250,9 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
         committed.current = next;
         initialDraftPending.current = false;
         dirty.current = hasUnsavedChanges(current.current);
-      } else if (!succeeded && sequence === commitSequence.current && mounted.current) setError('修改尚未保存');
+      } else if (!succeeded && sequence === commitSequence.current && mounted.current) setError(t("修改尚未保存", "Unsaved changes"));
     } catch {
-      if (sequence === commitSequence.current && mounted.current) setError('修改尚未保存');
+      if (sequence === commitSequence.current && mounted.current) setError(t("修改尚未保存", "Unsaved changes"));
     } finally {
       pendingCommits.current -= 1;
       savingRef.current = pendingCommits.current > 0;
@@ -1357,9 +1413,9 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
         committed.current = next;
         initialDraftPending.current = false;
         dirty.current = hasUnsavedChanges(current.current);
-      } else if (mounted.current) setError('未能保存，修改仍保留在这里。');
+      } else if (mounted.current) setError(t("未能保存，修改仍保留在这里。", "Could not save. Your changes are still here."));
     } catch {
-      if (mounted.current) setError('保存失败，修改仍保留在这里。');
+      if (mounted.current) setError(t("保存失败，修改仍保留在这里。", "Could not save. Your changes are still here."));
     } finally {
       savingRef.current = false;
       if (mounted.current) {
@@ -1369,7 +1425,7 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
     }
   }
 
-  return <section className={`chapter-editor${live ? ' chapter-editor-live' : ''}`} data-source-mode={mode === 'sv'} aria-label={`编辑${label}`} aria-busy={!ready}
+  return <section className={`chapter-editor${live ? ' chapter-editor-live' : ''}`} data-source-mode={mode === 'sv'} aria-label={t(`编辑${label}`, `Edit ${label}`)} aria-busy={!ready}
     // Vditor debounces its input callback with the undo stack. Publish after
     // each DOM edit too, so navigating immediately cannot lose the last word.
     onInputCapture={() => queueMicrotask(() => { if (composing.current) return; renderCodeHighlights(); refreshEmptyBlocks(); syncBlockControl(); publishCurrent(); })}
@@ -1429,21 +1485,21 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
         void save();
       }
     }}>
-    {!ready && !error && <div className="chapter-editor-loading" role="status">正在打开编辑器…</div>}
+    {!ready && !error && <div className="chapter-editor-loading" role="status">{t("正在打开编辑器…", "Opening editor…")}</div>}
     <div ref={host} className="chapter-editor-host" />
     {editingHint && <div className="chapter-editor-hint" role="status">{editingHint}</div>}
-    {flowEnd && mode !== 'sv' && <div className="chapter-flow-end"><button type="button" aria-label="继续正文" title="离开当前结构，继续正文 · Ctrl+Enter" aria-keyshortcuts="Control+Enter Meta+Enter" onPointerDown={event => { event.preventDefault(); captureInsertSelection(); }} onClick={() => continueBody(flowEnd)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><path d="M5 3v7a3 3 0 0 0 3 3h8m-4-4 4 4-4 4" /></svg><span>继续正文</span><kbd>Ctrl ↵</kbd></button></div>}
+    {flowEnd && mode !== 'sv' && <div className="chapter-flow-end"><button type="button" aria-label={t("继续正文", "Continue writing")} title={t("离开当前结构，继续正文 · Ctrl+Enter", "Continue writing · Ctrl+Enter")} aria-keyshortcuts="Control+Enter Meta+Enter" onPointerDown={event => { event.preventDefault(); captureInsertSelection(); }} onClick={() => continueBody(flowEnd)}><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><path d="M5 3v7a3 3 0 0 0 3 3h8m-4-4 4 4-4 4" /></svg><span>{t("继续正文", "Continue writing")}</span><kbd>Ctrl ↵</kbd></button></div>}
     {blockControl && mode !== 'sv' && <div className={`chapter-block-control chapter-block-control-${blockControl.kind}`} style={{ top: blockControl.top, left: blockControl.left }} onPointerDownCapture={captureInsertSelection}>
-      <select aria-label={blockControl.kind === 'heading' ? '标题层级' : '代码语言'} value={blockControl.value} onChange={event => changeBlockControl(event.target.value)}>
+      <select aria-label={blockControl.kind === 'heading' ? t("标题层级", "Heading level") : t("代码语言", "Code language")} value={blockControl.value} onChange={event => changeBlockControl(event.target.value)}>
         {blockControl.kind === 'heading' ? <>{['h1', 'h2', 'h3'].map(level => <option key={level} value={level}>{level.toUpperCase()}</option>)}{!['h1', 'h2', 'h3'].includes(blockControl.value) && <option value={blockControl.value}>{blockControl.value.toUpperCase()}</option>}</> : <>{codeLanguages.map(([language, name]) => <option key={language} value={language}>{name}</option>)}{!codeLanguages.some(([language]) => language === blockControl.value) && <option value={blockControl.value}>{blockControl.value}</option>}</>}
       </select>
     </div>}
     {live ? <div className={`chapter-editor-live-status${error ? ' has-error' : ''}`} aria-live="polite" role="status">
-      {error ? <><span>{error}</span><button type="button" onClick={() => void commitLatest()}>重试</button></> : !allowEmpty && !current.current.trim() && !saving ? null : <span className="chapter-editor-sr-only">{saving ? '正在保存' : dirty.current ? '尚未保存' : ready ? '已保存' : ''}</span>}
+      {error ? <><span>{error}</span><button type="button" onClick={() => void commitLatest()}>{t("重试", "Retry")}</button></> : !allowEmpty && !current.current.trim() && !saving ? null : <span className="chapter-editor-sr-only">{saving ? t("正在保存", "Saving") : dirty.current ? t("尚未保存", "Unsaved") : ready ? t("已保存", "Saved") : ''}</span>}
     </div> : <footer className="chapter-editor-footer">
       <span className="chapter-editor-error" role={error ? 'alert' : undefined}>{error}</span>
-      <button type="button" className="chapter-editor-cancel" disabled={saving} onClick={() => callbacks.current.onCancel()}>取消</button>
-      <button type="button" className="chapter-editor-save" disabled={!ready || saving} title="保存 · Ctrl+Enter" onClick={() => void save()}>{saving ? '保存中…' : '完成'}</button>
+      <button type="button" className="chapter-editor-cancel" disabled={saving} onClick={() => callbacks.current.onCancel()}>{t("取消", "Cancel")}</button>
+      <button type="button" className="chapter-editor-save" disabled={!ready || saving} title={t("保存 · Ctrl+Enter", "Save · Ctrl+Enter")} onClick={() => void save()}>{saving ? t("保存中…", "Saving…") : t("完成", "Done")}</button>
     </footer>}
   </section>;
 }

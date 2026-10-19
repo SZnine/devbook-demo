@@ -1,3 +1,4 @@
+import { t, dateLocale } from '../i18n';
 import { useState } from 'react';
 import { Icon } from '../manual-demo/icons';
 import { collectionPath, noteTitle } from './content';
@@ -44,24 +45,24 @@ export function ArchivePanel({ state, busy, onOpenMemo, onOpenCollection, onRest
   });
 
   return <div className="nb-archive-panel" aria-busy={busy}>
-    {!!rows.length && <div className="nb-archive-tools"><label className="nb-archive-search"><Icon name="search" /><input aria-label="搜索归档" placeholder="搜索归档" value={query} onChange={event => setQuery(event.target.value)} />{query && <button type="button" aria-label="清除搜索" onClick={() => setQuery('')}>×</button>}</label><span>{visible.length} 项</span></div>}
-    {visible.length ? <ul className="nb-archive-list" aria-label="已归档内容">{visible.map(row => {
+    {!!rows.length && <div className="nb-archive-tools"><label className="nb-archive-search"><Icon name="search" /><input aria-label={t('搜索归档', 'Search archive')} placeholder={t('搜索归档', 'Search archive')} value={query} onChange={event => setQuery(event.target.value)} />{query && <button type="button" aria-label={t('清除搜索', 'Clear search')} onClick={() => setQuery('')}>×</button>}</label><span>{t(`${visible.length} 项`, `${visible.length} ${visible.length === 1 ? 'item' : 'items'}`)}</span></div>}
+    {visible.length ? <ul className="nb-archive-list" aria-label={t('已归档内容', 'Archived content')}>{visible.map(row => {
       const collection = row.kind === 'collection' ? row.item : null;
       const memo = row.kind === 'memo' ? row.item : null;
       const path = collection ? collectionPath(collection.id, state) : [];
       const parentArchived = path.slice(0, -1).some(item => item.archivedAt !== undefined);
-      const label = collection ? path.length > 1 ? '章节' : '书籍' : '随笔';
+      const label = collection ? path.length > 1 ? t('章节', 'Chapter') : t('书籍', 'Book') : t('随笔', 'Notes');
       const title = collection?.title ?? noteTitle(memo!.markdown.trim() || memo!.source?.quote || '');
-      const location = collection ? path.slice(0, -1).map(item => item.title).join(' / ') || '我的阅读' : memo!.source?.path.join(' / ') || '随笔';
+      const location = collection ? path.slice(0, -1).map(item => item.title).join(' / ') || t('我的阅读', 'Library') : memo!.source?.path.join(' / ') || t('随笔', 'Notes');
       const preview = excerpt(collection ? collection.summary ?? '' : memo!.markdown.split('\n').slice(1).join('\n'));
-      const restoreHint = parentArchived ? '请先恢复上级归档' : `恢复${label}`;
+      const restoreHint = parentArchived ? t('请先恢复上级归档', 'Restore the parent first') : t(`恢复${label}`, `Restore ${label.toLowerCase()}`);
       return <li className="nb-archive-row" key={`${row.kind}:${row.item.id}`}>
-        <button type="button" className="nb-archive-open" aria-label={`打开：${title}`} disabled={busy} onClick={() => collection ? onOpenCollection(collection.id) : onOpenMemo(memo!.id)}>
+        <button type="button" className="nb-archive-open" aria-label={t(`打开：${title}`, `Open: ${title}`)} disabled={busy} onClick={() => collection ? onOpenCollection(collection.id) : onOpenMemo(memo!.id)}>
           <span className={`nb-archive-symbol is-${row.kind}`}><Icon name={collection ? path.length > 1 ? 'list' : 'book' : 'note'} /></span>
-          <span className="nb-archive-details"><span className="nb-archive-title"><strong>{title}</strong><span>{label}</span></span><span className="nb-archive-location" title={location}>{location}</span>{preview && <span className="nb-archive-preview">{preview}</span>}<span className="nb-archive-meta"><time dateTime={new Date(row.archivedAt).toISOString()}>{new Date(row.archivedAt).toLocaleDateString('zh-CN', { year: 'numeric', month: 'numeric', day: 'numeric' })}</time>{parentArchived && <span>上级已归档</span>}</span></span>
+          <span className="nb-archive-details"><span className="nb-archive-title"><strong>{title}</strong><span>{label}</span></span><span className="nb-archive-location" title={location}>{location}</span>{preview && <span className="nb-archive-preview">{preview}</span>}<span className="nb-archive-meta"><time dateTime={new Date(row.archivedAt).toISOString()}>{new Date(row.archivedAt).toLocaleDateString(dateLocale(), { year: 'numeric', month: 'numeric', day: 'numeric' })}</time>{parentArchived && <span>{t('上级已归档', 'Parent archived')}</span>}</span></span>
         </button>
-        <button type="button" className="nb-archive-restore" disabled={busy || parentArchived} title={restoreHint} aria-label={`恢复：${title}`} onClick={() => collection ? onRestoreCollection(collection.id) : onRestoreMemo(memo!.id)}><Icon name="history" /><span>恢复</span></button>
+        <button type="button" className="nb-archive-restore" disabled={busy || parentArchived} title={restoreHint} aria-label={t(`恢复：${title}`, `Restore: ${title}`)} onClick={() => collection ? onRestoreCollection(collection.id) : onRestoreMemo(memo!.id)}><Icon name="history" /><span>{t('恢复', 'Restore')}</span></button>
       </li>;
-    })}</ul> : <div className="nb-archive-empty"><ArchiveSymbol /><p>{needle ? '没有匹配的归档' : '暂无归档'}</p></div>}
+    })}</ul> : <div className="nb-archive-empty"><ArchiveSymbol /><p>{needle ? t('没有匹配的归档', 'No matching archives') : t('暂无归档', 'No archived items')}</p></div>}
   </div>;
 }

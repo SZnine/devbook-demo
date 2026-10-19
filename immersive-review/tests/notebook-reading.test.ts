@@ -75,7 +75,7 @@ describe('notebook reading integration', () => {
     const note = await notebook.saveNote({ markdown: '字'.repeat(2000) }, T);
     const ref: notebook.Ref = { kind: 'note', id: note.id };
     await expect(notebook.recordRef(ref, { source: 'manual', sessionId: 'un-enrolled' }, T)).rejects.toThrow('纳入记忆库');
-    await expect(notebook.recordRef(ref, { ...focus('too-short'), activeMs: 20_000 }, T)).rejects.toThrow('时间不足');
+    await expect(notebook.recordRef(ref, { ...focus('too-short'), activeMs: 20_000 }, T)).rejects.toThrow('Not enough active reading time');
     await expect(notebook.recordRef(ref, { ...focus('too-narrow'), coverage: 0.5 }, T)).rejects.toThrow('覆盖不足');
     expect((await notebook.loadNotebook()).entries).toHaveLength(0);
     const first = await notebook.recordRef(ref, focus('first-valid-reading'), T);
@@ -87,7 +87,7 @@ describe('notebook reading integration', () => {
     expect(compatible.events[0]).toEqual(first.entry.events[0]);
     expect(compatible).not.toHaveProperty('recorded');
     await notebook.archiveNote(note.id);
-    await expect(notebook.recordRef(ref, focus('archived'), T + HOUR)).rejects.toThrow('恢复');
+    await expect(notebook.recordRef(ref, focus('archived'), T + HOUR)).rejects.toThrow('Restore');
     expect((await notebook.loadNotebook()).entries[0].events).toEqual(compatible.events);
   });
 
@@ -113,7 +113,7 @@ describe('notebook reading integration', () => {
     const { ref, note, identity } = await savedNote();
     const first = await notebook.recordRef(ref, focus('before-edit', identity.contentHash), T);
     await notebook.saveNote({ id: note.id, markdown: '事件循环由任务队列和微任务队列共同协调。' }, T + MINUTE);
-    await expect(notebook.recordRef(ref, focus('stale-browser', identity.contentHash), T + 2 * MINUTE)).rejects.toThrow('内容已变更');
+    await expect(notebook.recordRef(ref, focus('stale-browser', identity.contentHash), T + 2 * MINUTE)).rejects.toThrow('Content changed');
     let state = await notebook.loadNotebook();
     expect(state.entries[0].events).toEqual(first.entry.events);
     expect(notebook.getProjection(ref, state, T + 2 * MINUTE)).toMatchObject({ freshness: null, versionChanged: true, totalReadCount: 1 });
@@ -146,7 +146,7 @@ describe('notebook reading integration', () => {
     const two = await readNote('另一节有关 Promise 的内容。');
     const results = [await assessment(one.ref, 1, 2), await assessment(two.ref, 2, 2)];
     await notebook.saveNote({ id: two.note.id, markdown: '评分期间内容改写。' }, T + MINUTE);
-    await expect(notebook.applyAiPriorities(results)).rejects.toThrow('内容已变更');
+    await expect(notebook.applyAiPriorities(results)).rejects.toThrow('Content changed');
     const state = await notebook.loadNotebook();
     expect(state.entries.every(entry => entry.priority?.ai === undefined)).toBe(true);
   });

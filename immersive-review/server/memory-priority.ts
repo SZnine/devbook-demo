@@ -3,7 +3,7 @@ const MAX_CONTEXT_CHARS = 16_000;
 const MAX_RESPONSE_BYTES = 128 * 1024;
 
 type PriorityItem = { id: string; contentHash: string; title: string; chapterTitle?: string; sectionTitle?: string; summary: string };
-export type PriorityRequest = { providerId: string; model: string; goal: string; items: PriorityItem[] };
+export type PriorityRequest = { providerId: string; model: string; goal: string; items: PriorityItem[]; language?: 'en' | 'zh-CN' };
 export class PriorityApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
 }
@@ -20,7 +20,8 @@ function textField(value: unknown, max: number, name: string, allowEmpty = false
 }
 
 export function validatePriorityRequest(body: Record<string, unknown>): PriorityRequest {
-  if (Object.keys(body).some(key => !['providerId', 'model', 'goal', 'items'].includes(key))) throw new PriorityApiError(400, '评分只接受节章标题和简短摘要，不接受完整正文或其他字段。');
+  if (Object.keys(body).some(key => !['providerId', 'model', 'goal', 'items', 'language'].includes(key))) throw new PriorityApiError(400, '评分只接受节章标题和简短摘要，不接受完整正文或其他字段。');
+  if (body.language !== undefined && body.language !== 'en' && body.language !== 'zh-CN') throw new PriorityApiError(400, 'Unsupported interface language.');
   const providerId = textField(body.providerId, 30, 'AI 服务');
   const model = textField(body.model, 200, '模型');
   const goal = textField(body.goal, 2000, '学习方向', true).trim();
@@ -41,7 +42,7 @@ export function validatePriorityRequest(body: Record<string, unknown>): Priority
     return { id, contentHash, title, ...(chapterTitle === undefined ? {} : { chapterTitle }), ...(sectionTitle === undefined ? {} : { sectionTitle }), summary };
   });
   if (total > MAX_CONTEXT_CHARS) throw new PriorityApiError(413, '本批标题和摘要超过 16,000 字符，请减少比较项后重试。');
-  return { providerId, model, goal, items };
+  return { providerId, model, goal, items, ...(body.language ? { language: body.language } : {}) };
 }
 
 const SYSTEM_PROMPT = `你为阅读工作台比较最近浏览内容的相对学习优先级，不评价用户的记忆能力、熟悉度或保持率。
@@ -101,7 +102,7 @@ export async function requestMemoryPriority(
     method: 'POST', redirect: 'error', signal,
     headers: { 'Content-Type': 'application/json', Accept: 'application/json', Authorization: `Bearer ${provider.apiKey}` },
     body: JSON.stringify({ model: request.model, stream: false, messages: [
-      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'system', content: SYSTEM_PROMPT.replace('简短中文比较理由', '简短比较理由') + `\nWrite each reason in ${request.language === 'zh-CN' ? 'Simplified Chinese' : 'English'}.` },
       { role: 'user', content: JSON.stringify({ goal: request.goal, items: request.items.map(({ id, title, chapterTitle, sectionTitle, summary }) => ({ id, title, chapterTitle, sectionTitle, summary })) }) },
     ] }),
   });

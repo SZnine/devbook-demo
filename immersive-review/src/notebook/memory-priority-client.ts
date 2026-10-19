@@ -1,5 +1,7 @@
+import { t, getLanguage } from '../i18n';
+import { assistantErrorMessage } from './assistant-errors';
 import type { AssistantProviderId } from './assistant-client';
-import { DEMO_AI_NOTICE, IS_DEMO_MODE } from '../demo';
+import { demoAiNotice, IS_DEMO_MODE } from '../demo';
 
 export const MEMORY_PRIORITY_RUBRIC_VERSION = 'memory-context-priority/3' as const;
 
@@ -41,11 +43,12 @@ export async function assessMemoryPriority(
   request: MemoryPriorityRequest,
   { signal }: { signal?: AbortSignal } = {},
 ): Promise<{ items: MemoryPriorityAssessment[] }> {
-  if (signal?.aborted) throw new DOMException('已取消评分', 'AbortError');
-  if (IS_DEMO_MODE) throw new Error(DEMO_AI_NOTICE);
+  if (signal?.aborted) throw new DOMException(t("已取消评分", "Scoring cancelled"), 'AbortError');
+  if (IS_DEMO_MODE) throw new Error(demoAiNotice());
   // Serialize bounded context fields, even if a caller holds a full content object.
   const contextRequest = {
     providerId: request.providerId, model: request.model, goal: request.goal,
+    language: getLanguage(),
     items: request.items.map(({ id, contentHash, title, chapterTitle, sectionTitle, summary }) => ({ id, contentHash, title, chapterTitle, sectionTitle, summary })),
   };
   const response = await fetch('/api/assistant/memory-priority', {
@@ -55,18 +58,18 @@ export async function assessMemoryPriority(
   });
   let payload: unknown;
   try { payload = await response.json(); } catch (error) {
-    if (signal?.aborted) throw new DOMException('已取消评分', 'AbortError');
+    if (signal?.aborted) throw new DOMException(t("已取消评分", "Scoring cancelled"), 'AbortError');
     if (error instanceof DOMException && error.name === 'AbortError') throw error;
-    throw new Error('评分服务未返回有效数据，请重试。');
+    throw new Error(t("评分服务未返回有效数据，请重试。", "Invalid scoring response. Try again."));
   }
-  if (signal?.aborted) throw new DOMException('已取消评分', 'AbortError');
+  if (signal?.aborted) throw new DOMException(t("已取消评分", "Scoring cancelled"), 'AbortError');
   if (!response.ok) {
     const message = isRecord(payload) && typeof payload.error === 'string'
       ? payload.error.replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, 300)
       : '';
-    throw new Error(message || `评分请求失败（${response.status}），请检查助手设置。`);
+    throw new Error(assistantErrorMessage(message) || t(`评分请求失败（${response.status}），请检查助手设置。`, `Scoring failed (${response.status}). Check provider settings.`));
   }
-  const fail = () => { throw new Error('评分结果与请求内容不匹配，未保存任何评分。'); };
+  const fail = () => { throw new Error(t("评分结果与请求内容不匹配，未保存任何评分。", "Scoring results did not match. No changes were saved.")); };
   if (!isRecord(payload) || !Array.isArray(payload.items) || payload.items.length !== request.items.length) return fail();
   const expected = new Map(request.items.map(item => [item.id, item]));
   if (expected.size !== request.items.length) return fail();

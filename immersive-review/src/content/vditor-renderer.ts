@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 /// <reference types="vite/client" />
 import DOMPurify from 'dompurify';
 import { fromHtml } from 'hast-util-from-html';
@@ -20,7 +21,7 @@ function loadRuntime() {
       const script = document.createElement('script');
       script.src = luteUrl;
       script.onload = () => { script.id = 'vditorLuteScript'; resolve(); };
-      script.onerror = () => { script.remove(); reject(new Error('Markdown 解析器加载失败')); };
+      script.onerror = () => { script.remove(); reject(new Error(t("Markdown 解析器加载失败", "Markdown renderer unavailable"))); };
       document.head.append(script);
     }),
   ]).then(([module]) => module.default).catch(error => { runtime = undefined; throw error; });

@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import { useEffect, useRef, useState } from 'react';
 import { ChapterEditor } from './ChapterEditor';
 import { Markdown } from '../Markdown';
@@ -41,11 +42,11 @@ export function ChapterSummary({ chapter, isBook, readOnly, mode, onFocus, commi
   };
 
   if (readOnly && !chapter.summary) return null;
-  return <section data-ai-owner={chapter.id} className={`cw-summary ${text.trim() ? '' : 'is-empty'}`} aria-label={isBook ? '书籍摘要' : '章节摘要'}>
+  return <section data-ai-owner={chapter.id} className={`cw-summary ${text.trim() ? '' : 'is-empty'}`} aria-label={isBook ? t("书籍摘要", "Book summary") : t("章节摘要", "Chapter summary")}>
     {readOnly ? <div className="cw-prose"><Markdown body={chapter.summary ?? ''} /></div>
       : <ChapterEditor value={text} mode={mode} live allowEmpty autoFocus={false}
-        initiallyDirty={text !== (chapter.summary ?? '')} label={isBook ? '书籍摘要' : '章节摘要'}
-        placeholder={isBook ? '添加书籍摘要…' : '添加章节摘要…'}
+        initiallyDirty={text !== (chapter.summary ?? '')} label={isBook ? t("书籍摘要", "Book summary") : t("章节摘要", "Chapter summary")}
+        placeholder={isBook ? t("添加书籍摘要…", "Add a book summary…") : t("添加章节摘要…", "Add a chapter summary…")}
         onFocus={onFocus} onChange={change} onCommit={save} onSave={() => save(textRef.current)} onCancel={() => {}} />}
   </section>;
 }

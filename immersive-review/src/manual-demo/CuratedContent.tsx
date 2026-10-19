@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import { Markdown } from '../Markdown';
 import core from './research/core.json';
 import applied from './research/applied.json';
@@ -21,7 +22,7 @@ function Sources({ ids, cards = false }: { ids: string[]; cards?: boolean }) {
     {ids.map(id => { const source = sources.get(id); if (!source) return null;
       return cards ? <div className="sl-link-card" key={id}>
         <span className="sl-flex stack"><a data-reference-link href={source.url} target="_blank" rel="noopener noreferrer"><span className="title">{source.title}</span></a>
-          <span className="description">{source.publisher} · {source.kind === 'lab' ? '原始教程' : source.kind === 'paper' ? '研究原文' : '原始资料'}</span></span><Arrow />
+          <span className="description">{source.publisher} · {source.kind === 'lab' ? t('原始教程', 'Tutorial') : source.kind === 'paper' ? t('研究原文', 'Paper') : t('原始资料', 'Source')}</span></span><Arrow />
       </div> : <a key={id} data-reference-link href={source.url} target="_blank" rel="noopener noreferrer">{source.title}<span aria-hidden="true"> ↗</span></a>;
     })}
   </div>;
@@ -39,10 +40,10 @@ export function CuratedContent({ sectionId }: { sectionId: string }) {
       </aside>;
       if (item.kind === 'diagram') return <figure key={item.id} className="md-research-diagram" data-addition-id={item.id}>
         <h3>{item.title}</h3><Markdown body={item.body} />
-        <figcaption>据下列资料整理绘制</figcaption><Sources ids={item.sourceIds} />
+        <figcaption>{t('据下列资料整理绘制', 'Based on the sources below')}</figcaption><Sources ids={item.sourceIds} />
       </figure>;
       return <details key={item.id} className={`md-research-detail md-research-${item.kind}`} data-addition-id={item.id}>
-        <summary>{item.title}{item.kind === 'lab' && <span className="md-resource-type">实验</span>}</summary>
+        <summary>{item.title}{item.kind === 'lab' && <span className="md-resource-type">{t('实验', 'Lab')}</span>}</summary>
         <div className={item.kind === 'lab' || item.kind === 'steps' ? 'md-lab-steps' : undefined}><Markdown body={item.body} /></div>
         <Sources ids={item.sourceIds} cards />
       </details>;

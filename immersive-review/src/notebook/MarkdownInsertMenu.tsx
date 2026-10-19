@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { motionChange } from './motion';
 import './markdown-insert-menu.css';
@@ -30,18 +31,18 @@ export const markdownShortcutLabels: Partial<Record<MarkdownInsertKind, string>>
 const ariaShortcut = (kind: MarkdownInsertKind) => markdownShortcutLabels[kind]?.replace('Ctrl', 'Control');
 const shortcutTitle = (item: { kind: MarkdownInsertKind; label: string }) => `${item.label}${markdownShortcutLabels[item.kind] ? ` · ${markdownShortcutLabels[item.kind]}` : ''}`;
 
-const items: { kind: MarkdownInsertKind; label: string; keys: string; sample: string; detail?: boolean }[] = [
-  { kind: 'text', label: '正文', keys: 'text paragraph normal wenben zhengwen', sample: 'Aa' },
-  { kind: 'heading', label: '标题', keys: 'heading title h1 h2 h3 biaoti', sample: 'H2' },
-  { kind: 'bullet', label: '无序列表', keys: 'bullet unordered list w uxuliebiao', sample: '•  列表项' },
-  { kind: 'numbered', label: '有序列表', keys: 'numbered ordered list youxuliebiao', sample: '1.  列表项' },
-  { kind: 'todo', label: '待办事项', keys: 'todo task check checkbox daiban', sample: '待办', },
-  { kind: 'quote', label: '引用', keys: 'quote blockquote yinyong', sample: '引用文字' },
-  { kind: 'code', label: '代码', keys: 'code fence python javascript typescript daima', sample: '</>' },
-  { kind: 'table', label: '表格', keys: 'table grid biaoge', sample: '2 × 2' },
-  { kind: 'divider', label: '分隔线', keys: 'divider separator hr fengexian', sample: '────' },
-  { kind: 'link', label: '链接', keys: 'link url href lianjie', sample: 'https://', detail: true },
-  { kind: 'image', label: '图片', keys: 'image photo picture tupian', sample: '图片地址', detail: true },
+const getItems = (): { kind: MarkdownInsertKind; label: string; keys: string; sample: string; detail?: boolean }[] => [
+  { kind: 'text', label: t("正文", "Content"), keys: 'text paragraph normal wenben zhengwen', sample: 'Aa' },
+  { kind: 'heading', label: t("标题", "Heading"), keys: 'heading title h1 h2 h3 biaoti', sample: 'H2' },
+  { kind: 'bullet', label: t("无序列表", "Bulleted list"), keys: 'bullet unordered list w uxuliebiao', sample: t("•  列表项", "•  List item") },
+  { kind: 'numbered', label: t("有序列表", "Numbered list"), keys: 'numbered ordered list youxuliebiao', sample: t("1.  列表项", "1.  List item") },
+  { kind: 'todo', label: t("待办事项", "Task list"), keys: 'todo task check checkbox daiban', sample: t("待办", "Task"), },
+  { kind: 'quote', label: t("引用", "Quote"), keys: 'quote blockquote yinyong', sample: t("引用文字", "Quote") },
+  { kind: 'code', label: t("代码", "Code"), keys: 'code fence python javascript typescript daima', sample: '</>' },
+  { kind: 'table', label: t("表格", "Table"), keys: 'table grid biaoge', sample: '2 × 2' },
+  { kind: 'divider', label: t("分隔线", "Divider"), keys: 'divider separator hr fengexian', sample: '────' },
+  { kind: 'link', label: t("链接", "Link"), keys: 'link url href lianjie', sample: 'https://', detail: true },
+  { kind: 'image', label: t("图片", "Image"), keys: 'image photo picture tupian', sample: t("图片地址", "Image URL"), detail: true },
 ];
 
 export function MarkdownInsertIcon({ kind }: { kind: MarkdownInsertKind }) {
@@ -83,6 +84,7 @@ export function createDirectInsertion(kind: DirectMarkdownInsertKind, selectedTe
 }
 
 export function MarkdownInsertMenu({ onInsert, onClose, selectedText = '', initialQuery = '', onLiteral, onQueryChange, className = '', style, variant = 'popup', targetId, focusRequest = 0, componentRequest, disabled = false }: MarkdownInsertMenuProps) {
+  const items = getItems();
   const id = useId();
   const root = useRef<HTMLDivElement>(null);
   const search = useRef<HTMLInputElement>(null);
@@ -170,22 +172,22 @@ export function MarkdownInsertMenu({ onInsert, onClose, selectedText = '', initi
   function submit() {
     if (!detail) return;
     let parsed: URL;
-    try { parsed = new URL(url.trim()); } catch { setError('输入完整的 http:// 或 https:// 地址'); return; }
-    if (!['http:', 'https:'].includes(parsed.protocol)) { setError('请使用 http:// 或 https:// 地址'); return; }
-    const label = (content.trim() || (detail === 'image' ? '图片' : parsed.hostname)).replace(/([\\[\]])/g, '\\$1');
+    try { parsed = new URL(url.trim()); } catch { setError(t("输入完整的 http:// 或 https:// 地址", "Enter an http:// or https:// URL")); return; }
+    if (!['http:', 'https:'].includes(parsed.protocol)) { setError(t("请使用 http:// 或 https:// 地址", "Use an http:// or https:// URL")); return; }
+    const label = (content.trim() || (detail === 'image' ? t("图片", "Image") : parsed.hostname)).replace(/([\\[\]])/g, '\\$1');
     const address = parsed.href.replace(/\(/g, '%28').replace(/\)/g, '%29');
     commit(insertion(detail, `${detail === 'image' ? '!' : ''}[${label}](${address})`, label, detail === 'image'));
   }
 
-  const detailContent = detail && <><div className="mi-detail-title"><button type="button" aria-label="返回组件列表" onClick={dismissPanel}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="m14 6-6 6 6 6" /></svg></button><MarkdownInsertIcon kind={detail} /><strong>{chosen?.label}</strong>{variant === 'popup' && <button type="button" className="mi-close" aria-label="关闭插入菜单" onClick={close}>×</button>}</div>
+  const detailContent = detail && <><div className="mi-detail-title"><button type="button" aria-label={t("返回组件列表", "Back to blocks")} onClick={dismissPanel}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"><path d="m14 6-6 6 6 6" /></svg></button><MarkdownInsertIcon kind={detail} /><strong>{chosen?.label}</strong>{variant === 'popup' && <button type="button" className="mi-close" aria-label={t("关闭插入菜单", "Close blocks")} onClick={close}>×</button>}</div>
       <form className="mi-detail" onSubmit={event => { event.preventDefault(); submit(); }}>
-        {(detail === 'link' || detail === 'image') && <><label>{detail === 'image' ? '图片地址' : '链接地址'}<input value={url} onChange={event => { setUrl(event.target.value); setError(''); }} placeholder="https://" aria-label={detail === 'image' ? '图片地址' : '链接地址'} autoComplete="off" /></label><label>{detail === 'image' ? '图片说明' : '显示文字'}<input value={content} onChange={event => setContent(event.target.value)} placeholder={detail === 'image' ? '可选' : '可选，默认使用域名'} aria-label={detail === 'image' ? '图片说明' : '显示文字'} /></label></>}
-        {error && <p className="mi-error" role="alert">{error}</p>}<button className="mi-submit" type="submit" disabled={disabled}>插入{chosen?.label}</button>
+        {(detail === 'link' || detail === 'image') && <><label>{detail === 'image' ? t("图片地址", "Image URL") : t("链接地址", "Link URL")}<input value={url} onChange={event => { setUrl(event.target.value); setError(''); }} placeholder="https://" aria-label={detail === 'image' ? t("图片地址", "Image URL") : t("链接地址", "Link URL")} autoComplete="off" /></label><label>{detail === 'image' ? t("图片说明", "Alt text") : t("显示文字", "Link text")}<input value={content} onChange={event => setContent(event.target.value)} placeholder={detail === 'image' ? t("可选", "Optional") : t("可选，默认使用域名", "Optional; uses domain name")} aria-label={detail === 'image' ? t("图片说明", "Alt text") : t("显示文字", "Link text")} /></label></>}
+        {error && <p className="mi-error" role="alert">{error}</p>}<button className="mi-submit" type="submit" disabled={disabled}>{t("插入", "Insert")} {chosen?.label}</button>
       </form></>;
-  const listContent = <><div className="mi-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6" /><path d="m15 15 5 5" /></svg><input ref={search} value={query} onChange={event => { const next = event.target.value; if (onLiteral && /[\/\\]/.test(next)) onLiteral(`/${next}`); else setQuery(next); }} placeholder="搜索组件…" aria-label="搜索组件" role="combobox" aria-autocomplete="list" aria-controls={`${id}-list`} aria-expanded="true" aria-activedescendant={filtered[active] ? `${id}-${filtered[active].kind}` : undefined} />{variant === 'popup' && <button type="button" className="mi-close" onClick={close} aria-label="关闭插入菜单">×</button>}</div>
-      <div className="mi-options" role="listbox" id={`${id}-list`} aria-label="组件类型">{filtered.map((item, index) => <button type="button" disabled={disabled} role="option" title={shortcutTitle(item)} aria-keyshortcuts={ariaShortcut(item.kind)} id={`${id}-${item.kind}`} key={item.kind} aria-selected={active === index} className={`mi-option mi-option-${item.kind}`} onPointerMove={() => setActive(index)} onClick={() => choose(item.kind)}><MarkdownInsertIcon kind={item.kind} /><span className="mi-option-label">{item.label}</span><span className={`mi-sample mi-sample-${item.kind}`} aria-hidden="true">{item.sample}</span>{item.detail && <svg className="mi-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="m9 6 6 6-6 6" /></svg>}</button>)}{!filtered.length && <div className="mi-no-result">没有找到组件</div>}</div>
-      {variant === 'popup' && <div className="mi-footer"><span><kbd>↑</kbd><kbd>↓</kbd> 选择</span><span><kbd>↵</kbd> 插入</span><span><kbd>esc</kbd> 关闭</span></div>}</>;
-  return <div ref={root} className={`markdown-insert-menu ${variant === 'floating' ? 'mi-floating' : ''} ${className}`} style={style} role={variant === 'popup' ? 'dialog' : 'group'} aria-label="插入组件" onPointerDown={event => event.stopPropagation()} onClick={event => event.stopPropagation()} onKeyDown={event => {
+  const listContent = <><div className="mi-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6" /><path d="m15 15 5 5" /></svg><input ref={search} value={query} onChange={event => { const next = event.target.value; if (onLiteral && /[\/\\]/.test(next)) onLiteral(`/${next}`); else setQuery(next); }} placeholder={t("搜索组件…", "Search blocks…")} aria-label={t("搜索组件", "Search blocks")} role="combobox" aria-autocomplete="list" aria-controls={`${id}-list`} aria-expanded="true" aria-activedescendant={filtered[active] ? `${id}-${filtered[active].kind}` : undefined} />{variant === 'popup' && <button type="button" className="mi-close" onClick={close} aria-label={t("关闭插入菜单", "Close blocks")}>×</button>}</div>
+      <div className="mi-options" role="listbox" id={`${id}-list`} aria-label={t("组件类型", "Block types")}>{filtered.map((item, index) => <button type="button" disabled={disabled} role="option" title={shortcutTitle(item)} aria-keyshortcuts={ariaShortcut(item.kind)} id={`${id}-${item.kind}`} key={item.kind} aria-selected={active === index} className={`mi-option mi-option-${item.kind}`} onPointerMove={() => setActive(index)} onClick={() => choose(item.kind)}><MarkdownInsertIcon kind={item.kind} /><span className="mi-option-label">{item.label}</span><span className={`mi-sample mi-sample-${item.kind}`} aria-hidden="true">{item.sample}</span>{item.detail && <svg className="mi-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="m9 6 6 6-6 6" /></svg>}</button>)}{!filtered.length && <div className="mi-no-result">{t("没有找到组件", "No blocks found")}</div>}</div>
+      {variant === 'popup' && <div className="mi-footer"><span><kbd>↑</kbd><kbd>↓</kbd> {t("选择", "Choose")}</span><span><kbd>↵</kbd> {t("插入", "Insert")}</span><span><kbd>esc</kbd> {t("关闭", "Close")}</span></div>}</>;
+  return <div ref={root} className={`markdown-insert-menu ${variant === 'floating' ? 'mi-floating' : ''} ${className}`} style={style} role={variant === 'popup' ? 'dialog' : 'group'} aria-label={t("插入组件", "Insert block")} onPointerDown={event => event.stopPropagation()} onClick={event => event.stopPropagation()} onKeyDown={event => {
     event.stopPropagation();
     if (event.nativeEvent.isComposing || event.keyCode === 229) return;
     if (event.key === 'Escape') { event.preventDefault(); if (detail || searchOpen) dismissPanel(); else close(); return; }
@@ -202,6 +204,6 @@ export function MarkdownInsertMenu({ onInsert, onClose, selectedText = '', initi
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); setActive(index => (index + (event.key === 'ArrowDown' ? 1 : -1) + filtered.length) % Math.max(1, filtered.length)); }
     if (event.key === 'Enter' && filtered[active]) { event.preventDefault(); choose(filtered[active].kind); }
   }}>
-    {variant === 'floating' ? <><div className="mi-toolbar" role="toolbar" aria-label="Markdown 组件类型">{items.map(item => <button key={item.kind} type="button" aria-label={item.label} title={shortcutTitle(item)} aria-keyshortcuts={ariaShortcut(item.kind)} disabled={disabled} aria-pressed={detail === item.kind} className={`mi-tool mi-tool-${item.kind}`} onClick={() => choose(item.kind)}><MarkdownInsertIcon kind={item.kind} /><span className="mi-tool-label">{item.label}</span></button>)}<button type="button" className="mi-tool mi-search-tool" aria-label="搜索组件" title="搜索组件" aria-expanded={searchOpen} onClick={() => { void motionChange(() => { setDetail(null); setSearchOpen(value => !value); requestAnimationFrame(() => search.current?.focus({ preventScroll: true })); }, 'popover'); }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="10.5" cy="10.5" r="6" /><path d="m15 15 5 5" /></svg></button></div>{(detail || searchOpen) && <div className="mi-floating-popover">{detail ? detailContent : listContent}</div>}</> : detail ? detailContent : listContent}
+    {variant === 'floating' ? <><div className="mi-toolbar" role="toolbar" aria-label={t("Markdown 组件类型", "Markdown block types")}>{items.map(item => <button key={item.kind} type="button" aria-label={item.label} title={shortcutTitle(item)} aria-keyshortcuts={ariaShortcut(item.kind)} disabled={disabled} aria-pressed={detail === item.kind} className={`mi-tool mi-tool-${item.kind}`} onClick={() => choose(item.kind)}><MarkdownInsertIcon kind={item.kind} /><span className="mi-tool-label">{item.label}</span></button>)}<button type="button" className="mi-tool mi-search-tool" aria-label={t("搜索组件", "Search blocks")} title={t("搜索组件", "Search blocks")} aria-expanded={searchOpen} onClick={() => { void motionChange(() => { setDetail(null); setSearchOpen(value => !value); requestAnimationFrame(() => search.current?.focus({ preventScroll: true })); }, 'popover'); }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="10.5" cy="10.5" r="6" /><path d="m15 15 5 5" /></svg></button></div>{(detail || searchOpen) && <div className="mi-floating-popover">{detail ? detailContent : listContent}</div>}</> : detail ? detailContent : listContent}
   </div>;
 }

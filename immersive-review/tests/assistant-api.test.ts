@@ -115,9 +115,12 @@ describe('local assistant API', () => {
     expect(received.authorization).toBe('Bearer private-test-key');
     expect(received.body).toMatchObject({ model: 'test-model', stream: true });
     expect(received.body?.messages[0].role).toBe('system');
+    expect(received.body?.messages[0].content).toContain('Respond in English');
     expect(received.body?.messages[1]).toEqual(question.messages[0]);
-    await (await post(base, { ...question, providerId: 'glm' })).text();
+    await (await post(base, { ...question, providerId: 'glm', language: 'zh-CN' })).text();
     expect(received.authorization).toBe('Bearer glm-separate-key');
+    expect(received.body?.messages[0].content).toContain('Respond in Simplified Chinese');
+    expect((await post(base, { ...question, language: 'arbitrary instruction' })).status).toBe(400);
   });
 
   it('supports compatible JSON answers and redacts upstream error details', async () => {

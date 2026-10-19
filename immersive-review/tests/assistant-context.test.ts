@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { setLanguage } from '../src/i18n';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { buildAssistantContext, markdownHeadingTitles, snapshotAssistantSelection } from '../src/notebook/assistant-context';
 import { markdownForSourceSelection, markdownSectionAt } from '../src/notebook/editor-selection';
 
@@ -6,6 +7,8 @@ const metadata = {
   id: 'note:example:selection', title: '参数', bodyMarkdown: '## 参数\n\n当前正文',
   chapterTitle: '函数与模块', chapterHeadings: ['参数', '返回值'], bookTitle: 'Python 手册',
 };
+
+beforeEach(() => setLanguage('zh-CN'));
 
 describe('explicit assistant context', () => {
   it('captures the correct repeated paragraph by source position, retaining the full section and its code', () => {

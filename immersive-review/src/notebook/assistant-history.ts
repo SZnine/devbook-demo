@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import type { ApiMessage, AssistantProviderId } from './assistant-client';
 
 export type AssistantAttachment = { title: string; content: string };
@@ -13,10 +14,10 @@ export type AssistantConversation = {
 export type AssistantHistory = { version: 2; activeId: string; conversations: AssistantConversation[] };
 export type AssistantResponseStyle = 'concise' | 'essence' | 'normal' | 'detailed';
 export const RESPONSE_STYLES: { id: AssistantResponseStyle; label: string; instruction: string }[] = [
-  { id: 'concise', label: '极简', instruction: '回答风格：极简。直接给出结论，通常不超过三句；只保留理解或执行所必需的信息。' },
-  { id: 'essence', label: '直说本质', instruction: '回答风格：直说本质。先用一句话说明核心机制或根本原因，再解释关键因果和约束；省略铺垫、套话和无关扩展。' },
-  { id: 'normal', label: '正常', instruction: '回答风格：正常。先回答问题，提供足够的解释和必要示例；清楚、适度，不重复。' },
-  { id: 'detailed', label: '详细解读', instruction: '回答风格：详细解读。解释背景、概念、推理步骤和适用边界，必要时给出具体示例；按主题组织，避免重复。' },
+  { id: 'concise', get label() { return t("极简", "Brief"); }, get instruction() { return t("回答风格：极简。直接给出结论，通常不超过三句；只保留理解或执行所必需的信息。", "Response style: brief. Answer directly, usually within three sentences. Include only what is needed to understand or act."); } },
+  { id: 'essence', get label() { return t("直说本质", "Essentials"); }, get instruction() { return t("回答风格：直说本质。先用一句话说明核心机制或根本原因，再解释关键因果和约束；省略铺垫、套话和无关扩展。", "Response style: essentials. State the core mechanism or root cause in one sentence, then explain key causes and constraints. Omit filler and unrelated detail."); } },
+  { id: 'normal', get label() { return t("正常", "Standard"); }, get instruction() { return t("回答风格：正常。先回答问题，提供足够的解释和必要示例；清楚、适度，不重复。", "Response style: standard. Answer first, then give enough explanation and useful examples. Be clear and avoid repetition."); } },
+  { id: 'detailed', get label() { return t("详细解读", "Detailed"); }, get instruction() { return t("回答风格：详细解读。解释背景、概念、推理步骤和适用边界，必要时给出具体示例；按主题组织，避免重复。", "Response style: detailed. Explain context, concepts, reasoning steps and limitations, using examples when helpful. Organize by topic and avoid repetition."); } },
 ];
 export const ASSISTANT_HISTORY_KEY = 'read-assistant-conversations-v2';
 export const LEGACY_ASSISTANT_HISTORY_KEY = 'read-assistant-chat-v1';
@@ -42,10 +43,10 @@ function turns(value: unknown): AssistantTurn[] {
   });
 }
 export function newAssistantConversation(now = Date.now(), id: string = crypto.randomUUID()): AssistantConversation {
-  return { id, title: '新对话', createdAt: now, updatedAt: now, turns: [], draft: '' };
+  return { id, title: t("新对话", "New chat"), createdAt: now, updatedAt: now, turns: [], draft: '' };
 }
 export function conversationTitle(question: string) {
-  return question.replace(/\s+/g, ' ').trim().slice(0, 48) || '新对话';
+  return question.replace(/\s+/g, ' ').trim().slice(0, 48) || t("新对话", "New chat");
 }
 export function loadAssistantHistory(local: ReadStorage, legacy?: ReadStorage): { history: AssistantHistory; error: string; migrated: boolean } {
   const fresh = newAssistantConversation();
@@ -75,12 +76,12 @@ export function loadAssistantHistory(local: ReadStorage, legacy?: ReadStorage): 
     }
     return { history: empty, error: '', migrated: false };
   } catch {
-    return { history: empty, error: '无法读取本机对话记录，已有存储未被覆盖。', migrated: false };
+    return { history: empty, error: t("无法读取本机对话记录，已有存储未被覆盖。", "Could not load chat history. Existing data was kept."), migrated: false };
   }
 }
 export function saveAssistantHistory(storage: WriteStorage, history: AssistantHistory): string {
   try { storage.setItem(ASSISTANT_HISTORY_KEY, JSON.stringify(history)); return ''; }
-  catch { return '对话未能保存到本机，请释放浏览器存储空间；当前对话仍可继续。'; }
+  catch { return t("对话未能保存到本机，请释放浏览器存储空间；当前对话仍可继续。", "Could not save this chat. Free up browser storage to save changes."); }
 }
 
 /** Retain every turn locally; bound only the context sent for this request. */
@@ -91,7 +92,7 @@ export function assistantRequestMessages(history: AssistantTurn[], request: stri
   let bytes = new TextEncoder().encode(JSON.stringify([{ role: 'user', content: request }])).length;
   for (let index = eligible.length - 1; index >= 0 && pairs.length < 29; index--) {
     const turn = eligible[index];
-    const answer = turn.status === 'complete' ? turn.answer : `${turn.answer}\n\n[本次回答在完成前中断]`;
+    const answer = turn.status === 'complete' ? turn.answer : `${turn.answer}\n\n[${t("本次回答在完成前中断", "Response interrupted before completion")}]`;
     const pair: ApiMessage[] = [{ role: 'user', content: turn.requestContent }, { role: 'assistant', content: answer }];
     const nextBytes = new TextEncoder().encode(JSON.stringify(pair)).length;
     if (turn.requestContent.length > 100_000 || answer.length > 100_000
@@ -102,7 +103,7 @@ export function assistantRequestMessages(history: AssistantTurn[], request: stri
 }
 export function assistantRequestContent(question: string, style: AssistantResponseStyle, source?: AssistantAttachment) {
   const instruction = RESPONSE_STYLES.find(item => item.id === style)?.instruction ?? RESPONSE_STYLES[2].instruction;
-  return `${instruction}\n\n${source ? `参考内容（${source.title}）：\n<reference>\n${source.content}\n</reference>\n\n` : ''}我的问题：\n${question}`;
+  return `${instruction}\n\n${source ? `${t("参考内容", "Reference")} (${source.title}):\n<reference>\n${source.content}\n</reference>\n\n` : ''}${t('我的问题：', 'Question:')}\n${question}`;
 }
 
 export function clampAssistantWidth(width: number, viewport = 1440) {

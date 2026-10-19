@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Icon } from '../manual-demo/icons';
 import { ChapterEditor } from './ChapterEditor';
@@ -111,9 +112,9 @@ export function MemoComposer({ value, onChange, onSave, onCancel, editing = fals
         savedTimer.current = setTimeout(() => setSaved(false), 1800);
         return true;
       }
-      setError('未能保存，内容仍保留在这里。');
+      setError(t("未能保存，内容仍保留在这里。", "Could not save. Your draft is safe."));
     } catch {
-      setError('保存失败，内容仍保留在这里。');
+      setError(t("保存失败，内容仍保留在这里。", "Could not save. Your draft is safe."));
     } finally {
       savingRef.current = false;
       setSaving(false);
@@ -121,32 +122,32 @@ export function MemoComposer({ value, onChange, onSave, onCancel, editing = fals
     return false;
   };
 
-  return <section ref={container} className={`nb-composer nb-composer-next${expanded ? ' is-expanded' : ''}${value ? ' has-content' : ''}`} aria-label={editing ? '编辑随笔' : '写随笔'} aria-busy={saving}
+  return <section ref={container} className={`nb-composer nb-composer-next${expanded ? ' is-expanded' : ''}${value ? ' has-content' : ''}`} aria-label={editing ? t("编辑随笔", "Edit note") : t("写随笔", "Write a note")} aria-busy={saving}
     onKeyDown={event => {
       if (event.key !== 'Escape' || event.nativeEvent.isComposing || event.keyCode === 229) return;
       if (tagOpen) { event.preventDefault(); event.stopPropagation(); void motionChange(() => { setTagOpen(false); focusEditor(); }, 'popover'); }
       else if (expanded) { event.preventDefault(); event.stopPropagation(); void motionChange(() => setExpanded(false), 'layout'); }
     }}>
-    {editing && onCancel && <div className="nbc-heading"><span>编辑随笔</span><button type="button" disabled={locked} onClick={() => void motionChange(onCancel)}>取消</button></div>}
+    {editing && onCancel && <div className="nbc-heading"><span>{t("编辑随笔", "Edit note")}</span><button type="button" disabled={locked} onClick={() => void motionChange(onCancel)}>{t("取消", "Cancel")}</button></div>}
     <div className="nbc-body" inert={locked}>
-      <ChapterEditor value={value} onChange={change} onSave={save} onCancel={() => {}} autoFocus={autoFocus} label="随笔正文" mode={sourceMode ? 'sv' : 'ir'} live allowEmpty />
+      <ChapterEditor value={value} onChange={change} onSave={save} onCancel={() => {}} autoFocus={autoFocus} label={t("随笔正文", "Note content")} mode={sourceMode ? 'sv' : 'ir'} live allowEmpty />
     </div>
     <footer className="nb-composer-tools">
-      <div role="group" aria-label="编辑工具">
+      <div role="group" aria-label={t("编辑工具", "Editing tools")}>
         <div ref={tagControl} className="nbc-tag-control">
-          <button className="nb-icon" type="button" aria-label="添加标签" title="添加标签" aria-expanded={tagOpen} disabled={locked} onPointerDown={event => { event.preventDefault(); library.capture(); }} onClick={openTags}><span aria-hidden="true">#</span></button>
-          {tagOpen && <div ref={tagPicker} className="nbc-tag-picker" role="group" aria-label="标签" popover="auto" onToggle={event => { if (!event.currentTarget.matches(':popover-open')) void motionChange(() => setTagOpen(false), 'popover'); }}>
+          <button className="nb-icon" type="button" aria-label={t("添加标签", "Add tag")} title={t("添加标签", "Add tag")} aria-expanded={tagOpen} disabled={locked} onPointerDown={event => { event.preventDefault(); library.capture(); }} onClick={openTags}><span aria-hidden="true">#</span></button>
+          {tagOpen && <div ref={tagPicker} className="nbc-tag-picker" role="group" aria-label={t("标签", "Tags")} popover="auto" onToggle={event => { if (!event.currentTarget.matches(':popover-open')) void motionChange(() => setTagOpen(false), 'popover'); }}>
             <form onSubmit={event => { event.preventDefault(); insertTag(normalizedTag); }}>
-              <span aria-hidden="true">#</span><input ref={tagInput} aria-label="标签名称" placeholder="查找或输入标签" value={tagQuery} onChange={event => setTagQuery(event.target.value)} autoComplete="off" /><button type="submit" disabled={!normalizedTag || !library.available}>添加</button>
+              <span aria-hidden="true">#</span><input ref={tagInput} aria-label={t("标签名称", "Tag name")} placeholder={t("查找或输入标签", "Find or add a tag")} value={tagQuery} onChange={event => setTagQuery(event.target.value)} autoComplete="off" /><button type="submit" disabled={!normalizedTag || !library.available}>{t("添加", "Add")}</button>
             </form>
             {matches.length > 0 && <div className="nbc-tag-options">{matches.map(tag => <button type="button" key={tag} onClick={() => insertTag(tag)}><span aria-hidden="true">#</span>{tag}</button>)}</div>}
           </div>}
         </div>
-        <button className="nb-icon" type="button" aria-label={sourceMode ? '关闭源码模式' : '源码模式'} title={sourceMode ? '关闭源码模式' : '源码模式'} aria-pressed={sourceMode} disabled={locked} onPointerDown={() => library.capture()} onClick={() => void motionChange(() => { setTagOpen(false); setSourceMode(mode => !mode); })}><Icon name="code" /></button>
+        <button className="nb-icon" type="button" aria-label={sourceMode ? t("关闭源码模式", "Close source") : t("源码模式", "Source")} title={sourceMode ? t("关闭源码模式", "Close source") : t("源码模式", "Source")} aria-pressed={sourceMode} disabled={locked} onPointerDown={() => library.capture()} onClick={() => void motionChange(() => { setTagOpen(false); setSourceMode(mode => !mode); })}><Icon name="code" /></button>
       </div>
-      <div><button type="button" className="nb-icon nbc-expand" aria-label={expanded ? '收起编辑区' : '展开编辑区'} title={expanded ? '收起编辑区' : '展开编辑区'} aria-pressed={expanded} disabled={locked} onClick={() => void motionChange(() => setExpanded(value => !value), 'layout')}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">{expanded ? <path d="M3 9h6V3m12 12h-6v6M9 9 3 3m12 12 6 6" /> : <path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5M3 3l6 6m12-6-6 6M3 21l6-6m12 6-6-6" />}</svg></button><button className="nb-save" type="button" title="保存 · Ctrl+Shift+Enter（普通正文也可 Ctrl+Enter）" aria-keyshortcuts="Control+Shift+Enter Meta+Shift+Enter" disabled={locked || (!allowEmpty && !value.trim())} onClick={() => void save()}>{saving ? '保存中…' : saved ? '已保存 ✓' : editing ? '更新' : '保存'}</button></div>
+      <div><button type="button" className="nb-icon nbc-expand" aria-label={expanded ? t("收起编辑区", "Collapse editor") : t("展开编辑区", "Expand editor")} title={expanded ? t("收起编辑区", "Collapse editor") : t("展开编辑区", "Expand editor")} aria-pressed={expanded} disabled={locked} onClick={() => void motionChange(() => setExpanded(value => !value), 'layout')}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">{expanded ? <path d="M3 9h6V3m12 12h-6v6M9 9 3 3m12 12 6 6" /> : <path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5M3 3l6 6m12-6-6 6M3 21l6-6m12 6-6-6" />}</svg></button><button className="nb-save" type="button" title={t("保存 · Ctrl+Shift+Enter（普通正文也可 Ctrl+Enter）", "Save · Ctrl+Shift+Enter")} aria-keyshortcuts="Control+Shift+Enter Meta+Shift+Enter" disabled={locked || (!allowEmpty && !value.trim())} onClick={() => void save()}>{saving ? t("保存中…", "Saving…") : saved ? t("已保存 ✓", "Saved ✓") : editing ? t("更新", "Update") : t("保存", "Save")}</button></div>
     </footer>
     {error && <div className="nbc-error" role="alert">{error}</div>}
-    <span className="nbc-sr" role="status" aria-live="polite">{saving ? '正在保存' : saved ? '随笔已保存' : ''}</span>
+    <span className="nbc-sr" role="status" aria-live="polite">{saving ? t("正在保存", "Saving") : saved ? t("随笔已保存", "Note saved") : ''}</span>
   </section>;
 }

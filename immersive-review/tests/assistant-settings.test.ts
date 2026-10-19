@@ -11,8 +11,8 @@ describe('AI settings model validation', () => {
   });
 
   it('still requires models when an existing credential is retained or a new one is entered', () => {
-    expect(assistantModelValidationError({ hasApiKey: true }, { apiKey: '', clearApiKey: false }, [])).toBe('请至少填写一个模型 ID。');
-    expect(assistantModelValidationError({ hasApiKey: false }, { apiKey: 'test-placeholder', clearApiKey: false }, [])).toBe('请至少填写一个模型 ID。');
+    expect(assistantModelValidationError({ hasApiKey: true }, { apiKey: '', clearApiKey: false }, [])).toBe('Add at least one model ID.');
+    expect(assistantModelValidationError({ hasApiKey: false }, { apiKey: 'test-placeholder', clearApiKey: false }, [])).toBe('Add at least one model ID.');
   });
 
   it('accepts a configured model with either a retained or newly entered credential', () => {

@@ -64,7 +64,7 @@ describe('session deletion undo', () => {
     await store.trashCollection(book.id);
     await store.restoreDeletedCollection(book.id);
     expect(store.peekDeletionUndo()?.id).toBe(removed.id);
-    await expect(store.deleteContent(book.id, ref(body.id))).rejects.toThrow('已被删除');
+    await expect(store.deleteContent(book.id, ref(body.id))).rejects.toThrow('deleted');
     expect(store.peekDeletionUndo()?.id).toBe(removed.id);
     await store.restoreDeletedContent(removed.id);
     expect(store.peekDeletionUndo()).toBeUndefined();
@@ -77,7 +77,7 @@ describe('session deletion undo', () => {
     const removed = await store.deleteCollectionSummary(book.id);
     await store.saveCollectionSummary(book.id, '后来写的摘要');
     const before = await store.loadNotebook();
-    await expect(store.undoLastDeletion()).rejects.toThrow('当前已有摘要');
+    await expect(store.undoLastDeletion()).rejects.toThrow('Move the current summary');
     expect(await store.loadNotebook()).toEqual(before);
     expect(store.peekDeletionUndo()).toMatchObject({ id: removed.id, kind: 'summary', deletedAt: removed.deletedAt });
     await store.saveCollectionSummary(book.id, '');
@@ -110,7 +110,7 @@ describe('session deletion undo', () => {
     const snapshots: Array<Store.DeletionUndo | undefined> = [];
     const unsubscribe = store.subscribeDeletionUndo(() => snapshots.push(store.peekDeletionUndo()));
     const stopBroken = store.subscribeDeletionUndo(() => { throw new Error('UI listener error'); });
-    await expect(store.deleteCollectionSummary(book.id)).rejects.toThrow('已经为空');
+    await expect(store.deleteCollectionSummary(book.id)).rejects.toThrow('already empty');
     expect(snapshots).toEqual([]);
     await store.trashCollection(book.id);
     expect(snapshots).toHaveLength(1);
@@ -141,8 +141,8 @@ describe('formatted memo citations', () => {
     const target = await store.createCollection('整理书籍');
     const imported = await store.copyIntoCollection({ to: target.id, refs: [ref(memo.id)] });
     const state = await store.loadNotebook();
-    expect(state.notes.find(item => item.id === imported.items[0].id)?.markdown).toBe('> ```python\n> print("hello")\n> ```\n\n出处：来源书籍 / 代码');
+    expect(state.notes.find(item => item.id === imported.items[0].id)?.markdown).toBe('> ```python\n> print("hello")\n> ```\n\nSource: 来源书籍 / 代码');
     expect(state.notes.find(item => item.id === imported.items[0].id)?.source?.quoteFormat).toBe('markdown');
-    await expect(store.saveDraft({ markdown: '', source: { ...source, quoteFormat: 'html' as 'markdown' } })).rejects.toThrow('引用格式');
+    await expect(store.saveDraft({ markdown: '', source: { ...source, quoteFormat: 'html' as 'markdown' } })).rejects.toThrow('quotation format');
   });
 });

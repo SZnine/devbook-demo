@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import { useEffect, useId, useState } from 'react';
 import DOMPurify from 'dompurify';
 import { ExpressiveCodeBlock } from './ExpressiveCode';
@@ -49,11 +50,11 @@ export function MermaidDiagram({ source }: { source: string }) {
   const ready = result.source === source && !!result.svg;
   return <figure className="document-diagram" data-diagram-status={ready ? 'ready' : result.error ? 'fallback' : 'loading'}>
     {ready && <>
-      <div className="diagram-surface" role="img" aria-label="文档图示" dangerouslySetInnerHTML={{ __html: result.svg }} />
+      <div className="diagram-surface" role="img" aria-label={t("文档图示", "Diagram")} dangerouslySetInnerHTML={{ __html: result.svg }} />
       <button type="button" className="diagram-source-toggle" data-content-control aria-pressed={showSource}
-        onClick={() => setShowSource(!showSource)}>{showSource ? '收起源码' : '源码'}</button>
+        onClick={() => setShowSource(!showSource)}>{showSource ? t("收起源码", "Hide source") : t("源码", "Source")}</button>
     </>}
     {(!ready || showSource) && <ExpressiveCodeBlock code={source} language="mermaid" />}
-    {result.error && <figcaption>图示无法解析，已保留源码。</figcaption>}
+    {result.error && <figcaption>{t("图示无法解析，已保留源码。", "Could not render diagram. Source shown below.")}</figcaption>}
   </figure>;
 }

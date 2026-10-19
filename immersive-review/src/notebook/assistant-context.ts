@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
@@ -70,15 +71,15 @@ export function buildAssistantContext(
 ): string {
   const items: readonly AssistantContextSelection[] = Array.isArray(selections) ? selections : [selections as AssistantContextSelection];
   return items.map((item, index) => {
-    const parts = [`参考 ${index + 1} · ${item.title}`, '选中文字：', item.selectedMarkdown];
+    const parts = [t(`参考 ${index + 1} · ${item.title}`, `Reference ${index + 1} · ${item.title}`), t("选中文字：", "Selected text:"), item.selectedMarkdown];
     if (level !== 'selection') {
-      if (item.sectionTitle) parts.push(`所属小节：${item.sectionTitle}`);
-      if (item.sectionMarkdown) parts.push('小节完整正文（Markdown）：', item.sectionMarkdown);
+      if (item.sectionTitle) parts.push(t(`所属小节：${item.sectionTitle}`, `Section: ${item.sectionTitle}`));
+      if (item.sectionMarkdown) parts.push(t("小节完整正文（Markdown）：", "Full section (Markdown):"), item.sectionMarkdown);
     }
     if (level === 'chapter') {
-      if (item.bookTitle) parts.push(`所属书籍：${item.bookTitle}`);
-      if (item.chapterTitle) parts.push(`所属章节：${item.chapterTitle}`);
-      if (item.chapterHeadings.length) parts.push('章节内小节标题（按原顺序）：', ...item.chapterHeadings.map(title => `- ${title}`));
+      if (item.bookTitle) parts.push(t(`所属书籍：${item.bookTitle}`, `Book: ${item.bookTitle}`));
+      if (item.chapterTitle) parts.push(t(`所属章节：${item.chapterTitle}`, `Chapter: ${item.chapterTitle}`));
+      if (item.chapterHeadings.length) parts.push(t("章节内小节标题（按原顺序）：", "Chapter outline:"), ...item.chapterHeadings.map(title => `- ${title}`));
     }
     return parts.join('\n\n');
   }).join('\n\n---\n\n');

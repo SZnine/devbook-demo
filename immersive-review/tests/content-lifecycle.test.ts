@@ -54,9 +54,9 @@ describe('separate book contents, source memos, and reversible deletion', () => 
     expect(state.entries).toEqual(before.entries);
     await store.deleteContent(first.id, ref(copy.id));
     state = await store.loadNotebook();
-    await expect(store.saveDocumentContent({ collectionId: first.id, id: memo.id, markdown: '迟到的旧编辑器' })).rejects.toThrow('已被删除');
-    await expect(store.saveDocumentContent({ collectionId: first.id, id: copy.id, markdown: '迟到的自动保存' })).rejects.toThrow('已被删除');
-    await expect(store.saveNote({ id: copy.id, markdown: '旧调用也不能复活' })).rejects.toThrow('已被删除');
+    await expect(store.saveDocumentContent({ collectionId: first.id, id: memo.id, markdown: '迟到的旧编辑器' })).rejects.toThrow('deleted');
+    await expect(store.saveDocumentContent({ collectionId: first.id, id: copy.id, markdown: '迟到的自动保存' })).rejects.toThrow('deleted');
+    await expect(store.saveNote({ id: copy.id, markdown: '旧调用也不能复活' })).rejects.toThrow('deleted');
     expect(await store.loadNotebook()).toEqual(state);
   });
 
@@ -74,11 +74,11 @@ describe('separate book contents, source memos, and reversible deletion', () => 
     expect(deleted.collections.find(item => item.id === chapter.id)?.deletedAt).toBeUndefined();
     expect(deleted.notes).toEqual(before.notes);
     expect(deleted.entries).toEqual(before.entries);
-    await expect(store.saveCollectionSummary(chapter.id, '迟到的摘要保存')).rejects.toThrow('回收站');
-    await expect(store.saveDocumentContent({ collectionId: chapter.id, id: body.id, markdown: '迟到的正文保存' })).rejects.toThrow('回收站');
-    await expect(store.createCollection('错误新增', chapter.id)).rejects.toThrow('回收站');
-    await expect(store.moveChapter(chapter.id, null)).rejects.toThrow('回收站');
-    await expect(store.readRef(ref(body.id))).rejects.toThrow('已被删除');
+    await expect(store.saveCollectionSummary(chapter.id, '迟到的摘要保存')).rejects.toThrow('Trash');
+    await expect(store.saveDocumentContent({ collectionId: chapter.id, id: body.id, markdown: '迟到的正文保存' })).rejects.toThrow('Trash');
+    await expect(store.createCollection('错误新增', chapter.id)).rejects.toThrow('Trash');
+    await expect(store.moveChapter(chapter.id, null)).rejects.toThrow('Trash');
+    await expect(store.readRef(ref(body.id))).rejects.toThrow('deleted');
     expect(await store.loadNotebook()).toEqual(deleted);
     await store.restoreDeletedCollection(book.id);
     expect(await store.loadNotebook()).toEqual(before);
@@ -91,7 +91,7 @@ describe('separate book contents, source memos, and reversible deletion', () => 
     await store.trashCollection(child.id);
     const childDeleted = (await store.loadNotebook()).collections.find(item => item.id === child.id)?.deletedAt;
     await store.trashCollection(book.id);
-    await expect(store.restoreDeletedCollection(child.id)).rejects.toThrow('上级');
+    await expect(store.restoreDeletedCollection(child.id)).rejects.toThrow('parent');
     await store.restoreDeletedCollection(book.id);
     const state = await store.loadNotebook();
     expect(state.collections.find(item => item.id === book.id)?.archivedAt).toBeTypeOf('number');
@@ -122,7 +122,7 @@ describe('separate book contents, source memos, and reversible deletion', () => 
     const removed = await store.deleteCollectionSummary(book.id);
     await store.saveCollectionSummary(book.id, '后来写的摘要');
     const before = await store.loadNotebook();
-    await expect(store.restoreDeletedContent(removed.id)).rejects.toThrow('当前已有摘要');
+    await expect(store.restoreDeletedContent(removed.id)).rejects.toThrow('Move the current summary');
     expect(await store.loadNotebook()).toEqual(before);
     await store.saveCollectionSummary(book.id, '');
     await store.restoreDeletedContent(removed.id);
@@ -135,7 +135,7 @@ describe('separate book contents, source memos, and reversible deletion', () => 
     const body = await store.createNoteInCollection(chapter.id, '仍需要能恢复的正文');
     const deleted = await store.deleteContent(chapter.id, ref(body.id));
     const before = await store.loadNotebook();
-    await expect(store.ungroupChapter(chapter.id)).rejects.toThrow('请先恢复该章节回收站中的内容');
+    await expect(store.ungroupChapter(chapter.id)).rejects.toThrow('Restore this chapter’s deleted content');
     expect(await store.loadNotebook()).toEqual(before);
     await store.restoreDeletedContent(deleted.id);
     await store.ungroupChapter(chapter.id);
@@ -171,8 +171,8 @@ describe('separate book contents, source memos, and reversible deletion', () => 
     const quoted = await store.createMemoFromContent({ source: source(book.id, memo.id) });
     expect(quoted.markdown).toBe('');
     const before = await store.loadNotebook();
-    await expect(store.saveDraft({ markdown: '', source: { ...source(book.id, memo.id), quote: '' } })).rejects.toThrow('引用内容');
-    await expect(store.copyIntoCollection({ to: book.id, refs: [ref(memo.id), ref('missing')] })).rejects.toThrow('不存在');
+    await expect(store.saveDraft({ markdown: '', source: { ...source(book.id, memo.id), quote: '' } })).rejects.toThrow('quotation');
+    await expect(store.copyIntoCollection({ to: book.id, refs: [ref(memo.id), ref('missing')] })).rejects.toThrow('no longer exists');
     expect(await store.loadNotebook()).toEqual(before);
   });
 
@@ -191,7 +191,7 @@ describe('separate book contents, source memos, and reversible deletion', () => 
     const state = await store.loadNotebook();
     expect(state.notes.find(note => note.id === memo.id)?.source).toEqual(second);
     expect(state.notes.find(note => note.id === copied.items[0].id)?.source).toEqual(second);
-    await expect(store.saveDraft({ markdown: '', source: { ...second, contextMarkdown: 1 as unknown as string } })).rejects.toThrow('引用上下文');
+    await expect(store.saveDraft({ markdown: '', source: { ...second, contextMarkdown: 1 as unknown as string } })).rejects.toThrow('quotation context');
   });
 
   it('imports quote-only and annotated memos as readable documents while leaving the original memos unchanged', async () => {
@@ -206,8 +206,8 @@ describe('separate book contents, source memos, and reversible deletion', () => 
     let state = await store.loadNotebook();
     const first = state.notes.find(note => note.id === imported.items[0].id)!;
     const second = state.notes.find(note => note.id === imported.items[1].id)!;
-    expect(first.markdown).toBe('> 选中的原文\n\n出处：书籍 / 章节 / 原文标题');
-    expect(second.markdown).toBe('> 选中的原文\n\n出处：书籍 / 章节 / 原文标题\n\n## 我的理解\n\n这段内容的个人解释。');
+    expect(first.markdown).toBe('> 选中的原文\n\nSource: 书籍 / 章节 / 原文标题');
+    expect(second.markdown).toBe('> 选中的原文\n\nSource: 书籍 / 章节 / 原文标题\n\n## 我的理解\n\n这段内容的个人解释。');
     expect(first.source).toEqual(citation);
     expect(second.source).toEqual(citation);
     expect(state.notes.filter(store.isMemo)).toEqual(before.notes.filter(store.isMemo));

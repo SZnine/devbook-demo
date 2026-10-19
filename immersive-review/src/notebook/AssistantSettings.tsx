@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import { useEffect, useRef, useState } from 'react';
 import {
   getAssistantConfig, saveAssistantConfig,
@@ -14,7 +15,7 @@ function draftFor(provider: AssistantProvider): ProviderDraft {
 
 export function assistantModelValidationError(provider: Pick<AssistantProvider, 'hasApiKey'>, draft: Pick<ProviderDraft, 'apiKey' | 'clearApiKey'>, models: readonly string[]): string {
   const willHaveApiKey = !draft.clearApiKey && (Boolean(draft.apiKey.trim()) || provider.hasApiKey);
-  return willHaveApiKey && !models.length ? '请至少填写一个模型 ID。' : '';
+  return willHaveApiKey && !models.length ? t("请至少填写一个模型 ID。", "Add at least one model ID.") : '';
 }
 
 function ServiceSymbol({ provider }: { provider: AssistantProviderId }) {
@@ -66,7 +67,7 @@ export function AssistantSettings({ onClose, onSaved, embedded = false }: Assist
       setConfig(value);
       setDrafts(Object.fromEntries(value.providers.map(provider => [provider.id, draftFor(provider)])));
     }).catch((reason: unknown) => {
-      if (!controller.signal.aborted) setError(reason instanceof Error ? reason.message : '无法读取 AI 服务设置。');
+      if (!controller.signal.aborted) setError(reason instanceof Error ? reason.message : t("无法读取 AI 服务设置。", "Could not load provider settings."));
     }).finally(() => {
       if (!controller.signal.aborted) setLoading(false);
     });
@@ -91,7 +92,7 @@ export function AssistantSettings({ onClose, onSaved, embedded = false }: Assist
       const url = new URL(baseUrl);
       if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password || url.search || url.hash) throw new Error();
     } catch {
-      setError('请输入有效的 API 地址，不要包含密钥、查询参数或片段。');
+      setError(t("请输入有效的 API 地址，不要包含密钥、查询参数或片段。", "Enter an API URL without credentials, query parameters or fragments."));
       return;
     }
     const modelError = assistantModelValidationError(provider, draft, models);
@@ -111,52 +112,52 @@ export function AssistantSettings({ onClose, onSaved, embedded = false }: Assist
       const nextProvider = nextConfig.providers.find(item => item.id === provider.id);
       if (nextProvider) setDrafts(current => ({ ...current, [provider.id]: draftFor(nextProvider) }));
       setShowKey(false);
-      setSaved(`${provider.name} 设置已保存`);
+      setSaved(t(`${provider.id === 'custom' ? t('自定义', 'Custom') : provider.name} 设置已保存`, `${provider.id === 'custom' ? t('自定义', 'Custom') : provider.name} saved`));
       savedRef.current(nextConfig);
     } catch (reason) {
-      if (!controller.signal.aborted) setError(reason instanceof Error ? reason.message : '保存失败，请重试。');
+      if (!controller.signal.aborted) setError(reason instanceof Error ? reason.message : t("保存失败，请重试。", "Could not save. Try again."));
     } finally {
       if (!controller.signal.aborted) setSaving(false);
     }
   }
 
-  const fields = <>{loading ? <div className="nas-loading" role="status">正在读取设置…</div> : !config ? <div className="nas-loading"><p role="alert">{error || '无法读取设置'}</p><button type="button" className="nas-secondary" onClick={() => setLoadAttempt(value => value + 1)}>重新加载</button></div> : <div className="nas-layout">
-      <nav className="nas-services" aria-label="AI 服务商">
+  const fields = <>{loading ? <div className="nas-loading" role="status">{t("正在读取设置…", "Loading settings…")}</div> : !config ? <div className="nas-loading"><p role="alert">{error || t("无法读取设置", "Could not load settings")}</p><button type="button" className="nas-secondary" onClick={() => setLoadAttempt(value => value + 1)}>{t("重新加载", "Reload")}</button></div> : <div className="nas-layout">
+      <nav className="nas-services" aria-label={t("AI 服务商", "AI providers")}>
         {providers.map(item => <button type="button" key={item.id} aria-current={selectedId === item.id ? 'true' : undefined} disabled={saving}
           onClick={() => { setSelectedId(item.id); setShowKey(false); setError(''); setSaved(''); }}>
-          <ServiceSymbol provider={item.id} /><span>{item.name}</span>{item.configured && <span className="nas-ready-dot" aria-label="已配置" />}
+          <ServiceSymbol provider={item.id} /><span>{item.id === 'custom' ? t('自定义', 'Custom') : item.name}</span>{item.configured && <span className="nas-ready-dot" aria-label={t("已配置", "Connected")} />}
         </button>)}
       </nav>
       {provider && draft && <form className="nas-form" noValidate onSubmit={event => { event.preventDefault(); void save(); }}>
-        <div className="nas-provider-heading"><h3>{provider.name}</h3><span className={`nas-status${provider.configured ? ' is-ready' : ''}`}>{provider.configured ? '已配置' : '未配置'}</span></div>
+        <div className="nas-provider-heading"><h3>{provider.id === 'custom' ? t('自定义', 'Custom') : provider.name}</h3><span className={`nas-status${provider.configured ? ' is-ready' : ''}`}>{provider.configured ? t("已配置", "Connected") : t("未配置", "Not configured")}</span></div>
         <fieldset disabled={saving}>
           <label className="nas-field" htmlFor="nas-api-key">API Key</label>
           <div className="nas-key-input">
             <input id="nas-api-key" type={showKey ? 'text' : 'password'} autoComplete="new-password" spellCheck={false} value={draft.apiKey} disabled={draft.clearApiKey}
-              placeholder={draft.clearApiKey ? '保存后移除密钥' : provider.hasApiKey ? '已保存，留空保留' : '输入 API Key'}
+              placeholder={draft.clearApiKey ? t("保存后移除密钥", "Key will be removed on save") : provider.hasApiKey ? t("已保存，留空保留", "Saved. Leave blank to keep.") : t("输入 API Key", "Enter API key")}
               onChange={event => updateDraft({ apiKey: event.target.value })} />
-            <button type="button" className="nas-eye" disabled={!draft.apiKey || draft.clearApiKey} aria-label={showKey ? '隐藏输入的密钥' : '显示输入的密钥'} aria-pressed={showKey} onClick={() => setShowKey(value => !value)}>
+            <button type="button" className="nas-eye" disabled={!draft.apiKey || draft.clearApiKey} aria-label={showKey ? t("隐藏输入的密钥", "Hide API key") : t("显示输入的密钥", "Show API key")} aria-pressed={showKey} onClick={() => setShowKey(value => !value)}>
               <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 10s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5Z" /><circle cx="10" cy="10" r="2" />{showKey && <path d="m3 3 14 14" />}</svg>
             </button>
           </div>
-          <p className="nas-local-note">密钥保存在服务端配置文件中，不写入浏览器存储。</p>
-          {provider.hasApiKey && <label className="nas-remove-key"><input type="checkbox" checked={draft.clearApiKey} onChange={event => updateDraft({ clearApiKey: event.target.checked, apiKey: '' })} />移除已保存的密钥</label>}
+          <p className="nas-local-note">{t("密钥保存在服务端配置文件中，不写入浏览器存储。", "Stored on your server.")}</p>
+          {provider.hasApiKey && <label className="nas-remove-key"><input type="checkbox" checked={draft.clearApiKey} onChange={event => updateDraft({ clearApiKey: event.target.checked, apiKey: '' })} />{t("移除已保存的密钥", "Remove saved key")}</label>}
           <details className="nas-advanced" key={provider.id}>
-            <summary><span>高级设置</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 4 4 4-4 4" /></svg></summary>
+            <summary><span>{t("高级设置", "Advanced")}</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 4 4 4-4 4" /></svg></summary>
             <div className="nas-advanced-fields">
-              <label className="nas-field" htmlFor="nas-base-url">API 地址<input id="nas-base-url" type="url" spellCheck={false} autoComplete="off" value={draft.baseUrl} required onChange={event => updateDraft({ baseUrl: event.target.value })} /></label>
-              <label className="nas-field" htmlFor="nas-models">模型<textarea id="nas-models" rows={3} spellCheck={false} value={draft.models} required placeholder="每行一个模型 ID" onChange={event => updateDraft({ models: event.target.value })} /></label>
-              <p className="nas-hint">每行一个模型 ID，也可用逗号分隔。模型会出现在聊天界面的选择菜单中。</p>
-              {provider.id === 'custom' && <p className="nas-hint">兼容 OpenAI Chat Completions 格式。</p>}
-              <p className="nas-storage-detail">密钥以明文保存在配置目录的 <code>assistant-config.json</code> 中。</p>
+              <label className="nas-field" htmlFor="nas-base-url">{t("API 地址", "API URL")}<input id="nas-base-url" type="url" spellCheck={false} autoComplete="off" value={draft.baseUrl} required onChange={event => updateDraft({ baseUrl: event.target.value })} /></label>
+              <label className="nas-field" htmlFor="nas-models">{t("模型", "Model")}<textarea id="nas-models" rows={3} spellCheck={false} value={draft.models} required placeholder={t("每行一个模型 ID", "One model ID per line")} onChange={event => updateDraft({ models: event.target.value })} /></label>
+              <p className="nas-hint">{t("每行一个模型 ID，也可用逗号分隔。模型会出现在聊天界面的选择菜单中。", "One model ID per line, or separated by commas.")}</p>
+              {provider.id === 'custom' && <p className="nas-hint">{t("兼容 OpenAI Chat Completions 格式。", "OpenAI-compatible Chat Completions endpoint.")}</p>}
+              <p className="nas-storage-detail">{t("密钥以明文保存在配置目录的", "Keys are stored unencrypted in ")}<code>assistant-config.json</code>{t("中。", ".")}</p>
             </div>
           </details>
         </fieldset>
-        <footer className="nas-footer"><div className={`nas-feedback${error ? ' is-error' : ''}`} role={error ? 'alert' : 'status'}>{error || saved}</div><button className="nas-save" type="submit" disabled={saving}>{saving ? '保存中…' : '保存设置'}</button></footer>
+        <footer className="nas-footer"><div className={`nas-feedback${error ? ' is-error' : ''}`} role={error ? 'alert' : 'status'}>{error || saved}</div><button className="nas-save" type="submit" disabled={saving}>{saving ? t("保存中…", "Saving…") : t("保存设置", "Save")}</button></footer>
       </form>}
     </div>}</>;
   if (embedded) return fields;
-  return <dialog ref={dialogRef} className="nas-dialog" aria-label="AI 服务设置"
+  return <dialog ref={dialogRef} className="nas-dialog" aria-label={t("AI 服务设置", "Provider settings")}
     onCancel={event => { event.preventDefault(); closeRef.current(); }}
     onKeyDown={event => event.stopPropagation()}
     onClick={event => {
@@ -164,8 +165,8 @@ export function AssistantSettings({ onClose, onSaved, embedded = false }: Assist
       const bounds = event.currentTarget.getBoundingClientRect();
       if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closeRef.current();
     }}>
-    <header className="nas-header"><div><h2>设置</h2><span>AI 服务</span></div>
-      <button type="button" className="nas-close" aria-label="关闭 AI 服务设置" title="关闭 · Esc" onClick={onClose} autoFocus>
+    <header className="nas-header"><div><h2>{t("设置", "Settings")}</h2><span>{t("AI 服务", "AI providers")}</span></div>
+      <button type="button" className="nas-close" aria-label={t("关闭 AI 服务设置", "Close provider settings")} title={t("关闭 · Esc", "Close · Esc")} onClick={onClose} autoFocus>
         <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" /></svg>
       </button>
     </header>

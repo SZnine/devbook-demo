@@ -14,6 +14,10 @@
 .ns-row:first-child { padding-top:0; }
 .ns-row>div:first-child { min-width:0; }
 .ns-row strong { font-size:13px;font-weight:550; }
+.ns-language { border:1px solid var(--nas-line);border-radius:7px;background:var(--nas-field);color:var(--nas-text);font:inherit;font-size:12px;padding:7px 28px 7px 10px;min-width:140px; }
+.ns-language:focus-visible { outline:2px solid var(--nas-accent);outline-offset:2px; }
+.ns-export-details { color:var(--nas-muted);font-size:11px;margin-top:12px; }
+.ns-export-details summary { cursor:pointer;width:fit-content; }
 .ns-row p { margin:4px 0 0;color:var(--nas-muted);font-size:11px;line-height:1.7; }
 .ns-row .nas-secondary { flex-shrink:0;font-size:11px;white-space:nowrap; }
 .ns-segmented { display:flex;background:var(--nas-sidebar);border:1px solid var(--nas-line);border-radius:7px;padding:3px;gap:3px;flex-shrink:0; }

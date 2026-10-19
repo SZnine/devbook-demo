@@ -61,7 +61,7 @@ describe('locally authored chapters', () => {
     await notebook.enrollRef(noteRef(note.id));
     await notebook.readRef(noteRef(note.id));
     const before = await notebook.loadNotebook();
-    await expect(notebook.ungroupChapter(chapter.id)).rejects.toThrow('章节仍有摘要，请先将摘要移至上级或清空后再展开。');
+    await expect(notebook.ungroupChapter(chapter.id)).rejects.toThrow('Move or clear the chapter summary first.');
     expect(await notebook.loadNotebook()).toEqual(before);
     await notebook.saveCollectionSummary(chapter.id, '');
     await notebook.ungroupChapter(chapter.id);
@@ -80,14 +80,14 @@ describe('locally authored chapters', () => {
     const chapter = await notebook.createCollection('章节', book.id);
     await notebook.saveCollectionSummary(chapter.id, '原摘要');
     const valid = await notebook.loadNotebook();
-    await expect(notebook.saveCollectionSummary('missing', '摘要')).rejects.toThrow('不存在');
-    await expect(notebook.saveCollectionSummary(chapter.id, null as unknown as string)).rejects.toThrow('摘要');
-    await expect(notebook.saveCollectionSummary(chapter.id, '字'.repeat(2_000_001))).rejects.toThrow('摘要');
+    await expect(notebook.saveCollectionSummary('missing', '摘要')).rejects.toThrow('no longer exists');
+    await expect(notebook.saveCollectionSummary(chapter.id, null as unknown as string)).rejects.toThrow('Summary');
+    await expect(notebook.saveCollectionSummary(chapter.id, '字'.repeat(2_000_001))).rejects.toThrow('Summary');
     expect(await notebook.loadNotebook()).toEqual(valid);
     for (const id of [book.id, chapter.id]) {
       await notebook.archiveCollection(id);
       const before = await notebook.loadNotebook();
-      await expect(notebook.saveCollectionSummary(chapter.id, '')).rejects.toThrow('归档');
+      await expect(notebook.saveCollectionSummary(chapter.id, '')).rejects.toThrow('archived');
       expect(await notebook.loadNotebook()).toEqual(before);
       await notebook.restoreCollection(id);
     }
@@ -109,9 +109,9 @@ describe('locally authored chapters', () => {
     expect(state.draft.markdown).toBe('尚未提交的另一条随笔');
     expect(titleFor(chapterRef(child.id), state)).toBe('异步编程');
     expect(bodyFor(chapterRef(child.id), state)).toBe('');
-    await expect(notebook.createNoteInCollection(child.id, '不能成为孤儿的随笔', noteRef('missing'))).rejects.toThrow('位置');
-    await expect(notebook.createNoteInCollection('missing', '无法保存')).rejects.toThrow('不存在');
-    await expect(notebook.createNoteInCollection(child.id, '  ')).rejects.toThrow('内容');
+    await expect(notebook.createNoteInCollection(child.id, '不能成为孤儿的随笔', noteRef('missing'))).rejects.toThrow('destination');
+    await expect(notebook.createNoteInCollection('missing', '无法保存')).rejects.toThrow('no longer exists');
+    await expect(notebook.createNoteInCollection(child.id, '  ')).rejects.toThrow('content');
     // A second read uses a newly opened database connection, as a refreshed page does.
     expect(await notebook.loadNotebook()).toEqual(state);
   });
@@ -151,13 +151,13 @@ describe('locally authored chapters', () => {
     const grandchild = await notebook.createCollection('孙', child.id);
     const note = await notebook.createNoteInCollection(child.id, '正文');
     const before = await notebook.loadNotebook();
-    await expect(notebook.moveChapter(root.id, root.id)).rejects.toThrow('自身');
-    await expect(notebook.moveChapter(root.id, grandchild.id)).rejects.toThrow('子章节');
-    await expect(notebook.moveChapter(child.id, grandchild.id)).rejects.toThrow('子章节');
-    await expect(notebook.ungroupChapter(root.id)).rejects.toThrow('书籍');
-    await expect(notebook.groupIntoChapter(root.id, [noteRef(note.id)], '错误来源')).rejects.toThrow('来源');
-    await expect(notebook.groupIntoChapter(root.id, [], '空选择')).rejects.toThrow('选择');
-    await expect(notebook.createCollection(' ', root.id)).rejects.toThrow('名称');
+    await expect(notebook.moveChapter(root.id, root.id)).rejects.toThrow('itself');
+    await expect(notebook.moveChapter(root.id, grandchild.id)).rejects.toThrow('descendant');
+    await expect(notebook.moveChapter(child.id, grandchild.id)).rejects.toThrow('descendant');
+    await expect(notebook.ungroupChapter(root.id)).rejects.toThrow('book');
+    await expect(notebook.groupIntoChapter(root.id, [noteRef(note.id)], '错误来源')).rejects.toThrow('source');
+    await expect(notebook.groupIntoChapter(root.id, [], '空选择')).rejects.toThrow('Select');
+    await expect(notebook.createCollection(' ', root.id)).rejects.toThrow('name');
     expect(await notebook.loadNotebook()).toEqual(before);
   });
 
@@ -173,9 +173,9 @@ describe('locally authored chapters', () => {
     expect(state.collections.flatMap(item => item.items).filter(item => item.kind === 'chapter' && item.id === child.id)).toHaveLength(1);
     await notebook.reorderContent(second.id, [noteRef(note.id), chapterRef(child.id)]);
     state = await notebook.loadNotebook();
-    await expect(notebook.reorderContent(second.id, [noteRef(note.id)])).rejects.toThrow('排序');
-    await expect(notebook.reorderContent(second.id, [noteRef(note.id), noteRef(note.id)])).rejects.toThrow('排序');
-    await expect(notebook.reorderContent(second.id, [noteRef(note.id), chapterRef(first.id)])).rejects.toThrow('排序');
+    await expect(notebook.reorderContent(second.id, [noteRef(note.id)])).rejects.toThrow('order');
+    await expect(notebook.reorderContent(second.id, [noteRef(note.id), noteRef(note.id)])).rejects.toThrow('order');
+    await expect(notebook.reorderContent(second.id, [noteRef(note.id), chapterRef(first.id)])).rejects.toThrow('order');
     expect(await notebook.loadNotebook()).toEqual(state);
     await notebook.moveChapter(child.id, second.id, noteRef(note.id));
     expect((await notebook.loadNotebook()).collections.find(item => item.id === second.id)?.items).toEqual([chapterRef(child.id), noteRef(note.id)]);
@@ -228,7 +228,7 @@ describe('locally authored chapters', () => {
     expect(state.notes).toEqual([]);
     expect(state.entries).toEqual(before.entries);
     // The old reference-only transfer endpoint cannot bypass single-parent and cycle checks.
-    await expect(notebook.transferItems({ to: other.id, refs: [chapterRef(child.id)] as unknown as notebook.Ref[], mode: 'copy' })).rejects.toThrow('不存在');
+    await expect(notebook.transferItems({ to: other.id, refs: [chapterRef(child.id)] as unknown as notebook.Ref[], mode: 'copy' })).rejects.toThrow('no longer exists');
     expect(await notebook.loadNotebook()).toEqual(state);
   });
 
@@ -276,9 +276,9 @@ describe('locally authored chapters', () => {
     const child = await notebook.createCollection('子', source.id);
     const grandchild = await notebook.createCollection('孙', child.id);
     const before = await notebook.loadNotebook();
-    await expect(notebook.moveContent({ from: source.id, to: target.id, refs: [noteRef(note.id), chapterRef('missing')] })).rejects.toThrow('不存在');
-    await expect(notebook.moveContent({ from: source.id, to: grandchild.id, refs: [noteRef(note.id), chapterRef(child.id)] })).rejects.toThrow('子章节');
-    await expect(notebook.moveContent({ from: source.id, to: null, refs: [chapterRef(child.id), noteRef(note.id)] })).rejects.toThrow('根目录');
+    await expect(notebook.moveContent({ from: source.id, to: target.id, refs: [noteRef(note.id), chapterRef('missing')] })).rejects.toThrow('no longer exists');
+    await expect(notebook.moveContent({ from: source.id, to: grandchild.id, refs: [noteRef(note.id), chapterRef(child.id)] })).rejects.toThrow('descendant');
+    await expect(notebook.moveContent({ from: source.id, to: null, refs: [chapterRef(child.id), noteRef(note.id)] })).rejects.toThrow('Library root');
     expect(await notebook.loadNotebook()).toEqual(before);
     await notebook.moveContent({ from: source.id, to: null, refs: [chapterRef(child.id)] });
     const state = await notebook.loadNotebook();
@@ -298,13 +298,13 @@ describe('locally authored chapters', () => {
     for (const id of [sourceRoot.id, source.id, targetRoot.id, target.id, child.id]) {
       await notebook.archiveCollection(id);
       const before = await notebook.loadNotebook();
-      await expect(notebook.moveContent({ from: source.id, to: target.id, refs })).rejects.toThrow('归档');
+      await expect(notebook.moveContent({ from: source.id, to: target.id, refs })).rejects.toThrow('archived');
       expect(await notebook.loadNotebook()).toEqual(before);
       await notebook.restoreCollection(id);
     }
     await notebook.archiveCollection(sourceRoot.id);
     const before = await notebook.loadNotebook();
-    await expect(notebook.moveContent({ to: target.id, refs: [chapterRef(child.id)] })).rejects.toThrow('归档');
+    await expect(notebook.moveContent({ to: target.id, refs: [chapterRef(child.id)] })).rejects.toThrow('archived');
     expect(await notebook.loadNotebook()).toEqual(before);
   });
 });

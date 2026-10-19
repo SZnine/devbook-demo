@@ -1,3 +1,4 @@
+import { t, dateLocale } from '../i18n';
 import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import { Markdown } from '../Markdown';
 import { Icon, type IconName } from '../manual-demo/icons';
@@ -64,7 +65,7 @@ function Dialog({ title, children, close, className = '', headerActions }: { tit
     return () => { element.current?.close(); if (opener.current?.isConnected) opener.current.focus(); };
   }, []);
   return <dialog className={`nb-dialog ${className}`} ref={element} onCancel={event => { event.preventDefault(); close(); }} onClick={event => { if (event.target === event.currentTarget) close(); }}>
-    <header><h2>{title}</h2>{headerActions}<button type="button" className="nb-icon" aria-label="关闭" onClick={close}>×</button></header>{children}
+    <header><h2>{title}</h2>{headerActions}<button type="button" className="nb-icon" aria-label={t("关闭", "Close")} onClick={close}>×</button></header>{children}
   </dialog>;
 }
 function SourceBody({ id, recall = false }: { id: string; recall?: boolean }) {
@@ -80,9 +81,9 @@ function SourceBody({ id, recall = false }: { id: string; recall?: boolean }) {
     <div data-reading-core>
     {primary.map(part => <Markdown key={part.id} body={part.markdown} />)}
     {answers.length > 0 && <>
-      {recall && <button type="button" className="nb-answer-reveal" aria-expanded={visible} aria-controls={answerId} aria-label={`${visible ? '收起答案' : '查看答案'}：${shortTitle(section.title)}`} onClick={() => void motionChange(() => setRevealed(value => !value))}><Icon name="eye" /><span>{visible ? '收起答案' : '查看答案'}</span><Icon name="chevron" /></button>}
-      <section id={answerId} className="nb-answer-sheet" aria-label={`答案与检查点：${shortTitle(section.title)}`} hidden={!visible}>
-        <header className="nb-answer-heading"><Icon name="list" /><h4>答案与检查点</h4></header>
+      {recall && <button type="button" className="nb-answer-reveal" aria-expanded={visible} aria-controls={answerId} aria-label={`${visible ? t("收起答案", "Hide answer") : t("查看答案", "Show answer")}${t('：', ': ')}${shortTitle(section.title)}`} onClick={() => void motionChange(() => setRevealed(value => !value))}><Icon name="eye" /><span>{visible ? t("收起答案", "Hide answer") : t("查看答案", "Show answer")}</span><Icon name="chevron" /></button>}
+      <section id={answerId} className="nb-answer-sheet" aria-label={`${t("答案与检查点", "Answers & checkpoints")}: ${shortTitle(section.title)}`} hidden={!visible}>
+        <header className="nb-answer-heading"><Icon name="list" /><h4>{t("答案与检查点", "Answers & checkpoints")}</h4></header>
         {visible && answers.map(part => <div className="nb-answer-part" key={part.id}>{part.role === 'note' && <p className="nb-answer-part-label">{part.label}</p>}<Markdown body={part.markdown} /></div>)}
       </section>
     </>}
@@ -289,7 +290,7 @@ function NotebookWorkspace() {
     return () => { document.removeEventListener('keydown', handler); mobileTrigger.current?.focus(); };
   }, [mobileNav]);
 
-  if (!state) return <div className="nb-loading">{business.error || '正在打开笔记…'}</div>;
+  if (!state) return <div className="nb-loading">{business.error || t("正在打开笔记…", "Opening notes…")}</div>;
   const activeNotes = state.notes.filter(note => store.isMemo(note) && !note.archivedAt);
   const allTags = [...new Set(activeNotes.flatMap(note => tagsFor(note.markdown)))].sort();
   const collection = state.collections.find(item => item.id === collectionId);
@@ -303,7 +304,7 @@ function NotebookWorkspace() {
   const topicIcons: IconName[] = ['code', 'organize', 'link', 'organize', 'code', 'memory', 'experiment', 'code', 'code', 'experiment', 'code', 'code', 'note', 'code', 'code', 'code', 'list', 'organize', 'code', 'list', 'organize', 'book', 'history', 'note', 'book', 'link', 'book'];
   const visibleTopics = manual.topics.filter(item => item.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
   if (sortByTitle) visibleTopics.sort((a, b) => a.title.localeCompare(b.title, 'zh-CN'));
-  const pageTitle = page === 'home' ? '开始' : page === 'notes' ? archived ? '归档' : tag ? `#${tag}` : '随笔' : page === 'memory' ? '记忆库' : topic?.title ?? collection?.title ?? (collectionId === 'manual' ? 'AI 应用与 Agent' : '阅读站');
+  const pageTitle = page === 'home' ? t("开始", "Home") : page === 'notes' ? archived ? t("归档", "Archive") : tag ? `#${tag}` : t("随笔", "Notes") : page === 'memory' ? t("记忆库", "Memory") : topic?.title ?? collection?.title ?? (collectionId === 'manual' ? t("AI 应用与 Agent", "AI & Agent handbook") : t("阅读站", "Library"));
   const assistantContext = page !== 'reading' ? '' : (isReference ? (topic?.sectionIds ?? []).map(id => ({ kind: 'section' as const, id })) : collection?.items ?? [])
     .filter(ref => ref.kind !== 'chapter').map(ref => `## ${titleFor(ref, state)}\n\n${bodyFor(ref, state)}`).join('\n\n');
   const matchesNote = (note: store.Note) => `${note.markdown}\n${note.source?.quote ?? ''}`.toLocaleLowerCase().includes(query.toLocaleLowerCase());
@@ -320,7 +321,7 @@ function NotebookWorkspace() {
   const ownerOf = (note: store.Note) => state.collections.find(item => !isCollectionArchived(item.id, state) && item.items.some(ref => ref.kind === 'note' && ref.id === note.id));
   const modifiedLabel = (at: number) => {
     const days = Math.floor((new Date().setHours(0, 0, 0, 0) - new Date(at).setHours(0, 0, 0, 0)) / 86400000);
-    return days === 0 ? '今天' : days === 1 ? '昨天' : new Date(at).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+    return days === 0 ? t("今天", "Today") : days === 1 ? t("昨天", "Yesterday") : new Date(at).toLocaleDateString(dateLocale(), { month: 'short', day: 'numeric' });
   };
   const discardUnusedQuote = () => {
     if (state.draft.source && !state.draft.editingId && !state.draft.markdown.trim()) business.draft({ markdown: '' });
@@ -335,12 +336,12 @@ function NotebookWorkspace() {
     undoActive.current = true;
     undoQueue.current = undoQueue.current.then(async () => {
       const restored = await business.run(() => store.undoLastDeletion());
-      if (restored) { setPage('reading'); setCollectionId(restored.collectionId); setTopicId(null); setNavigationMenu(null); setNotice('已撤销删除'); }
+      if (restored) { setPage('reading'); setCollectionId(restored.collectionId); setTopicId(null); setNavigationMenu(null); setNotice(t("已撤销删除", "Deletion undone")); }
     }).finally(() => { undoActive.current = false; });
     return true;
   };
   const createBlankBook = async () => {
-    const result = await business.run(() => store.createCollection('未命名书籍'));
+    const result = await business.run(() => store.createCollection(t("未命名书籍", "Untitled book")));
     if (result) go('reading', result.id);
   };
   const openModal = (next: Modal) => {
@@ -364,11 +365,11 @@ function NotebookWorkspace() {
   const closeModal = () => { if (modal?.kind === 'compose') discardUnusedQuote(); setModal(null); };
   const save = async (markdown = state.draft.markdown) => Boolean(await business.run(() => store.saveNote({ id: state.draft.editingId, markdown, source: state.draft.source }), true));
   const quoteMemo = (source: store.MemoSource) => {
-    if (state.draft.editingId || (state.draft.markdown.trim() && !state.draft.source)) { setNotice('请先保存或取消当前随笔草稿'); return; }
+    if (state.draft.editingId || (state.draft.markdown.trim() && !state.draft.source)) { setNotice(t("请先保存或取消当前随笔草稿", "Save or discard your draft first.")); return; }
     // Preserve authored thoughts when replacing a quote; unused quote-only drafts
     // are discarded on close or ordinary memo entry.
     business.draft({ markdown: state.draft.markdown, source });
-    if (state.draft.markdown.trim()) setNotice('已更换引用，随笔草稿保留');
+    if (state.draft.markdown.trim()) setNotice(t("已更换引用，随笔草稿保留", "Reference updated. Draft kept."));
     openModal({ kind: 'compose' });
   };
   const deleteCollection = async (id: string) => {
@@ -376,7 +377,7 @@ function NotebookWorkspace() {
     if (!result) return;
     setNavigationMenu(null);
     if (collectionId && collectionPath(collectionId, state).some(item => item.id === id)) go('reading');
-    setNotice('已删除 · Ctrl+Z 撤销');
+    setNotice(t("已删除 · Ctrl+Z 撤销", "Deleted · Ctrl+Z to undo"));
   };
   const sourceCitation = (source: store.MemoSource) => {
     const sourceNote = source.ref?.kind === 'note' ? state.notes.find(item => item.id === source.ref!.id) : undefined;
@@ -386,17 +387,17 @@ function NotebookWorkspace() {
       : source.ref?.kind === 'section' ? bodyFor(source.ref, state) : '';
     const markdown = source.quoteFormat === 'markdown' ? source.quote : recoverLegacyQuoteMarkdown(source.quote, original);
     const quote = () => markdown !== null ? <Markdown body={markdown} /> : <p className="nb-memo-plain-quote">{source.quote}</p>;
-    return <aside className="nb-memo-source" aria-label="随笔来源">
+    return <aside className="nb-memo-source" aria-label={t("随笔来源", "Note source")}>
     <button type="button" onClick={() => {
-      if (store.isCollectionDeleted(source.collectionId, state) || !state.collections.some(item => item.id === source.collectionId)) { setNotice('来源已删除，引用快照仍保留'); return; }
+      if (store.isCollectionDeleted(source.collectionId, state) || !state.collections.some(item => item.id === source.collectionId)) { setNotice(t("来源已删除，引用快照仍保留", "Source deleted. Quote kept.")); return; }
       setModal(null); go('reading', source.collectionId);
-    }}><Icon name="link" /><span>{source.path.join(' / ')} · {source.kind === 'summary' ? '摘要' : source.title}</span><Icon name="chevron" /></button>
+    }}><Icon name="link" /><span>{source.path.join(' / ')} · {source.kind === 'summary' ? t("摘要", "Summary") : source.title}</span><Icon name="chevron" /></button>
     <div className="nb-memo-quote">{quote()}</div>
-    {source.contextMarkdown && source.contextMarkdown.trim() !== (markdown ?? source.quote).trim() && <details><summary>上下文{source.contextTitle ? ` · ${source.contextTitle}` : ''}</summary><div className="nb-memo-context-selection"><Markdown body={source.contextMarkdown} /></div></details>}
+    {source.contextMarkdown && source.contextMarkdown.trim() !== (markdown ?? source.quote).trim() && <details><summary>{t("上下文", "Context")}{source.contextTitle ? ` · ${source.contextTitle}` : ''}</summary><div className="nb-memo-context-selection"><Markdown body={source.contextMarkdown} /></div></details>}
   </aside>;
   };
   const edit = (note: store.Note) => {
-    if (state.draft.markdown.trim() || state.draft.editingId || state.draft.source) { setNotice('请先保存或取消当前草稿'); return; }
+    if (state.draft.markdown.trim() || state.draft.editingId || state.draft.source) { setNotice(t("请先保存或取消当前草稿", "Save or discard your draft first.")); return; }
     void motionChange(() => {
       business.draft({ markdown: note.markdown, editingId: note.id, source: note.source }); go('notes'); setArchived(false); setModal(null); setMenu(null);
       requestAnimationFrame(() => document.getElementById(`note-${note.id}`)?.scrollIntoView({ block: 'center', behavior: 'smooth' }));
@@ -406,7 +407,7 @@ function NotebookWorkspace() {
     if (Date.now() - lastRead.current < 600) return;
     lastRead.current = Date.now();
     const result = await business.run(() => store.recordRef(ref, { source: 'manual', sessionId: crypto.randomUUID() }));
-    if (result) setNotice(result.recorded ? '已补记本次阅读' : '已合并到最近一次阅读');
+    if (result) setNotice(result.recorded ? t("已补记本次阅读", "Reading recorded") : t("已合并到最近一次阅读", "Added to your last reading"));
   };
   const startDrag = (event: ReactPointerEvent, refs: store.Ref[], from?: string) => {
     if (event.button !== 0 || event.pointerType === 'touch' || busy || !refs.length) return;
@@ -442,9 +443,9 @@ function NotebookWorkspace() {
         overlay.dataset.valid = String(Boolean(target));
       }
       if (dragCaption.current) {
-        const mode = from === target?.to ? '调整顺序' : from && !copyModifier ? '移动到' : '加入';
+        const mode = from === target?.to ? t("调整顺序", "Reorder") : from && !copyModifier ? t("移动到", "Move to") : t("加入", "Add to");
         const duplicate = target && refs.every(ref => target.targetCollection.items.some(item => refKey(item) === refKey(ref)));
-        dragCaption.current.textContent = target ? `${mode} · ${target.targetCollection.title}${duplicate && from !== target.to ? '（已有引用）' : ''}` : '拖到阅读合集';
+        dragCaption.current.textContent = target ? `${mode} · ${target.targetCollection.title}${duplicate && from !== target.to ? t("（已有引用）", " (already added)") : ''}` : t("拖到阅读合集", "Drop into a book");
       }
       const scroller = document.elementFromPoint(x, y)?.closest<HTMLElement>('.nb-main,.nb-sidebar-scroll');
       if (scroller) {
@@ -479,7 +480,7 @@ function NotebookWorkspace() {
       swallowClick();
       if (!target) return;
       void business.run<store.Collection | store.Collection[]>(() => from ? store.transferItems({ from, refs, to: target.to, before: target.before, mode: !copyModifier ? 'move' : 'copy' }) : store.copyIntoCollection({ refs, to: target.to, before: target.before })).then(result => {
-        if (result) { setLanded(target.to); setNotice(`${from === target.to ? '已调整顺序' : from && !copyModifier ? '已移到' : '已加入'} ${target.targetCollection.title}`); }
+        if (result) { setLanded(target.to); setNotice(`${from === target.to ? t("已调整顺序", "Reordered") : from && !copyModifier ? t("已移到", "Moved to") : t("已加入", "Added to")} ${target.targetCollection.title}`); }
       });
     };
     dragCleanup.current?.(); dragCleanup.current = cleanup;
@@ -490,13 +491,13 @@ function NotebookWorkspace() {
     const ref: store.Ref = { kind: 'note', id: note.id };
     return <article className={`nb-memo ${dragCard?.refs.some(item => refKey(item) === refKey(ref)) ? 'nb-drag-source' : ''}`} data-reading-key={state.draft.editingId !== note.id ? refKey(ref) : undefined} id={`note-${note.id}`} key={note.id}>
       {state.draft.editingId === note.id && modal?.kind !== 'compose' ? <MemoComposer allowEmpty={Boolean(state.draft.source)} tags={allTags} value={state.draft.markdown} onChange={markdown => business.draft({ markdown, editingId: note.id, source: note.source })} onSave={save} onCancel={() => business.draft({ markdown: '' })} editing disabled={busy} autoFocus /> : <>
-        <header className="nb-memo-header nb-drag-handle" onPointerDown={event => startDrag(event, [ref])}><button className="nb-card-grip" title="拖入阅读合集" aria-label={`整理随笔：${noteTitle(note.markdown || note.source?.quote || '')}`} onClick={() => openModal({ kind: 'file', ref })}><svg viewBox="0 0 16 20" aria-hidden="true">{[5,10,15].map(y => <g key={y}><circle cx="5" cy={y} r="1.2" /><circle cx="11" cy={y} r="1.2" /></g>)}</svg></button><button className="nb-time" onClick={() => openModal({ kind: 'detail', ref })} title={`创建于 ${new Date(note.createdAt).toLocaleString()}${note.updatedAt > note.createdAt ? ` · 修改于 ${new Date(note.updatedAt).toLocaleString()}` : ''}`}><time>{new Date(note.createdAt).toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</time></button>
-          <div className="nb-card-actions"><SmallButton icon="book" label={`放入合集：${noteTitle(note.markdown || note.source?.quote || '')}`} onClick={() => openModal({ kind: 'file', ref })} /><button className="nb-icon" aria-label={`更多：${noteTitle(note.markdown || note.source?.quote || '')}`} aria-expanded={menu === note.id} onClick={() => setMenu(menu === note.id ? null : note.id)}>···</button></div>
+        <header className="nb-memo-header nb-drag-handle" onPointerDown={event => startDrag(event, [ref])}><button className="nb-card-grip" title={t("拖入阅读合集", "Drag into a book")} aria-label={`${t("整理随笔", "Organize note")}: ${noteTitle(note.markdown || note.source?.quote || '')}`} onClick={() => openModal({ kind: 'file', ref })}><svg viewBox="0 0 16 20" aria-hidden="true">{[5,10,15].map(y => <g key={y}><circle cx="5" cy={y} r="1.2" /><circle cx="11" cy={y} r="1.2" /></g>)}</svg></button><button className="nb-time" onClick={() => openModal({ kind: 'detail', ref })} title={`${t("创建于", "Created")} ${new Date(note.createdAt).toLocaleString(dateLocale())}${note.updatedAt > note.createdAt ? ` · ${t("修改于", "Edited")} ${new Date(note.updatedAt).toLocaleString(dateLocale())}` : ''}`}><time>{new Date(note.createdAt).toLocaleString(dateLocale(), { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</time></button>
+          <div className="nb-card-actions"><SmallButton icon="book" label={`${t("加入书籍", "Add to book")}: ${noteTitle(note.markdown || note.source?.quote || '')}`} onClick={() => openModal({ kind: 'file', ref })} /><button className="nb-icon" aria-label={`${t("更多", "More")}: ${noteTitle(note.markdown || note.source?.quote || '')}`} aria-expanded={menu === note.id} onClick={() => setMenu(menu === note.id ? null : note.id)}>···</button></div>
           {menu === note.id && <div className="nb-menu" onKeyDown={event => { if (event.key === 'Escape') setMenu(null); }}>
-            {note.archivedAt ? <button disabled={busy} onClick={() => void business.run(() => store.restoreNote(note.id))}>恢复随笔</button> : <><button onClick={() => edit(note)}>编辑</button><button onClick={() => openModal({ kind: 'file', ref })}>加入阅读站</button><button disabled={busy} onClick={() => { void business.run(() => store.archiveNote(note.id)); setMenu(null); }}>归档</button></>}
+            {note.archivedAt ? <button disabled={busy} onClick={() => void business.run(() => store.restoreNote(note.id))}>{t("恢复随笔", "Restore note")}</button> : <><button onClick={() => edit(note)}>{t("编辑", "Edit")}</button><button onClick={() => openModal({ kind: 'file', ref })}>{t("加入阅读站", "Add to book")}</button><button disabled={busy} onClick={() => { void business.run(() => store.archiveNote(note.id)); setMenu(null); }}>{t("归档", "Archive")}</button></>}
           </div>}
         </header>{note.source && sourceCitation(note.source)}<Markdown body={note.markdown} />
-        {(tagsFor(note.markdown).length > 0 || note.sourceSectionId) && <footer className="nb-memo-tags">{tagsFor(note.markdown).map(item => <button key={item} onClick={() => { setTag(item); setQuery(''); }}>#{item}</button>)}{note.sourceSectionId && <button onClick={() => openModal({ kind: 'detail', ref: { kind: 'section', id: note.sourceSectionId! } })}><Icon name="link" />原文</button>}</footer>}
+        {(tagsFor(note.markdown).length > 0 || note.sourceSectionId) && <footer className="nb-memo-tags">{tagsFor(note.markdown).map(item => <button key={item} onClick={() => { setTag(item); setQuery(''); }}>#{item}</button>)}{note.sourceSectionId && <button onClick={() => openModal({ kind: 'detail', ref: { kind: 'section', id: note.sourceSectionId! } })}><Icon name="link" />{t("原文", "Source")}</button>}</footer>}
       </>}
     </article>;
   };
@@ -541,7 +542,7 @@ function NotebookWorkspace() {
     } else if (key === 'Escape') setNavigationMenu(null);
   };
   const navigationForm = (depth: number, label: string) => <form className="nb-tree-edit" style={{ '--chapter-depth': depth } as CSSProperties} onSubmit={event => { event.preventDefault(); void saveNavigationEdit(); }}>
-    <span className="nb-tree-disclosure-space" />{depth === 0 ? <Icon name="book" /> : <ChapterSymbol />}<input ref={navigationInput} aria-label={label} placeholder={depth === 0 ? '书名' : '章节名称'} value={navigationEdit?.value ?? ''} disabled={busy} maxLength={120} onChange={event => setNavigationEdit(current => current ? { ...current, value: event.target.value } : current)} onKeyDown={event => { if (event.key === 'Escape') { event.preventDefault(); const id = navigationEdit?.kind === 'rename' ? navigationEdit.id : navigationEdit?.parentId; setNavigationEdit(null); if (id) requestAnimationFrame(() => focusNavigation(id)); } }} /><button type="submit" title="确认名称" aria-label="确认名称" disabled={busy || !navigationEdit?.value.trim()}>↵</button>
+    <span className="nb-tree-disclosure-space" />{depth === 0 ? <Icon name="book" /> : <ChapterSymbol />}<input ref={navigationInput} aria-label={label} placeholder={depth === 0 ? t("书名", "Book title") : t("章节名称", "Chapter title")} value={navigationEdit?.value ?? ''} disabled={busy} maxLength={120} onChange={event => setNavigationEdit(current => current ? { ...current, value: event.target.value } : current)} onKeyDown={event => { if (event.key === 'Escape') { event.preventDefault(); const id = navigationEdit?.kind === 'rename' ? navigationEdit.id : navigationEdit?.parentId; setNavigationEdit(null); if (id) requestAnimationFrame(() => focusNavigation(id)); } }} /><button type="submit" title={t("确认名称", "Confirm name")} aria-label={t("确认名称", "Confirm name")} disabled={busy || !navigationEdit?.value.trim()}>↵</button>
   </form>;
   const renderChapterNav = (item: store.Collection, depth = 0, parentId?: string): ReactNode => {
     const children = item.items.filter(ref => ref.kind === 'chapter').map(ref => state.collections.find(child => child.id === ref.id)).filter((child): child is store.Collection => Boolean(child && !child.archivedAt && !store.isCollectionDeleted(child.id, state)));
@@ -550,50 +551,50 @@ function NotebookWorkspace() {
     const renaming = navigationEdit?.kind === 'rename' && navigationEdit.id === item.id;
     const current = page === 'reading' && collectionId === item.id;
     return <div className="nb-tree-branch" key={item.id}>
-      {renaming ? navigationForm(depth, depth === 0 ? '重命名书籍' : '重命名章节') : <div className={`nb-tree-row ${current ? 'active' : ''} ${dragOver === item.id ? 'drop-target' : landed === item.id ? 'nb-drop-landed' : ''}`} style={{ '--chapter-depth': depth } as CSSProperties} data-drop-collection={item.id} onContextMenu={event => { event.preventDefault(); setNavigationPoint({ x: event.clientX, y: event.clientY }); setNavigationMenu(item.id); }}>
-        {children.length || creatingChild ? <button className="nb-tree-disclosure" aria-label={`${expanded ? '收起' : '展开'}：${item.title}`} aria-expanded={expanded} aria-controls={`nav-children-${item.id}`} onClick={() => toggleNavigation(item.id)}><Icon name="chevron" /></button> : <span className="nb-tree-disclosure-space" />}
+      {renaming ? navigationForm(depth, depth === 0 ? t("重命名书籍", "Rename book") : t("重命名章节", "Rename chapter")) : <div className={`nb-tree-row ${current ? 'active' : ''} ${dragOver === item.id ? 'drop-target' : landed === item.id ? 'nb-drop-landed' : ''}`} style={{ '--chapter-depth': depth } as CSSProperties} data-drop-collection={item.id} onContextMenu={event => { event.preventDefault(); setNavigationPoint({ x: event.clientX, y: event.clientY }); setNavigationMenu(item.id); }}>
+        {children.length || creatingChild ? <button className="nb-tree-disclosure" aria-label={`${expanded ? t("收起", "Collapse") : t("展开", "Expand")}${t('：', ': ')}${item.title}`} aria-expanded={expanded} aria-controls={`nav-children-${item.id}`} onClick={() => toggleNavigation(item.id)}><Icon name="chevron" /></button> : <span className="nb-tree-disclosure-space" />}
         <button className="nb-tree-open" data-nav-id={item.id} aria-current={current ? 'page' : undefined} title={item.title} onClick={() => go('reading', item.id)} onKeyDown={event => navigationKeys(event, item.id, children.map(child => child.id), parentId, item)}>{depth === 0 ? <Icon name="book" /> : <ChapterSymbol />}<span>{item.title}</span></button>
-        <button className="nb-tree-more" aria-label={`操作：${item.title}`} title="更多操作" aria-expanded={navigationMenu === item.id} onClick={event => { const rect = event.currentTarget.getBoundingClientRect(); setNavigationPoint({ x: rect.right + 6, y: rect.top }); setNavigationMenu(navigationMenu === item.id ? null : item.id); }}>···</button>
+        <button className="nb-tree-more" aria-label={`${t("操作", "Actions")}: ${item.title}`} title={t("更多操作", "More")} aria-expanded={navigationMenu === item.id} onClick={event => { const rect = event.currentTarget.getBoundingClientRect(); setNavigationPoint({ x: rect.right + 6, y: rect.top }); setNavigationMenu(navigationMenu === item.id ? null : item.id); }}>···</button>
       </div>}
-      <div id={`nav-children-${item.id}`} className="nb-tree-children" data-open={expanded} inert={!expanded} aria-hidden={!expanded}><div className="nb-tree-children-content">{children.map(child => renderChapterNav(child, depth + 1, item.id))}{creatingChild && navigationForm(depth + 1, '新章节名称')}</div></div>
+      <div id={`nav-children-${item.id}`} className="nb-tree-children" data-open={expanded} inert={!expanded} aria-hidden={!expanded}><div className="nb-tree-children-content">{children.map(child => renderChapterNav(child, depth + 1, item.id))}{creatingChild && navigationForm(depth + 1, t("新章节名称", "New chapter title"))}</div></div>
     </div>;
   };
   const renderManualNav = () => <div className="nb-tree-branch">
     <div className={`nb-tree-row ${page === 'reading' && collectionId === 'manual' && !topicId ? 'active' : ''}`}>
-      <button className="nb-tree-disclosure" aria-label={`${expandedNodes.manual ? '收起' : '展开'}：AI 应用与 Agent`} aria-expanded={Boolean(expandedNodes.manual)} aria-controls="nav-manual-chapters" onClick={() => toggleNavigation('manual')}><Icon name="chevron" /></button>
-      <button className="nb-tree-open" data-nav-id="manual" title="AI 应用与 Agent" aria-current={page === 'reading' && collectionId === 'manual' && !topicId ? 'page' : undefined} onClick={() => go('reading', 'manual')} onKeyDown={event => navigationKeys(event, 'manual', manual.topics.map(item => `manual:${item.id}`))}><Icon name="book" /><span>AI 应用与 Agent</span></button><span className="nb-tree-more-space" />
+      <button className="nb-tree-disclosure" aria-label={`${expandedNodes.manual ? t("收起", "Collapse") : t("展开", "Expand")}${t("：", ": ")}${t("AI 应用与 Agent", "AI & Agent handbook")}`} aria-expanded={Boolean(expandedNodes.manual)} aria-controls="nav-manual-chapters" onClick={() => toggleNavigation('manual')}><Icon name="chevron" /></button>
+      <button className="nb-tree-open" data-nav-id="manual" title={t("AI 应用与 Agent", "AI & Agent handbook")} aria-current={page === 'reading' && collectionId === 'manual' && !topicId ? 'page' : undefined} onClick={() => go('reading', 'manual')} onKeyDown={event => navigationKeys(event, 'manual', manual.topics.map(item => `manual:${item.id}`))}><Icon name="book" /><span>{t("AI 应用与 Agent", "AI & Agent handbook")}</span></button><span className="nb-tree-more-space" />
     </div>
     <div className="nb-tree-children" id="nav-manual-chapters" data-open={Boolean(expandedNodes.manual)} inert={!expandedNodes.manual} aria-hidden={!expandedNodes.manual}><div className="nb-tree-children-content">{manual.topics.map(item => <div className={`nb-tree-row ${page === 'reading' && topicId === item.id ? 'active' : ''}`} style={{ '--chapter-depth': 1 } as CSSProperties} key={item.id}><span className="nb-tree-disclosure-space" /><button className="nb-tree-open" data-nav-id={`manual:${item.id}`} aria-current={page === 'reading' && topicId === item.id ? 'page' : undefined} title={item.title} onClick={() => { go('reading', 'manual'); setTopicId(item.id); }} onKeyDown={event => navigationKeys(event, `manual:${item.id}`, [], 'manual')}><ChapterSymbol /><span>{item.title}</span></button><span className="nb-tree-more-space" /></div>)}</div></div>
   </div>;
 
   return <div data-theme={appearance} style={{ '--assistant-width': `${assistantWidth}px` } as CSSProperties} className={`notebook nb-craft nb-native-workspace ${assistantOpen ? 'has-assistant' : ''} ${isReference && topic && !assistantOpen ? 'has-reference-navigation' : ''} ${referenceOutlineVisible ? 'has-reference-outline' : ''} ${sidebarCollapsed ? 'is-sidebar-collapsed' : ''}`} onClickCapture={event => { if (suppressClick.current) { event.preventDefault(); event.stopPropagation(); suppressClick.current = false; } }}>
-    {mobileNav && <button className="nb-backdrop" aria-label="关闭导航" onClick={() => setMobileNav(false)} />}
-    <aside className={`nb-sidebar ${mobileNav ? 'is-open' : ''}`} ref={nav} aria-label="主导航" aria-hidden={sidebarCollapsed || undefined} inert={sidebarCollapsed}>
-      <div className="nb-brand"><span className="nb-brand-mark">R</span><span>Read</span>{IS_DEMO_MODE && <span className="nb-demo-label" title="内容仅保存在当前浏览器；AI 服务在演示中关闭">演示</span>}</div>
-      <nav className="nb-primary" aria-label="工作区">{([{ id: 'home', title: '开始' }, { id: 'notes', title: '随笔' }, { id: 'reading', title: '阅读站' }, { id: 'memory', title: '记忆库' }] as const).map(item => <button key={item.id} data-page={item.id} data-section-active={page === item.id || undefined} aria-current={page === item.id && (item.id === 'reading' ? !collectionId : item.id === 'notes' ? !tag : true) ? 'page' : undefined} onClick={() => go(item.id)}>
+    {mobileNav && <button className="nb-backdrop" aria-label={t("关闭导航", "Close navigation")} onClick={() => setMobileNav(false)} />}
+    <aside className={`nb-sidebar ${mobileNav ? 'is-open' : ''}`} ref={nav} aria-label={t("主导航", "Main navigation")} aria-hidden={sidebarCollapsed || undefined} inert={sidebarCollapsed}>
+      <div className="nb-brand"><span className="nb-brand-mark">R</span><span>Read</span>{IS_DEMO_MODE && <span className="nb-demo-label">{t("演示", "Demo")}</span>}</div>
+      <nav className="nb-primary" aria-label={t("工作区", "Workspace")}>{([{ id: 'home', title: t("开始", "Home") }, { id: 'notes', title: t("随笔", "Notes") }, { id: 'reading', title: t("阅读站", "Library") }, { id: 'memory', title: t("记忆库", "Memory") }] as const).map(item => <button key={item.id} data-page={item.id} data-section-active={page === item.id || undefined} aria-current={page === item.id && (item.id === 'reading' ? !collectionId : item.id === 'notes' ? !tag : true) ? 'page' : undefined} onClick={() => go(item.id)}>
         <Icon name={item.id === 'home' ? 'organize' : item.id === 'notes' ? 'note' : item.id === 'reading' ? 'book' : 'memory'} /><span>{item.title}</span></button>)}</nav>
-      <button type="button" className="nb-search nb-global-search-trigger" aria-label="搜索全部内容" onClick={() => setSearchOpen(true)}><Icon name="search" /><span>搜索</span><kbd>Ctrl ⇧ F</kbd></button>
+      <button type="button" className="nb-search nb-global-search-trigger" aria-label={t("搜索全部内容", "Search everything")} onClick={() => setSearchOpen(true)}><Icon name="search" /><span>{t("搜索", "Search")}</span><kbd>Ctrl ⇧ F</kbd></button>
       <div className="nb-sidebar-scroll">
-        {page !== 'memory' && <nav className="nb-book-navigation" aria-label="书籍与章节"><div className="nb-sidebar-label">书籍<SmallButton icon="plus" label="新建书籍" disabled={busy} onClick={() => startNavigationCreate()} /></div>{ownBooks.map(item => renderChapterNav(item))}{!ownBooks.length && <button className="nb-sidebar-empty" disabled={busy} onClick={() => void createBlankBook()}>创建第一本书</button>}{navigationEdit?.kind === 'create' && !navigationEdit.parentId && navigationForm(0, '新书籍名称')}</nav>}
-        {page === 'notes' && allTags.length > 0 && <><div className="nb-sidebar-label">标签</div><button className={`nb-sidebar-item ${!tag ? 'active' : ''}`} onClick={() => setTag('')}><span>#</span>全部随笔</button>{allTags.map(item => <button key={item} className={`nb-sidebar-item ${tag === item ? 'active' : ''}`} aria-current={tag === item ? 'page' : undefined} onClick={() => setTag(item)}><span>#</span>{item}</button>)}</>}
-        <details className="nb-reference-navigation"><summary><Icon name="chevron" /><span>参考资料</span></summary>{renderManualNav()}</details>
+        {page !== 'memory' && <nav className="nb-book-navigation" aria-label={t("书籍与章节", "Books and chapters")}><div className="nb-sidebar-label">{t("书籍", "Books")}<SmallButton icon="plus" label={t("新建书籍", "New book")} disabled={busy} onClick={() => startNavigationCreate()} /></div>{ownBooks.map(item => renderChapterNav(item))}{!ownBooks.length && <button className="nb-sidebar-empty" disabled={busy} onClick={() => void createBlankBook()}>{t("创建第一本书", "Create a book")}</button>}{navigationEdit?.kind === 'create' && !navigationEdit.parentId && navigationForm(0, t("新书籍名称", "New book title"))}</nav>}
+        {page === 'notes' && allTags.length > 0 && <><div className="nb-sidebar-label">{t("标签", "Tags")}</div><button className={`nb-sidebar-item ${!tag ? 'active' : ''}`} onClick={() => setTag('')}><span>#</span>{t("全部随笔", "All notes")}</button>{allTags.map(item => <button key={item} className={`nb-sidebar-item ${tag === item ? 'active' : ''}`} aria-current={tag === item ? 'page' : undefined} onClick={() => setTag(item)}><span>#</span>{item}</button>)}</>}
+        {!IS_DEMO_MODE && <details className="nb-reference-navigation"><summary><Icon name="chevron" /><span>{t("参考资料", "Reference")}</span></summary>{renderManualNav()}</details>}
       </div>
-      <button className="nb-craft-sidebar-create" onClick={() => { setMobileNav(false); newMemo(); }}><Icon name="plus" /><span>新建随笔</span></button>
-      <button type="button" className="nb-ai-settings-entry" aria-label="设置" onClick={() => openSettings()}><AssistantSettingsIcon /><span>设置</span></button>
-      <button className="nb-ai-settings-entry" onClick={() => openModal({ kind: 'archive' })}><Icon name="archive" /><span>归档</span></button>
-      <button className="nb-ai-settings-entry" onClick={() => openModal({ kind: 'trash' })}><Icon name="trash" /><span>回收站</span></button>
-      {state.legacyDrafts.length > 0 && <button className="nb-sidebar-recovery" onClick={() => openModal({ kind: 'drafts' })}><Icon name="history" />恢复旧草稿</button>}
+      <button className="nb-craft-sidebar-create" onClick={() => { setMobileNav(false); newMemo(); }}><Icon name="plus" /><span>{t("新建随笔", "New note")}</span></button>
+      <button type="button" className="nb-ai-settings-entry" aria-label={t("设置", "Settings")} onClick={() => openSettings()}><AssistantSettingsIcon /><span>{t("设置", "Settings")}</span></button>
+      <button className="nb-ai-settings-entry" onClick={() => openModal({ kind: 'archive' })}><Icon name="archive" /><span>{t("归档", "Archive")}</span></button>
+      <button className="nb-ai-settings-entry" onClick={() => openModal({ kind: 'trash' })}><Icon name="trash" /><span>{t("回收站", "Trash")}</span></button>
+      {state.legacyDrafts.length > 0 && <button className="nb-sidebar-recovery" onClick={() => openModal({ kind: 'drafts' })}><Icon name="history" />{t("恢复旧草稿", "Recover drafts")}</button>}
     </aside>
 
     <main className="nb-main" ref={main}>
-      <header className="nb-page-header"><button className="nb-icon nb-sidebar-toggle" ref={mobileTrigger} aria-label={sidebarCollapsed ? '展开侧栏' : '收起侧栏'} title={sidebarCollapsed ? '展开侧栏' : '收起侧栏'} aria-expanded={!sidebarCollapsed} onClick={() => { rememberReferencePosition(); setSidebarCollapsed(value => !value); }}><Icon name="sidebar" /></button>{page === 'reading' && collectionId && collectionId !== 'manual' ? <div className="nb-workspace-toolbar-slot" ref={setWorkspaceToolbar} /> : <div className="nb-craft-title-path"><h1>{pageTitle}</h1></div>}
-        {page === 'notes' && <button className="nb-text-button" onClick={() => { setArchived(!archived); setTag(''); setQuery(''); }}>{archived ? '返回随笔' : '归档'}</button>}
-        {page === 'reading' && collectionId === 'manual' && !topic && <div className="nb-craft-view-controls"><div><button aria-label="网格视图" title="网格视图" aria-pressed={libraryView === 'grid'} onClick={() => setLibraryView('grid')}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></button><button aria-label="列表视图" title="列表视图" aria-pressed={libraryView === 'list'} onClick={() => setLibraryView('list')}><Icon name="list" /></button></div><button aria-label={sortByTitle ? '恢复原文顺序' : '按名称排序'} title={sortByTitle ? '恢复原文顺序' : '按名称排序'} aria-pressed={sortByTitle} onClick={() => setSortByTitle(value => !value)}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><path d="M8 4v16m-4-4 4 4 4-4M16 20V4m-4 4 4-4 4 4" /></svg></button><SmallButton icon="search" label="搜索全部内容" onClick={() => setSearchOpen(true)} /></div>}
-        {canUseComponents && <button type="button" className="nb-icon nb-components-trigger" aria-label="组件库" title="组件库 · Ctrl + Alt + M" aria-pressed={componentLibrary.open} onClick={() => componentLibrary.toggle()}><Icon name="organize" /></button>}
-        {isReference && topicHasAnswers && <div className="nb-answer-mode" role="group" aria-label="答案显示方式"><button type="button" aria-pressed={answerMode === 'read'} title="连续阅读，显示全部答案" onClick={() => { if (answerMode !== 'read') { rememberReferencePosition(true); setAnswerMode('read'); } }}>阅读</button><button type="button" aria-pressed={answerMode === 'recall'} title="先回忆，再按节查看答案" onClick={() => { if (answerMode !== 'recall') { rememberReferencePosition(true); setAnswerMode('recall'); } }}>回忆</button></div>}
-        {isReference && topic && <button type="button" className="nb-icon nb-reference-trigger" ref={referenceOutlineTrigger} aria-label={referenceOutlineVisible ? '收起目录' : '展开目录'} title={referenceOutlineVisible ? '收起目录' : '展开目录'} aria-controls="reference-outline" aria-expanded={referenceOutlineVisible} onClick={() => { if (assistantOpen) rememberReferencePosition(); setReferenceOutlineOpen(!referenceOutlineVisible); if (!referenceOutlineVisible) setAssistantOpen(false); }}><Icon name="list" /></button>}
-        <button className="nb-icon nb-assistant-trigger" ref={assistantTrigger} aria-label="智能助手" title="智能助手" aria-controls="notebook-assistant" aria-expanded={assistantOpen} onClick={() => { rememberReferencePosition(); setAssistantOpen(value => !value); }}><Icon name="optimize" /></button>
-        <button type="button" className="nb-icon nb-theme-toggle" aria-label="暗色模式" aria-pressed={appearance === 'dark'} title={appearance === 'dark' ? '切换为浅色' : '切换为暗色'} onPointerDown={event => event.preventDefault()} onClick={() => setAppearance(current => current === 'dark' ? 'light' : 'dark')}>
+      <header className="nb-page-header"><button className="nb-icon nb-sidebar-toggle" ref={mobileTrigger} aria-label={sidebarCollapsed ? t("展开侧栏", "Show sidebar") : t("收起侧栏", "Hide sidebar")} title={sidebarCollapsed ? t("展开侧栏", "Show sidebar") : t("收起侧栏", "Hide sidebar")} aria-expanded={!sidebarCollapsed} onClick={() => { rememberReferencePosition(); setSidebarCollapsed(value => !value); }}><Icon name="sidebar" /></button>{page === 'reading' && collectionId && collectionId !== 'manual' ? <div className="nb-workspace-toolbar-slot" ref={setWorkspaceToolbar} /> : <div className="nb-craft-title-path"><h1>{pageTitle}</h1></div>}
+        {page === 'notes' && <button className="nb-text-button" onClick={() => { setArchived(!archived); setTag(''); setQuery(''); }}>{archived ? t("返回随笔", "Back to notes") : t("归档", "Archive")}</button>}
+        {page === 'reading' && collectionId === 'manual' && !topic && <div className="nb-craft-view-controls"><div><button aria-label={t("网格视图", "Grid view")} title={t("网格视图", "Grid view")} aria-pressed={libraryView === 'grid'} onClick={() => setLibraryView('grid')}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></button><button aria-label={t("列表视图", "List view")} title={t("列表视图", "List view")} aria-pressed={libraryView === 'list'} onClick={() => setLibraryView('list')}><Icon name="list" /></button></div><button aria-label={sortByTitle ? t("恢复原文顺序", "Original order") : t("按名称排序", "Sort by name")} title={sortByTitle ? t("恢复原文顺序", "Original order") : t("按名称排序", "Sort by name")} aria-pressed={sortByTitle} onClick={() => setSortByTitle(value => !value)}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true"><path d="M8 4v16m-4-4 4 4 4-4M16 20V4m-4 4 4-4 4 4" /></svg></button><SmallButton icon="search" label={t("搜索全部内容", "Search everything")} onClick={() => setSearchOpen(true)} /></div>}
+        {canUseComponents && <button type="button" className="nb-icon nb-components-trigger" aria-label={t("组件库", "Blocks")} title={t("组件库 · Ctrl + Alt + M", "Blocks · Ctrl + Alt + M")} aria-pressed={componentLibrary.open} onClick={() => componentLibrary.toggle()}><Icon name="organize" /></button>}
+        {isReference && topicHasAnswers && <div className="nb-answer-mode" role="group" aria-label={t("答案显示方式", "Answer display")}><button type="button" aria-pressed={answerMode === 'read'} title={t("连续阅读，显示全部答案", "Show all answers")} onClick={() => { if (answerMode !== 'read') { rememberReferencePosition(true); setAnswerMode('read'); } }}>{t("阅读", "Read")}</button><button type="button" aria-pressed={answerMode === 'recall'} title={t("先回忆，再按节查看答案", "Reveal answers as you go")} onClick={() => { if (answerMode !== 'recall') { rememberReferencePosition(true); setAnswerMode('recall'); } }}>{t("回忆", "Recall")}</button></div>}
+        {isReference && topic && <button type="button" className="nb-icon nb-reference-trigger" ref={referenceOutlineTrigger} aria-label={referenceOutlineVisible ? t("收起目录", "Hide outline") : t("展开目录", "Show outline")} title={referenceOutlineVisible ? t("收起目录", "Hide outline") : t("展开目录", "Show outline")} aria-controls="reference-outline" aria-expanded={referenceOutlineVisible} onClick={() => { if (assistantOpen) rememberReferencePosition(); setReferenceOutlineOpen(!referenceOutlineVisible); if (!referenceOutlineVisible) setAssistantOpen(false); }}><Icon name="list" /></button>}
+        <button className="nb-icon nb-assistant-trigger" ref={assistantTrigger} aria-label={t("智能助手", "Assistant")} title={t("智能助手", "Assistant")} aria-controls="notebook-assistant" aria-expanded={assistantOpen} onClick={() => { rememberReferencePosition(); setAssistantOpen(value => !value); }}><Icon name="optimize" /></button>
+        <button type="button" className="nb-icon nb-theme-toggle" aria-label={t("暗色模式", "Dark mode")} aria-pressed={appearance === 'dark'} title={appearance === 'dark' ? t("切换为浅色", "Switch to light") : t("切换为暗色", "Switch to dark")} onPointerDown={event => event.preventDefault()} onClick={() => setAppearance(current => current === 'dark' ? 'light' : 'dark')}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{appearance === 'dark' ? <><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></> : <path d="M20.3 15.3A8.5 8.5 0 0 1 8.7 3.7a8.5 8.5 0 1 0 11.6 11.6Z" />}</svg>
         </button>
       </header>
@@ -601,14 +602,14 @@ function NotebookWorkspace() {
       {canUseComponents && <div className="nb-components-safe-area" aria-hidden="true" style={{ height: componentLibrary.open && modal?.kind !== 'compose' ? componentLibrary.showSyntax ? 80 : componentLibrary.compact ? 60 : 64 : 0 }} />}
 
       {page === 'home' && <div className="nb-start-writing">
-        <header className="nb-start-heading"><h2>从一个想法开始</h2><div className="nb-start-actions"><button type="button" className="nb-start-create-book" disabled={busy} onClick={() => void createBlankBook()}><span className="nb-start-action-symbol"><Icon name="book" /></span><span>空白书籍</span><Icon name="plus" /></button><button type="button" className="nb-start-create-note" onClick={newMemo}><span className="nb-start-action-symbol"><Icon name="note" /></span><span>新随笔</span><Icon name="plus" /></button></div></header>
-        {state.draft.markdown.trim() && <button className="nb-start-draft" onClick={() => openModal({ kind: 'compose' })}><Icon name="note" /><span><strong>继续草稿</strong><span>{noteTitle(state.draft.markdown)}</span></span><Icon name="chevron" /></button>}
-        {(activeNotes.length > 0 || query) && <section className="nb-start-section"><header><h3>最近修改</h3><button onClick={() => go('notes')}>全部随笔<Icon name="chevron" /></button></header><div className="nb-start-list">{recentNotes.map(note => {
+        <header className="nb-start-heading"><h2>{t("我的工作台", "Your workspace")}</h2><div className="nb-start-actions"><button type="button" className="nb-start-create-book" disabled={busy} onClick={() => void createBlankBook()}><span className="nb-start-action-symbol"><Icon name="book" /></span><span>{t("空白书籍", "New book")}</span><Icon name="plus" /></button><button type="button" className="nb-start-create-note" onClick={newMemo}><span className="nb-start-action-symbol"><Icon name="note" /></span><span>{t("新随笔", "New note")}</span><Icon name="plus" /></button></div></header>
+        {state.draft.markdown.trim() && <button className="nb-start-draft" onClick={() => openModal({ kind: 'compose' })}><Icon name="note" /><span><strong>{t("继续草稿", "Continue draft")}</strong><span>{noteTitle(state.draft.markdown)}</span></span><Icon name="chevron" /></button>}
+        {(activeNotes.length > 0 || query) && <section className="nb-start-section"><header><h3>{t("最近修改", "Recently edited")}</h3><button onClick={() => go('notes')}>{t("全部随笔", "All notes")}<Icon name="chevron" /></button></header><div className="nb-start-list">{recentNotes.map(note => {
           const owner = ownerOf(note);
-          return <button className="nb-start-recent" key={note.id} onClick={() => { if (owner) { void motionChange(() => { go('reading', owner.id); requestAnimationFrame(() => main.current?.querySelector(`[data-cw-key="note:${CSS.escape(note.id)}"]`)?.scrollIntoView({ block: 'center' })); }); } else openModal({ kind: 'detail', ref: { kind: 'note', id: note.id } }); }}><span className="nb-start-file-icon"><ChapterSymbol /></span><span className="nb-start-recent-name"><strong>{noteTitle(note.markdown || note.source?.quote || '')}</strong><small>{owner ? collectionPath(owner.id, state).map(item => item.title).join(' / ') : '随笔'}</small></span><time dateTime={new Date(note.updatedAt).toISOString()} title={`修改于 ${new Date(note.updatedAt).toLocaleString('zh-CN')}`}>{modifiedLabel(note.updatedAt)}</time><Icon name="chevron" /></button>;
-        })}{!recentNotes.length && <p className="nb-start-no-results">没有匹配的随笔</p>}</div></section>}
-        {ownBooks.length > 0 && <section className="nb-start-section"><header><h3>我的书籍</h3><button onClick={() => go('reading')}>阅读站<Icon name="chevron" /></button></header><div className="nb-start-books">{matchingBooks.slice(0, 6).map(book => <button key={book.id} onClick={() => go('reading', book.id)}><span className="nb-start-book-spine"><Icon name="book" /></span><span><strong>{book.title}</strong><small>{book.items.filter(ref => ref.kind === 'chapter' && !store.isCollectionDeleted(ref.id, state)).map(ref => state.collections.find(item => item.id === ref.id)?.title).filter(Boolean).slice(0, 3).join(' · ') || (book.items.length ? '打开正文' : '空白书籍')}</small></span><Icon name="chevron" /></button>)}{!matchingBooks.length && <p className="nb-start-no-results">没有匹配的书籍</p>}</div></section>}
-        {!activeNotes.length && !ownBooks.length && !query && <div className="nb-start-empty"><span /><p>这里还没有内容</p><span /></div>}
+          return <button className="nb-start-recent" key={note.id} onClick={() => { if (owner) { void motionChange(() => { go('reading', owner.id); requestAnimationFrame(() => main.current?.querySelector(`[data-cw-key="note:${CSS.escape(note.id)}"]`)?.scrollIntoView({ block: 'center' })); }); } else openModal({ kind: 'detail', ref: { kind: 'note', id: note.id } }); }}><span className="nb-start-file-icon"><ChapterSymbol /></span><span className="nb-start-recent-name"><strong>{noteTitle(note.markdown || note.source?.quote || '')}</strong><small>{owner ? collectionPath(owner.id, state).map(item => item.title).join(' / ') : t("随笔", "Notes")}</small></span><time dateTime={new Date(note.updatedAt).toISOString()} title={`${t("修改于", "Edited")} ${new Date(note.updatedAt).toLocaleString(dateLocale())}`}>{modifiedLabel(note.updatedAt)}</time><Icon name="chevron" /></button>;
+        })}{!recentNotes.length && <p className="nb-start-no-results">{t("没有匹配的随笔", "No matching notes")}</p>}</div></section>}
+        {ownBooks.length > 0 && <section className="nb-start-section"><header><h3>{t("我的书籍", "Your books")}</h3><button onClick={() => go('reading')}>{t("阅读站", "Library")}<Icon name="chevron" /></button></header><div className="nb-start-books">{matchingBooks.slice(0, 6).map(book => <button key={book.id} onClick={() => go('reading', book.id)}><span className="nb-start-book-spine"><Icon name="book" /></span><span><strong>{book.title}</strong><small>{book.items.filter(ref => ref.kind === 'chapter' && !store.isCollectionDeleted(ref.id, state)).map(ref => state.collections.find(item => item.id === ref.id)?.title).filter(Boolean).slice(0, 3).join(' · ') || (book.items.length ? t("打开正文", "Open book") : t("空白书籍", "New book"))}</small></span><Icon name="chevron" /></button>)}{!matchingBooks.length && <p className="nb-start-no-results">{t("没有匹配的书籍", "No matching books")}</p>}</div></section>}
+        {!activeNotes.length && !ownBooks.length && !query && <div className="nb-start-empty"><span /><p>{t("这里还没有内容", "No content yet")}</p><span /></div>}
       </div>}
 
       {page === 'notes' && <div className="nb-feed">
@@ -616,20 +617,20 @@ function NotebookWorkspace() {
         {!archived && !state.draft.editingId && modal?.kind !== 'compose' && <MemoComposer allowEmpty={Boolean(state.draft.source)} tags={allTags} value={state.draft.markdown} onChange={markdown => business.draft({ ...state.draft, markdown })} onSave={save} disabled={busy} />}
         {!archived && modal?.kind !== 'compose' && state.draft.editingId && !notes.some(note => note.id === state.draft.editingId) && <MemoComposer allowEmpty={Boolean(state.draft.source)} tags={allTags} value={state.draft.markdown} onChange={markdown => business.draft({ ...state.draft, markdown })} onSave={save} onCancel={() => business.draft({ markdown: '' })} editing disabled={busy} />}
         {notes.map(renderNote)}
-        {!notes.length && <div className="nb-empty"><Icon name={archived ? 'history' : 'note'} /><p>{query || tag ? '没有匹配的随笔' : archived ? '没有归档的随笔' : '想法，从这里留下。'}</p></div>}
+        {!notes.length && <div className="nb-empty"><Icon name={archived ? 'history' : 'note'} /><p>{query || tag ? t("没有匹配的随笔", "No matching notes") : archived ? t("没有归档的随笔", "No archived notes") : t("暂无随笔", "No notes yet")}</p></div>}
       </div>}
 
       {page === 'reading' && collectionId !== 'manual' && <ChapterWorkspace key={collectionId ?? 'home'} state={state} chapterId={collectionId} query={query} busy={busy} run={business.run} commitContent={business.commitContent} commitSummary={business.commitSummary} toolbarTarget={workspaceToolbar} onNavigate={id => go('reading', id)} onAddExisting={id => openModal({ kind: 'add', collection: id })} onQuoteMemo={quoteMemo} onDeleteCollection={id => void deleteCollection(id)} renderMemory={() => null} />}
 
       {page === 'reading' && collectionId === 'manual' && <div key={topicId ?? 'index'} className={`nb-reader ${topic ? '' : 'nb-craft-manual-index'}`}>
-        {topic && <div className="nb-reading-heading"><h2>{topic.title}</h2><p>{topic.sectionIds.length} 节</p></div>}
+        {topic && <div className="nb-reading-heading"><h2>{topic.title}</h2><p>{topic.sectionIds.length} {t("节", topic.sectionIds.length === 1 ? "section" : "sections")}</p></div>}
         {!topic && <div className={`nb-craft-library-grid ${libraryView === 'list' ? 'is-list' : ''}`}>{visibleTopics.map(item => {
           const index = manual.topics.indexOf(item);
           const previewSections = item.sectionIds.slice(0, 2).map(id => sectionMap.get(id)).filter(Boolean);
           const primaryText = previewSections[0]?.parts.filter(part => part.role === 'prompt' || part.role === 'body').map(part => part.markdown).join('\n') ?? '';
           const codePreview = primaryText.match(/```[^\n]*\n([\s\S]*?)```/);
           const cleanPreview = (text: string) => text.replace(/```[\s\S]*?```/g, '').replace(/!\[[^\]]*\]\([^)]+\)/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[#*`>]/g, '').trim();
-          return <button className="nb-craft-topic" aria-label={`${item.title} ${item.sectionIds.length} 节`} style={{ '--folder-color': folderColors[index % folderColors.length] } as CSSProperties} key={item.id} onClick={() => { setTopicId(item.id); setQuery(''); }}>
+          return <button className="nb-craft-topic" aria-label={`${item.title} ${item.sectionIds.length} ${t("节", item.sectionIds.length === 1 ? "section" : "sections")}`} style={{ '--folder-color': folderColors[index % folderColors.length] } as CSSProperties} key={item.id} onClick={() => { setTopicId(item.id); setQuery(''); }}>
             <span className={`nb-native-preview ${codePreview ? 'has-code' : ''}`} aria-hidden="true">
               <span className="nb-native-preview-content">
                 <b>{shortTitle(previewSections[0]?.title ?? item.title)}</b>
@@ -637,15 +638,15 @@ function NotebookWorkspace() {
                 {codePreview ? <span className="nb-native-preview-code">{codePreview[1].trim().split('\n').slice(0, 7).join('\n')}</span> : previewSections[1] && <><b>{shortTitle(previewSections[1].title)}</b><span className="nb-native-preview-prose">{cleanPreview(previewSections[1].parts.filter(part => part.role === 'prompt' || part.role === 'body').map(part => part.markdown).join('\n')).slice(0, 130)}</span></>}
               </span>
             </span>
-            <span className="nb-native-caption"><span className="nb-craft-tile-icon"><Icon name={topicIcons[index] ?? 'book'} /></span><strong>{item.title}</strong><small>{item.sectionIds.length} 节</small></span>
+            <span className="nb-native-caption"><span className="nb-craft-tile-icon"><Icon name={topicIcons[index] ?? 'book'} /></span><strong>{item.title}</strong><small>{item.sectionIds.length} {t("节", item.sectionIds.length === 1 ? "section" : "sections")}</small></span>
             <span className="nb-native-list-excerpt" aria-hidden="true">{previewSections.map(section => shortTitle(section!.title)).join(' · ')}</span>
           </button>;
-        })}{!visibleTopics.length && <p className="nb-empty">没有匹配的章节</p>}</div>}
-        {topic && <>{visibleSectionIds.map(id => { const ref: store.Ref = { kind: 'section', id }; return <article className={`nb-source ${dragCard?.refs.some(item => refKey(item) === refKey(ref)) ? 'nb-drag-source' : ''}`} id={`source-${id}`} data-reading-key={answerMode === 'read' ? refKey(ref) : undefined} key={id}><header><span className="nb-source-index nb-drag-handle" title="拖入阅读合集" onPointerDown={event => startDrag(event, [ref])}>{String(topic.sectionIds.indexOf(id) + 1).padStart(2, '0')}</span><h3>{titleFor(ref, state)}</h3><SmallButton icon="book" label={`加入阅读站：${titleFor(ref, state)}`} onClick={() => openModal({ kind: 'file', ref })} /></header><SourceBody id={id} recall={answerMode === 'recall'} /></article>; })}</>}
+        })}{!visibleTopics.length && <p className="nb-empty">{t("没有匹配的章节", "No matching chapters")}</p>}</div>}
+        {topic && <>{visibleSectionIds.map(id => { const ref: store.Ref = { kind: 'section', id }; return <article className={`nb-source ${dragCard?.refs.some(item => refKey(item) === refKey(ref)) ? 'nb-drag-source' : ''}`} id={`source-${id}`} data-reading-key={answerMode === 'read' ? refKey(ref) : undefined} key={id}><header><span className="nb-source-index nb-drag-handle" title={t("拖入阅读合集", "Drag into a book")} onPointerDown={event => startDrag(event, [ref])}>{String(topic.sectionIds.indexOf(id) + 1).padStart(2, '0')}</span><h3>{titleFor(ref, state)}</h3><SmallButton icon="book" label={`${t("加入阅读站", "Add to book")}: ${titleFor(ref, state)}`} onClick={() => openModal({ kind: 'file', ref })} /></header><SourceBody id={id} recall={answerMode === 'recall'} /></article>; })}</>}
       </div>}
 
       {page === 'memory' && <MemoryLibrary items={memory.map(({ ref, projection }) => ({ ref, projection, entry: projection.entry!, title: titleFor(ref, state), scoringContext: memoryScoringContext(ref, state), excerpt: memoryExcerptFor(ref, state), markdown: bodyFor(ref, state), contentHash: store.readingReference(ref, state).contentHash,
-        source: ref.kind === 'section' ? manual.title : state.notes.find(note => note.id === ref.id)?.kind === 'document' ? '书籍正文' : state.notes.find(note => note.id === ref.id)?.archivedAt ? '已归档随笔' : '随笔' }))}
+        source: ref.kind === 'section' ? manual.title : state.notes.find(note => note.id === ref.id)?.kind === 'document' ? t("书籍正文", "Book content") : state.notes.find(note => note.id === ref.id)?.archivedAt ? t("已归档随笔", "Archived note") : t("随笔", "Notes") }))}
         now={now} query={query} settings={state.settings} onSaveSettings={async settings => { await store.setReadingSettings(settings); }} busy={busy} configVersion={assistantConfigVersion}
         onOpen={ref => openModal({ kind: 'detail', ref })} onRead={record}
         onUndo={async (ref, eventId) => { await store.undoRef(ref, eventId); }}
@@ -658,33 +659,33 @@ function NotebookWorkspace() {
     {searchOpen && <GlobalSearch state={state} onSelect={openSearchResult} onClose={() => setSearchOpen(false)} />}
     {assistantSettingsOpen && <SettingsPanel initialCategory={settingsCategory} appearance={appearance} onAppearanceChange={setAppearance} onClose={() => setAssistantSettingsOpen(false)} onSaved={() => setAssistantConfigVersion(value => value + 1)} />}
 
-    {navigationMenu && state.collections.some(item => item.id === navigationMenu) && <ContextMenu x={navigationPoint.x} y={navigationPoint.y} label="书籍与章节操作" onClose={() => setNavigationMenu(null)} items={[
-      { label: collectionPath(navigationMenu, state).length > 1 ? '新建子章节' : '新建章节', icon: 'plus', disabled: busy, onSelect: () => startNavigationCreate(navigationMenu) },
-      { label: '重命名', icon: 'note', disabled: busy, onSelect: () => setNavigationEdit({ kind: 'rename', id: navigationMenu, value: state.collections.find(item => item.id === navigationMenu)!.title }) },
-      { label: '归档', icon: 'archive', disabled: busy, onSelect: () => { void business.run(() => store.archiveCollection(navigationMenu)).then(result => { if (result) { if (collectionId && collectionPath(collectionId, state).some(item => item.id === result.id)) go('reading'); setNotice('已归档'); } }); } },
-      { label: '删除', icon: 'trash', danger: true, separatorBefore: true, disabled: busy, onSelect: () => void deleteCollection(navigationMenu) },
+    {navigationMenu && state.collections.some(item => item.id === navigationMenu) && <ContextMenu x={navigationPoint.x} y={navigationPoint.y} label={t("书籍与章节操作", "Book and chapter actions")} onClose={() => setNavigationMenu(null)} items={[
+      { label: collectionPath(navigationMenu, state).length > 1 ? t("新建子章节", "New subchapter") : t("新建章节", "New chapter"), icon: 'plus', disabled: busy, onSelect: () => startNavigationCreate(navigationMenu) },
+      { label: t("重命名", "Rename"), icon: 'note', disabled: busy, onSelect: () => setNavigationEdit({ kind: 'rename', id: navigationMenu, value: state.collections.find(item => item.id === navigationMenu)!.title }) },
+      { label: t("归档", "Archive"), icon: 'archive', disabled: busy, onSelect: () => { void business.run(() => store.archiveCollection(navigationMenu)).then(result => { if (result) { if (collectionId && collectionPath(collectionId, state).some(item => item.id === result.id)) go('reading'); setNotice(t("已归档", "Archived")); } }); } },
+      { label: t("删除", "Delete"), icon: 'trash', danger: true, separatorBefore: true, disabled: busy, onSelect: () => void deleteCollection(navigationMenu) },
     ]} />}
-    {modal && <Dialog className={modal.kind === 'compose' ? 'nb-compose-dialog' : ''} headerActions={modal.kind === 'compose' ? <button type="button" className="nb-icon nb-dialog-components-toggle" aria-label="随笔组件库" title="组件库 · Ctrl + Alt + M" aria-pressed={componentLibrary.open} onClick={() => componentLibrary.toggle()}><Icon name="organize" /></button> : undefined} title={modal.kind === 'compose' ? state.draft.editingId ? '编辑随笔' : '新随笔' : modal.kind === 'transfer' ? '移动到' : modal.kind === 'create' ? '新建书籍' : modal.kind === 'rename' ? modal.ref ? '重命名阅读标题' : '重命名合集' : modal.kind === 'file' ? '加入阅读站' : modal.kind === 'add' ? '添加内容' : modal.kind === 'drafts' ? '原手册草稿' : modal.kind === 'trash' ? '回收站' : modal.kind === 'archive' ? '归档' : titleFor(modal.ref, state)} close={closeModal}>
+    {modal && <Dialog className={modal.kind === 'compose' ? 'nb-compose-dialog' : ''} headerActions={modal.kind === 'compose' ? <button type="button" className="nb-icon nb-dialog-components-toggle" aria-label={t("随笔组件库", "Note blocks")} title={t("组件库 · Ctrl + Alt + M", "Blocks · Ctrl + Alt + M")} aria-pressed={componentLibrary.open} onClick={() => componentLibrary.toggle()}><Icon name="organize" /></button> : undefined} title={modal.kind === 'compose' ? state.draft.editingId ? t("编辑随笔", "Edit note") : t("新随笔", "New note") : modal.kind === 'transfer' ? t("移动到", "Move to") : modal.kind === 'create' ? t("新建书籍", "New book") : modal.kind === 'rename' ? modal.ref ? t("重命名阅读标题", "Rename title") : t("重命名合集", "Rename book") : modal.kind === 'file' ? t("加入阅读站", "Add to book") : modal.kind === 'add' ? t("添加内容", "Add content") : modal.kind === 'drafts' ? t("原手册草稿", "Recovered drafts") : modal.kind === 'trash' ? t("回收站", "Trash") : modal.kind === 'archive' ? t("归档", "Archive") : titleFor(modal.ref, state)} close={closeModal}>
       {business.error && <p className="np-error" role="alert">{business.error}</p>}
-      {(modal.kind === 'create' || modal.kind === 'rename') && <form className="nb-name-form" onSubmit={async event => { event.preventDefault(); const result = await business.run(() => modal.kind === 'create' ? store.createCollection(dialogName) : modal.ref ? store.renameItem(modal.collection, modal.ref, dialogName) : store.renameCollection(modal.collection, dialogName)); if (result) { setModal(null); if (modal.kind === 'create') go('reading', result.id); } }}><label>{modal.kind === 'rename' && modal.ref ? '阅读标题' : '书名'}<input autoFocus value={dialogName} maxLength={120} onChange={event => setDialogName(event.target.value)} /></label>{modal.kind === 'rename' && modal.ref && <small>仅更改在此合集中的显示名称。</small>}<button className="nb-save" disabled={!dialogName.trim() || busy}>保存</button></form>}
-      {modal.kind === 'compose' && <div className="nb-compose-layout"><FloatingComponentLibrary /><div className="nb-compose-toolbar-space" aria-hidden="true" /><div className="nb-global-composer">{state.draft.source && <>{sourceCitation(state.draft.source)}<button className="nb-text-button nb-discard-quote" onClick={() => { business.draft({ markdown: '' }); setModal(null); }}>取消这篇随笔</button></>}<MemoComposer allowEmpty={Boolean(state.draft.source)} tags={allTags} value={state.draft.markdown} onChange={markdown => business.draft({ ...state.draft, markdown })} onSave={async markdown => { const ok = await save(markdown); if (ok) { setModal(null); setNotice('已保存随笔'); } return ok; }} editing={Boolean(state.draft.editingId)} disabled={busy} autoFocus /></div></div>}
+      {(modal.kind === 'create' || modal.kind === 'rename') && <form className="nb-name-form" onSubmit={async event => { event.preventDefault(); const result = await business.run(() => modal.kind === 'create' ? store.createCollection(dialogName) : modal.ref ? store.renameItem(modal.collection, modal.ref, dialogName) : store.renameCollection(modal.collection, dialogName)); if (result) { setModal(null); if (modal.kind === 'create') go('reading', result.id); } }}><label>{modal.kind === 'rename' && modal.ref ? t("阅读标题", "Reading title") : t("书名", "Book title")}<input autoFocus value={dialogName} maxLength={120} onChange={event => setDialogName(event.target.value)} /></label>{modal.kind === 'rename' && modal.ref && <small>{t("仅更改在此合集中的显示名称。", "Changes the title in this book.")}</small>}<button className="nb-save" disabled={!dialogName.trim() || busy}>{t("保存", "Save")}</button></form>}
+      {modal.kind === 'compose' && <div className="nb-compose-layout"><FloatingComponentLibrary /><div className="nb-compose-toolbar-space" aria-hidden="true" /><div className="nb-global-composer">{state.draft.source && <>{sourceCitation(state.draft.source)}<button className="nb-text-button nb-discard-quote" onClick={() => { business.draft({ markdown: '' }); setModal(null); }}>{t("取消这篇随笔", "Discard note")}</button></>}<MemoComposer allowEmpty={Boolean(state.draft.source)} tags={allTags} value={state.draft.markdown} onChange={markdown => business.draft({ ...state.draft, markdown })} onSave={async markdown => { const ok = await save(markdown); if (ok) { setModal(null); setNotice(t("已保存随笔", "Note saved")); } return ok; }} editing={Boolean(state.draft.editingId)} disabled={busy} autoFocus /></div></div>}
       {(modal.kind === 'file' || modal.kind === 'transfer') && <DestinationPicker state={state} refs={modal.kind === 'file' ? [modal.ref] : modal.refs} from={modal.kind === 'transfer' ? modal.from : undefined} mode={modal.kind === 'transfer' ? modal.mode : 'copy'} busy={busy} onClose={() => setModal(null)} onCreate={async title => (await business.run(() => store.createCollection(title))) || undefined} onConfirm={async to => {
         const ok = await business.run<store.Collection | store.Collection[]>(() => modal.kind === 'file' ? store.copyIntoCollection({ to, refs: [modal.ref] }) : store.transferItems({ to, refs: modal.refs, from: modal.from, mode: modal.mode }));
-        if (ok) { setModal(null); setLanded(to); setNotice(`已${modal.kind === 'transfer' ? '移到' : '加入'} ${state.collections.find(item => item.id === to)?.title ?? '合集'}`); } return Boolean(ok);
+        if (ok) { setModal(null); setLanded(to); setNotice(`${modal.kind === 'transfer' ? t("已移到", "Moved to") : t("已加入", "Added to")} ${state.collections.find(item => item.id === to)?.title ?? t("合集", "book")}`); } return Boolean(ok);
       }} />}
-      {modal.kind === 'add' && <ContentPicker state={state} collection={modal.collection} busy={busy} onClose={() => setModal(null)} onConfirm={async refs => { const ok = await business.run(() => store.copyIntoCollection({ to: modal.collection, refs })); if (ok) { setModal(null); setLanded(modal.collection); setNotice(`已添加 ${refs.length} 项`); } return Boolean(ok); }} />}
-      {modal.kind === 'detail' && <div className="nb-detail" data-reading-key={refKey(modal.ref)}>{modal.ref.kind === 'note' ? <>{state.notes.find(note => note.id === modal.ref.id)?.source && sourceCitation(state.notes.find(note => note.id === modal.ref.id)!.source!)}<Markdown body={bodyFor(modal.ref, state)} /></> : <SourceBody id={modal.ref.id} />}<footer><SmallButton icon="book" label="加入阅读站" onClick={() => openModal({ kind: 'file', ref: modal.ref })} />{modal.ref.kind === 'note' && state.notes.find(note => note.id === modal.ref.id)?.kind !== 'document' && !state.notes.find(note => note.id === modal.ref.id)?.archivedAt && <SmallButton icon="note" label="编辑随笔" onClick={() => edit(state.notes.find(note => note.id === modal.ref.id)!)} />}</footer></div>}
+      {modal.kind === 'add' && <ContentPicker state={state} collection={modal.collection} busy={busy} onClose={() => setModal(null)} onConfirm={async refs => { const ok = await business.run(() => store.copyIntoCollection({ to: modal.collection, refs })); if (ok) { setModal(null); setLanded(modal.collection); setNotice(t(`已添加 ${refs.length} 项`, `Added ${refs.length} ${refs.length === 1 ? 'item' : 'items'}`)); } return Boolean(ok); }} />}
+      {modal.kind === 'detail' && <div className="nb-detail" data-reading-key={refKey(modal.ref)}>{modal.ref.kind === 'note' ? <>{state.notes.find(note => note.id === modal.ref.id)?.source && sourceCitation(state.notes.find(note => note.id === modal.ref.id)!.source!)}<Markdown body={bodyFor(modal.ref, state)} /></> : <SourceBody id={modal.ref.id} />}<footer><SmallButton icon="book" label={t("加入阅读站", "Add to book")} onClick={() => openModal({ kind: 'file', ref: modal.ref })} />{modal.ref.kind === 'note' && state.notes.find(note => note.id === modal.ref.id)?.kind !== 'document' && !state.notes.find(note => note.id === modal.ref.id)?.archivedAt && <SmallButton icon="note" label={t("编辑随笔", "Edit note")} onClick={() => edit(state.notes.find(note => note.id === modal.ref.id)!)} />}</footer></div>}
       {modal.kind === 'trash' && <TrashPanel state={state} busy={busy}
-        onRestoreCollection={id => { void business.run(() => store.restoreDeletedCollection(id)).then(result => { if (result) setNotice('已恢复'); }); }}
-        onRestoreContent={id => { void business.run(() => store.restoreDeletedContent(id)).then(result => { if (result) setNotice('已恢复'); }); }} />}
+        onRestoreCollection={id => { void business.run(() => store.restoreDeletedCollection(id)).then(result => { if (result) setNotice(t("已恢复", "Restored")); }); }}
+        onRestoreContent={id => { void business.run(() => store.restoreDeletedContent(id)).then(result => { if (result) setNotice(t("已恢复", "Restored")); }); }} />}
       {modal.kind === 'archive' && <ArchivePanel state={state} busy={busy}
         onOpenMemo={id => openModal({ kind: 'detail', ref: { kind: 'note', id } })}
         onOpenCollection={id => { setModal(null); go('reading', id); }}
-        onRestoreMemo={id => { void business.run(() => store.restoreNote(id)).then(result => { if (result) setNotice('已恢复'); }); }}
-        onRestoreCollection={id => { void business.run(() => store.restoreCollection(id)).then(result => { if (result) setNotice('已恢复'); }); }} />}
-      {modal.kind === 'drafts' && <div className="nb-picker">{state.legacyDrafts.map(draft => <button key={draft.sectionId} disabled={busy} onClick={() => { if (state.draft.markdown.trim() || state.draft.editingId) { setNotice('请先保存当前草稿'); return; } business.draft({ markdown: draft.markdown, editingId: state.notes.some(note => note.id === draft.editingId && !note.archivedAt) ? draft.editingId : undefined }); setModal(null); setArchived(false); go('notes'); }}><Icon name="note" /><span>{shortTitle(sectionMap.get(draft.sectionId)?.title ?? '草稿')}</span><small>恢复编辑</small></button>)}</div>}
+        onRestoreMemo={id => { void business.run(() => store.restoreNote(id)).then(result => { if (result) setNotice(t("已恢复", "Restored")); }); }}
+        onRestoreCollection={id => { void business.run(() => store.restoreCollection(id)).then(result => { if (result) setNotice(t("已恢复", "Restored")); }); }} />}
+      {modal.kind === 'drafts' && <div className="nb-picker">{state.legacyDrafts.map(draft => <button key={draft.sectionId} disabled={busy} onClick={() => { if (state.draft.markdown.trim() || state.draft.editingId) { setNotice(t("请先保存当前草稿", "Save your draft first.")); return; } business.draft({ markdown: draft.markdown, editingId: state.notes.some(note => note.id === draft.editingId && !note.archivedAt) ? draft.editingId : undefined }); setModal(null); setArchived(false); go('notes'); }}><Icon name="note" /><span>{shortTitle(sectionMap.get(draft.sectionId)?.title ?? t("草稿", "Draft"))}</span><small>{t("恢复编辑", "Resume editing")}</small></button>)}</div>}
     </Dialog>}
-    {dragging && dragCard && <div className={`nb-drag-card ${dragCard.refs.length > 1 ? 'is-stack' : ''}`} ref={dragOverlay} aria-hidden="true"><div className="nb-drag-card-face"><div className="nb-drag-card-title"><Icon name={dragCard.refs[0].kind === 'note' ? 'note' : 'book'} /><strong>{dragCard.title}</strong>{dragCard.refs.length > 1 && <b>{dragCard.refs.length}</b>}</div><p>{dragCard.excerpt}</p><div className="nb-drag-caption" ref={dragCaption}>拖到阅读合集</div></div></div>}
-    {(business.error || notice) && <div className={`nb-toast ${business.error ? 'error' : ''}`} role={business.error ? 'alert' : 'status'}>{business.error || notice}<button aria-label="关闭提示" onClick={() => { business.dismissError(); setNotice(''); }}>×</button></div>}
+    {dragging && dragCard && <div className={`nb-drag-card ${dragCard.refs.length > 1 ? 'is-stack' : ''}`} ref={dragOverlay} aria-hidden="true"><div className="nb-drag-card-face"><div className="nb-drag-card-title"><Icon name={dragCard.refs[0].kind === 'note' ? 'note' : 'book'} /><strong>{dragCard.title}</strong>{dragCard.refs.length > 1 && <b>{dragCard.refs.length}</b>}</div><p>{dragCard.excerpt}</p><div className="nb-drag-caption" ref={dragCaption}>{t("拖到阅读合集", "Drop into a book")}</div></div></div>}
+    {(business.error || notice) && <div className={`nb-toast ${business.error ? 'error' : ''}`} role={business.error ? 'alert' : 'status'}>{business.error || notice}<button aria-label={t("关闭提示", "Dismiss")} onClick={() => { business.dismissError(); setNotice(''); }}>×</button></div>}
   </div>;
 }

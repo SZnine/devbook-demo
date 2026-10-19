@@ -1,3 +1,4 @@
+import { t, useLanguage } from '../i18n';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { Element, RootContent } from 'hast';
 import { codeSurface, darkCodeSurface, darkCodeThemeName, loadCodeTheme } from './code-theme';
@@ -54,7 +55,7 @@ function markPresentation(node: Element | RootContent) {
   if (classes.includes('gutter')) node.properties.ariaHidden = 'true';
   if (node.tagName === 'pre') {
     node.properties.tabIndex = 0;
-    node.properties.ariaLabel = '代码';
+    node.properties.ariaLabel = t("代码", "Code");
   }
   node.children.forEach(markPresentation);
 }
@@ -107,6 +108,7 @@ function installStyles(doc: Document, styles: string[]) {
 }
 
 export function ExpressiveCodeBlock({ code, language = 'text', meta = '' }: CodeBlockInput) {
+  const { language: interfaceLanguage } = useLanguage();
   const host = useRef<HTMLDivElement>(null);
   const resetCopy = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [visible, setVisible] = useState(false);
@@ -117,8 +119,11 @@ export function ExpressiveCodeBlock({ code, language = 'text', meta = '' }: Code
   const current = rendered?.key === key ? rendered.result : getRenderedExpressiveCode({ code, language, meta });
 
   useLayoutEffect(() => {
-    if (current && host.current) installStyles(host.current.ownerDocument, current.styles);
-  }, [current]);
+    if (current && host.current) {
+      installStyles(host.current.ownerDocument, current.styles);
+      host.current.querySelectorAll('pre').forEach(node => node.setAttribute('aria-label', t('代码', 'Code')));
+    }
+  }, [current, interfaceLanguage]);
 
   useEffect(() => {
     const element = host.current;
@@ -149,10 +154,10 @@ export function ExpressiveCodeBlock({ code, language = 'text', meta = '' }: Code
     resetCopy.current = setTimeout(() => setCopyState('idle'), 1800);
   }
 
-  const copyLabel = copyState === 'copied' ? '已复制' : copyState === 'failed' ? '复制失败，重试' : '复制代码';
+  const copyLabel = copyState === 'copied' ? t("已复制", "Copied") : copyState === 'failed' ? t("复制失败，重试", "Copy failed. Retry") : t("复制代码", "Copy code");
   return <div ref={host} className="code-presentation not-content" data-code-status={current ? 'rendered' : failedKey === key ? 'fallback' : 'pending'}>
     {current ? <div className="code-highlight" dangerouslySetInnerHTML={{ __html: current.html }} />
-      : <pre className="code-fallback" tabIndex={0} aria-label="代码"><code>{code}</code></pre>}
+      : <pre className="code-fallback" tabIndex={0} aria-label={t("代码", "Code")}><code>{code}</code></pre>}
     <button type="button" className="code-copy" data-content-control="" data-selection-ignore="" data-state={copyState}
       aria-label={copyLabel} title={copyLabel} onClick={event => { event.stopPropagation(); void copyCode(); }}>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">

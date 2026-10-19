@@ -1,4 +1,5 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { setLanguage } from '../src/i18n';
+import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import {
   getAssistantConfig,
   saveAssistantConfig,
@@ -32,6 +33,8 @@ function mockResponse(response: Response) {
   return fetcher;
 }
 
+beforeEach(() => setLanguage('zh-CN'));
+
 describe('assistant API client', () => {
   it('loads safe provider configuration and saves only the selected provider update', async () => {
     const config = { providers: [{ id: 'glm', name: 'GLM', baseUrl: 'https://example.com/v1', models: ['glm-test'], hasApiKey: true, configured: true }] };
@@ -50,7 +53,16 @@ describe('assistant API client', () => {
     await streamAssistantReply(request, { onDelta: text => chunks.push(text) });
     expect(chunks.join('')).toBe('你好 👋\n世界');
     expect(fetcher).toHaveBeenCalledOnce();
-    expect(fetcher).toHaveBeenCalledWith('/api/assistant/chat', expect.objectContaining({ body: JSON.stringify(request), credentials: 'same-origin' }));
+    expect(fetcher).toHaveBeenCalledWith('/api/assistant/chat', expect.objectContaining({ body: JSON.stringify({ ...request, language: 'zh-CN' }), credentials: 'same-origin' }));
+  });
+
+  it('sends the current interface language without changing the message', async () => {
+    setLanguage('en');
+    const fetcher = mockResponse(Response.json({ choices: [{ message: { content: 'Answer' }, finish_reason: 'stop' }] }));
+    await streamAssistantReply(request, { onDelta: vi.fn() });
+    const sent = JSON.parse(fetcher.mock.calls[0][1].body);
+    expect(sent.language).toBe('en');
+    expect(sent.messages).toEqual(request.messages);
   });
 
   it('joins multiple data lines and accepts a final finish_reason without DONE', async () => {

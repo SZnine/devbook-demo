@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ChapterEditor } from './ChapterEditor';
 import type { Note } from './store';
@@ -57,5 +58,5 @@ export function LiveNoteBody({ note, collectionId, mode, onFocus, commit }: Prop
     }
     return true;
   };
-  return <div data-reading-core data-reading-dirty={mode === 'sv' || text !== note.markdown}><ChapterEditor value={text} mode={mode} live allowEmpty initiallyDirty={text !== note.markdown} onFocus={onFocus} onChange={change} onCommit={save} onSave={() => save(textRef.current)} onCancel={() => {}} autoFocus={false} label={`正文：${note.markdown.split('\n').find(line => line.trim())?.replace(/^#+\s*/, '').slice(0, 60) || '正文'}`} /></div>;
+  return <div data-reading-core data-reading-dirty={mode === 'sv' || text !== note.markdown}><ChapterEditor value={text} mode={mode} live allowEmpty initiallyDirty={text !== note.markdown} onFocus={onFocus} onChange={change} onCommit={save} onSave={() => save(textRef.current)} onCancel={() => {}} autoFocus={false} label={`${t("正文", "Content")}: ${note.markdown.split('\n').find(line => line.trim())?.replace(/^#+\s*/, '').slice(0, 60) || t("正文", "Content")}`} /></div>;
 }

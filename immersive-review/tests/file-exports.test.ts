@@ -74,8 +74,8 @@ describe('chosen local export directory', () => {
 
   it('does not create or overwrite files after denied permission or invalid filenames', async () => {
     const { handle } = directory('prompt', 'denied');
-    await expect(writeExport(handle, 'read.json', new Blob(['{}']))).rejects.toThrow('权限');
-    await expect(writeExport(handle, '../escape.md', new Blob(['x']))).rejects.toThrow('文件名');
+    await expect(writeExport(handle, 'read.json', new Blob(['{}']))).rejects.toThrow('permission');
+    await expect(writeExport(handle, '../escape.md', new Blob(['x']))).rejects.toThrow('filename');
     expect(handle.getFileHandle).not.toHaveBeenCalled();
   });
 

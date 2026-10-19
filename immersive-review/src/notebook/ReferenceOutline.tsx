@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import { Icon } from '../manual-demo/icons';
 import { manual, sectionMap, shortTitle } from './content';
@@ -93,22 +94,22 @@ export function ReferenceOutline({ open, topicId, sectionIds, scrollRoot, onOpen
 
   if (!topic) return null;
 
-  return <aside className={`nb-reference-outline ${open ? 'is-open' : ''}`} aria-label="本章目录" onKeyDown={event => {
+  return <aside className={`nb-reference-outline ${open ? 'is-open' : ''}`} aria-label={t('本章目录', 'On this page')} onKeyDown={event => {
     if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); onClose(); }
   }}>
-    <button type="button" className="nro-rail" aria-label="打开本章目录" title="本章目录" aria-expanded={open} aria-controls="reference-outline" tabIndex={open ? -1 : 0} aria-hidden={open || undefined} onClick={() => { onOpen(); requestAnimationFrame(() => firstLink.current?.focus({ preventScroll: true })); }}>
+    <button type="button" className="nro-rail" aria-label={t('打开本章目录', 'Open outline')} title={t('本章目录', 'On this page')} aria-expanded={open} aria-controls="reference-outline" tabIndex={open ? -1 : 0} aria-hidden={open || undefined} onClick={() => { onOpen(); requestAnimationFrame(() => firstLink.current?.focus({ preventScroll: true })); }}>
       <Icon name="list" />
       <span className="nro-rail-lines" aria-hidden="true">{visibleIds.slice(0, 20).map(id => <i key={id} className={selectedSection === id ? 'is-current' : ''} />)}</span>
     </button>
     <div id="reference-outline" className="nro-drawer" inert={!open} aria-hidden={!open}>
-      <header className="nro-header"><span><Icon name="list" /><strong>本章目录</strong></span><button type="button" className="nro-close" aria-label="收起目录" title="收起目录" onClick={onClose}><Icon name="chevron" /></button></header>
+      <header className="nro-header"><span><Icon name="list" /><strong>{t('本章目录', 'On this page')}</strong></span><button type="button" className="nro-close" aria-label={t('收起目录', 'Close outline')} title={t('收起目录', 'Close outline')} onClick={onClose}><Icon name="chevron" /></button></header>
       <p className="nro-context">{topic.title}</p>
-      <nav className="nro-list" ref={list} aria-label="本章小节">
+      <nav className="nro-list" ref={list} aria-label={t('本章小节', 'Sections')}>
         <div className="nro-links">
           {visibleIds.length > 0 && <span className="nro-marker" aria-hidden="true" style={{ top: marker.top, height: marker.height }} />}
           {visibleIds.length ? visibleIds.map((id, index) => <button ref={index === 0 ? firstLink : undefined} type="button" className="nro-row" key={id} aria-current={selectedSection === id ? 'location' : undefined} onClick={() => jumpToSection(id)} title={shortTitle(sectionMap.get(id)!.title)}>
             <span className="nro-label">{shortTitle(sectionMap.get(id)!.title)}</span>
-          </button>) : <p className="nro-empty">没有匹配的小节</p>}
+          </button>) : <p className="nro-empty">{t('没有匹配的小节', 'No matching sections')}</p>}
         </div>
       </nav>
     </div>

@@ -17,9 +17,9 @@ describe('Memos notebook persistence', () => {
     const reloaded = await notebook.loadNotebook();
     expect(reloaded.notes).toEqual([cleared]);
     expect(reloaded.collections.find(item => item.id === book.id)?.items).toEqual([{ kind: 'note', id: note.id }]);
-    await expect(notebook.saveNote({ markdown: '' })).rejects.toThrow('内容');
-    await expect(notebook.saveNote({ markdown: '  \n\t' })).rejects.toThrow('内容');
-    await expect(notebook.createNoteInCollection(book.id, '')).rejects.toThrow('内容');
+    await expect(notebook.saveNote({ markdown: '' })).rejects.toThrow('content');
+    await expect(notebook.saveNote({ markdown: '  \n\t' })).rejects.toThrow('content');
+    await expect(notebook.createNoteInCollection(book.id, '')).rejects.toThrow('content');
     expect(await notebook.loadNotebook()).toEqual(reloaded);
   });
 
@@ -138,14 +138,14 @@ describe('Memos notebook persistence', () => {
     const ref: notebook.Ref = { kind: 'note', id: note.id };
     await notebook.addToCollection(collection.id, ref);
     await notebook.archiveNote(note.id);
-    await expect(notebook.saveNote({ id: note.id, markdown: '修改' })).rejects.toThrow('恢复');
-    await expect(notebook.enrollRef(ref)).rejects.toThrow('恢复');
+    await expect(notebook.saveNote({ id: note.id, markdown: '修改' })).rejects.toThrow('Restore');
+    await expect(notebook.enrollRef(ref)).rejects.toThrow('Restore');
     expect((await notebook.loadNotebook()).collections[0].items).toEqual([ref]);
     const restored = await notebook.restoreNote(note.id);
     expect(restored.archivedAt).toBeUndefined();
     expect(restored.markdown).toBe('已保存');
-    await expect(notebook.saveNote({ markdown: '  ' })).rejects.toThrow('内容');
-    await expect(notebook.addToCollection(collection.id, { kind: 'section', id: 'missing' })).rejects.toThrow('不存在');
+    await expect(notebook.saveNote({ markdown: '  ' })).rejects.toThrow('content');
+    await expect(notebook.addToCollection(collection.id, { kind: 'section', id: 'missing' })).rejects.toThrow('no longer exists');
     await notebook.saveDraft({ markdown: '失败后仍可写入' });
     expect((await notebook.loadNotebook()).draft.markdown).toBe('失败后仍可写入');
   });
@@ -163,7 +163,7 @@ describe('Memos notebook persistence', () => {
     const memory = await notebook.readRef(ref);
     await notebook.archiveNote(note.id);
     const before = await notebook.loadNotebook();
-    await expect(notebook.transferItems({ from: source.id, to: target.id, refs: [ref, { kind: 'section', id: 'py02' }], mode: 'move' })).rejects.toThrow('来源');
+    await expect(notebook.transferItems({ from: source.id, to: target.id, refs: [ref, { kind: 'section', id: 'py02' }], mode: 'move' })).rejects.toThrow('source');
     expect(await notebook.loadNotebook()).toEqual(before);
     const changed = await notebook.transferItems({ from: source.id, to: target.id, refs: [ref], mode: 'move' });
     expect(changed).toHaveLength(2);

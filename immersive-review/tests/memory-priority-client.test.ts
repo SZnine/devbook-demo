@@ -1,9 +1,12 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { setLanguage } from '../src/i18n';
+import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { assessMemoryPriority, type MemoryPriorityRequest } from '../src/notebook/memory-priority-client';
 
 const request: MemoryPriorityRequest = { providerId: 'glm', model: 'test-model', goal: ' 基础 ', items: [{ id: 'note:1', contentHash: 'content-v1', title: '异步', chapterTitle: '编程基础', sectionTitle: '异步机制', summary: '任务与事件循环的执行顺序。' }] };
 const valid = { id: 'note:1', contentHash: 'content-v1', score: 0.5, rank: 1, populationSize: 1, reason: '缺少其他内容，本次无法相对比较。', providerId: 'glm', model: 'test-model', goal: '基础', rubricVersion: 'memory-context-priority/3', scoredAt: 123456 };
 afterEach(() => vi.unstubAllGlobals());
+
+beforeEach(() => setLanguage('zh-CN'));
 
 describe('memory priority client', () => {
   it('forwards only the request, uses same-origin credentials, and validates complete assessment identity', async () => {
@@ -11,7 +14,8 @@ describe('memory priority client', () => {
     vi.stubGlobal('fetch', mocked);
     const controller = new AbortController();
     expect(await assessMemoryPriority(request, { signal: controller.signal })).toEqual({ items: [valid] });
-    expect(mocked).toHaveBeenCalledWith('/api/assistant/memory-priority', expect.objectContaining({ method: 'POST', credentials: 'same-origin', signal: controller.signal, body: JSON.stringify(request) }));
+    expect(mocked).toHaveBeenCalledWith('/api/assistant/memory-priority', expect.objectContaining({ method: 'POST', credentials: 'same-origin', signal: controller.signal }));
+    expect(JSON.parse(mocked.mock.calls[0][1].body)).toEqual({ ...request, language: 'zh-CN' });
   });
 
   it.each([
@@ -25,12 +29,13 @@ describe('memory priority client', () => {
   });
 
   it('never forwards body text, excerpts, or other metadata held by a caller', async () => {
+    setLanguage('en');
     const mocked = vi.fn().mockResolvedValue(new Response(JSON.stringify({ items: [valid] })));
     vi.stubGlobal('fetch', mocked);
     const richInput = { ...request, secret: 'unrelated context', items: [{ ...request.items[0], markdown: 'private body', excerpt: 'private excerpt', tags: ['private'] }] };
     await assessMemoryPriority(richInput);
     const forwarded = JSON.parse(mocked.mock.calls[0][1].body);
-    expect(forwarded).toEqual(request);
+    expect(forwarded).toEqual({ ...request, language: 'en' });
     expect(JSON.stringify(forwarded)).not.toContain('private');
   });
 

@@ -18,7 +18,11 @@ type Next = (error?: unknown) => void;
 
 const MAX_BODY_BYTES = 1024 * 1024;
 const MAX_REPLY_BYTES = 16 * 1024 * 1024;
-const SYSTEM_PROMPT = '你是用户的阅读与学习助手。用清晰的中文回答问题，必要时保留专业术语和 Markdown 格式。引用用户提供的内容时区分事实与推测。你只能提供建议，不能声称已经修改、移动或保存用户的笔记。';
+function systemPrompt(language: unknown) {
+  if (language !== undefined && language !== 'en' && language !== 'zh-CN') throw new ApiError(400, 'Unsupported interface language.');
+  const responseLanguage = language === 'zh-CN' ? 'Simplified Chinese' : 'English';
+  return `You help with the user's reading and notes. Respond in ${responseLanguage} unless the user requests another language. Use Markdown where useful. Distinguish source material from your interpretation. You can offer suggestions, but cannot edit, move or save the user's notes.`;
+}
 
 class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
@@ -194,6 +198,7 @@ export function createAssistantApiMiddleware(options: MiddlewareOptions) {
     if (!provider.apiKey || !provider.models.length) throw new ApiError(400, '请先在助手设置中填写该服务的 API Key 和模型。');
     if (typeof body.model !== 'string' || !provider.models.includes(body.model)) throw new ApiError(400, '所选模型未配置，请在助手设置中添加或重新选择。');
     const messages = validateMessages(body.messages);
+    const instruction = systemPrompt(body.language);
     const controller = new AbortController();
     let timedOut = false;
     const timer = setTimeout(() => { timedOut = true; controller.abort(); }, options.timeoutMs ?? 180_000);
@@ -204,7 +209,7 @@ export function createAssistantApiMiddleware(options: MiddlewareOptions) {
       const upstream = await fetch(`${provider.baseUrl}/chat/completions`, {
         method: 'POST', redirect: 'error', signal: controller.signal,
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${provider.apiKey}`, Accept: 'text/event-stream, application/json' },
-        body: JSON.stringify({ model: body.model, stream: true, messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages] }),
+        body: JSON.stringify({ model: body.model, stream: true, messages: [{ role: 'system', content: instruction }, ...messages] }),
       });
       if (!upstream.ok) {
         await upstream.body?.cancel();

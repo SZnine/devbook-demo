@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import { bodyFor, collectionPath, manual, noteTitle, refKey, sectionMap, shortTitle, titleFor } from './content';
 import { captureChapterSelection, readChapterMarkdown, type ChapterSelection } from './editor-selection';
@@ -96,7 +97,7 @@ function captureAssistantSelection(state: NotebookState, location: ReadingLocati
       const ref = contentRef(owned.dataset.aiRef ?? owned.dataset.cwKey ?? owned.dataset.readingKey);
       const body = liveMarkdown ?? (ref ? bodyFor(ref, state) : owner.summary ?? '');
       const newBody = owned.matches('.cw-new-editor');
-      metadata = { id: `chapter:${owner.id}:${ref ? refKey(ref) : newBody ? 'draft' : 'summary'}`, title: newBody ? noteTitle(body) : ref ? owner.titles?.[refKey(ref)] ?? titleFor(ref, state) : '摘要',
+      metadata = { id: `chapter:${owner.id}:${ref ? refKey(ref) : newBody ? 'draft' : 'summary'}`, title: newBody ? noteTitle(body) : ref ? owner.titles?.[refKey(ref)] ?? titleFor(ref, state) : t('摘要', 'Summary'),
         bodyMarkdown: body, ...chapterMetadata(owner, state, ref, body) };
       if (newBody && !ref) metadata.chapterHeadings = [...(metadata.chapterHeadings ?? []), ...markdownHeadingTitles(body)];
       captureBody = body;

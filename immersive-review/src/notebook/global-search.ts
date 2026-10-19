@@ -1,3 +1,5 @@
+import { IS_DEMO_MODE } from '../demo';
+import { t } from '../i18n';
 import { collectionPath, isCollectionArchived, manual, noteTitle, refKey, shortTitle } from './content';
 import type { NotebookState, Ref } from './store';
 import core from '../manual-demo/research/core.json';
@@ -28,7 +30,7 @@ const additions = new Map([core, applied, supplemental].flatMap(file => file.rev
   .map(review => [review.sectionId, review.additions.map(item => `${item.title}\n${item.body}`).join('\n\n')]));
 
 /** Index persisted, active content across the workspace; never the current page filter. */
-export function createSearchIndex(state: GlobalSearchState, catalog: SearchCatalog = manual): GlobalSearchEntry[] {
+export function createSearchIndex(state: GlobalSearchState, catalog: SearchCatalog = IS_DEMO_MODE ? { title: '', topics: [], sections: [] } : manual): GlobalSearchEntry[] {
   const entries: GlobalSearchEntry[] = [];
   const notes = new Map(state.notes.map(note => [note.id, note]));
   const sections = new Map(catalog.sections.map(section => [section.id, section]));
@@ -52,17 +54,17 @@ export function createSearchIndex(state: GlobalSearchState, catalog: SearchCatal
   for (const note of state.notes) {
     if (note.kind === 'document' || note.archivedAt !== undefined) continue;
     entries.push({ id: `memo:${note.id}`, type: 'memo', title: noteTitle(note.markdown || note.source?.quote || ''),
-      path: ['随笔', ...(note.source?.path ?? [])], body: [note.markdown, note.source?.quote].filter(Boolean).join('\n\n'),
+      path: [t('随笔', 'Notes'), ...(note.source?.path ?? [])], body: [note.markdown, note.source?.quote].filter(Boolean).join('\n\n'),
       target: { kind: 'memo', memoId: note.id } });
   }
-  entries.push({ id: 'manual', type: 'reference', title: catalog.title, path: ['参考资料'], body: '', target: { kind: 'manual' } });
+  if (catalog.title) entries.push({ id: 'manual', type: 'reference', title: catalog.title, path: [t('参考资料', 'Reference')], body: '', target: { kind: 'manual' } });
   const topics = new Map(catalog.topics.flatMap(topic => topic.sectionIds.map(id => [id, topic] as const)));
   for (const topic of catalog.topics) entries.push({ id: `manual-topic:${topic.id}`, type: 'chapter', title: topic.title,
-    path: ['参考资料', catalog.title], body: '', target: { kind: 'manual', topicId: topic.id } });
+    path: [t('参考资料', 'Reference'), catalog.title], body: '', target: { kind: 'manual', topicId: topic.id } });
   for (const section of catalog.sections) {
     const topic = topics.get(section.id);
     entries.push({ id: `manual-section:${section.id}`, type: 'reference', title: shortTitle(section.title),
-      path: ['参考资料', catalog.title, ...(topic ? [topic.title] : [])],
+      path: [t('参考资料', 'Reference'), catalog.title, ...(topic ? [topic.title] : [])],
       body: [...section.parts.map(part => part.markdown), ...(catalog === manual ? [additions.get(section.id) ?? ''] : [])].join('\n\n'),
       target: { kind: 'manual', ...(topic ? { topicId: topic.id } : {}), sectionId: section.id } });
   }

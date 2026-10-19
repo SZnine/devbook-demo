@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import { useEffect, useMemo, useRef } from 'react';
 import { createFocusState, estimateSeconds, sampleFocus, type FocusState } from './memory-policy';
 import { visibleReadingRange } from './reading-viewport';
@@ -93,7 +94,7 @@ export function useReadingActivity(state: store.NotebookState | null, reportErro
         .then(() => { bucket!.done = true; bucket!.completedAt = performance.now(); })
         .catch(reason => {
           bucket!.retryAt = performance.now() + 10_000;
-          latest.current.reportError(`自动阅读未保存：${reason instanceof Error ? reason.message : String(reason)}`);
+          latest.current.reportError(`${t("阅读记录未保存", "Reading activity was not saved")}: ${reason instanceof Error ? reason.message : String(reason)}`);
         })
         .finally(() => { bucket!.pending = false; });
     }, 500);

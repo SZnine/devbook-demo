@@ -1,3 +1,4 @@
+import { t, useLanguage } from './i18n';
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Fragment, jsx, jsxs } from 'react/jsx-runtime';
 import { toJsxRuntime } from 'hast-util-to-jsx-runtime';
@@ -15,7 +16,7 @@ const components = {
   a: ({ children, href, node: _node, ...props }: React.ComponentProps<'a'> & { node?: Element }) => <a {...props} href={href}
     target={href?.startsWith('#') ? undefined : '_blank'} rel={href?.startsWith('#') ? undefined : 'noopener noreferrer'}>{children}</a>,
   table: ({ children }: React.ComponentProps<'table'>) => <div className="table-scroll" tabIndex={0}><table>{children}</table></div>,
-  input: ({ checked }: React.ComponentProps<'input'>) => <input type="checkbox" checked={!!checked} disabled aria-label="原文勾选项" />,
+  input: ({ checked }: React.ComponentProps<'input'>) => <input type="checkbox" checked={!!checked} disabled aria-label={t("原文勾选项", "Task status")} />,
   img: ({ node: _node, ...props }: React.ComponentProps<'img'> & { node?: Element }) => <img {...props} loading="lazy" decoding="async" />,
 };
 
@@ -29,6 +30,7 @@ function Code({ node }: { node?: Element }) {
 }
 
 export function Markdown({ body }: { body: string }) {
+  const { language } = useLanguage();
   const id = useId().replace(/[^a-zA-Z0-9]/g, '');
   const host = useRef<HTMLDivElement>(null);
   const restore = useRef<{ body: string; details: boolean[]; scroll: { element: HTMLElement; top: number; left: number }[]; y: number; x: number } | null>(null);
@@ -84,7 +86,7 @@ export function Markdown({ body }: { body: string }) {
         },
       },
     });
-  }, [result, id]);
+  }, [result, id, language]);
   return <div ref={host} className="markdown" data-testid="unit-body" data-markdown-engine={content ? 'vditor' : failed ? 'fallback' : 'loading'}>
     {content || <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeSanitize]}
       components={components}>{body}</ReactMarkdown>}

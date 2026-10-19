@@ -61,7 +61,7 @@ describe('memory priority API', () => {
     const base = await app();
     for (const providerId of ['deepseek', 'glm', 'custom']) {
       await configure(base, `${upstream}/${providerId}/v1`, providerId);
-      const response = await post(base, { ...input, providerId });
+      const response = await post(base, { ...input, providerId, ...(providerId === 'glm' ? { language: 'zh-CN' } : {}) });
       expect(response.status).toBe(200);
       const result = await response.json();
       expect(result.items.map((item: { id: string }) => item.id)).toEqual(input.items.map(item => item.id));
@@ -81,8 +81,11 @@ describe('memory priority API', () => {
       expect(messages[0].content).toContain('你没有完整正文');
       expect(messages[0].content).toContain('结合章节、小节标题和摘要');
       expect(messages[0].content).toContain('不允许并列');
+      expect(messages[0].content).toContain(`Write each reason in ${providerId === 'glm' ? 'Simplified Chinese' : 'English'}.`);
       expect(JSON.parse(messages[1].content)).toEqual({ goal: input.goal.trim(), items: input.items.map(({ contentHash: _hash, ...item }) => item) });
     }
+    expect(calls).toHaveLength(3);
+    expect((await post(base, { ...input, language: 'arbitrary instruction' })).status).toBe(400);
     expect(calls).toHaveLength(3);
   });
 

@@ -1,8 +1,9 @@
 import { bodyFor, collectionPath, noteTitle, rootCollections } from './content';
 import { isCollectionDeleted, type NotebookState } from './store';
 import { ASSISTANT_HISTORY_KEY } from './assistant-history';
+import { t } from '../i18n';
 
-const PREFERENCE_KEYS = ['read-appearance', 'read-components-open', 'read-components-compact', 'read-components-syntax', 'read-assistant-model-v1', 'read-assistant-style-v1', 'read-assistant-width-v1'];
+const PREFERENCE_KEYS = ['read-language', 'read-appearance', 'read-components-open', 'read-components-compact', 'read-components-syntax', 'read-assistant-model-v1', 'read-assistant-style-v1', 'read-assistant-width-v1'];
 
 /** Explicit fields only: never export unrelated browser data or server credentials. */
 export function dataCopy(state: NotebookState, storage: Pick<Storage, 'getItem'>, now = new Date()) {
@@ -26,7 +27,7 @@ export function markdownExport(state: NotebookState): string {
     visited.add(id);
     const book = state.collections.find(item => item.id === id);
     if (!book) return;
-    output.push(`## ${collectionPath(id, state).map(item => item.title.replace(/[\r\n]+/g, ' ')).join(' / ')}${book.archivedAt ? '（已归档）' : ''}`);
+    output.push(`## ${collectionPath(id, state).map(item => item.title.replace(/[\r\n]+/g, ' ')).join(' / ')}${book.archivedAt ? t('（已归档）', ' (archived)') : ''}`);
     if (book.summary?.trim()) output.push(book.summary);
     for (const item of book.items) {
       if (item.kind === 'chapter') appendBook(item.id);
@@ -43,10 +44,10 @@ export function markdownExport(state: NotebookState): string {
     if (isCollectionDeleted(book.id, state)) for (const item of book.items) if (item.kind === 'note') deleted.add(item.id);
   }
   const remaining = state.notes.filter(note => !includedNotes.has(note.id) && !deleted.has(note.id));
-  if (remaining.length) output.push('## 随笔与未归类内容');
+  if (remaining.length) output.push(`## ${t('随笔与未归类内容', 'Notes & unsorted content')}`);
   for (const note of remaining) {
-    output.push(`### ${noteTitle(note.markdown)}${note.archivedAt ? '（已归档）' : ''}`);
-    if (note.source) output.push(`> 引用：${note.source.path.join(' / ')}\n>\n${note.source.quote.split('\n').map(line => `> ${line}`).join('\n')}`);
+    output.push(`### ${noteTitle(note.markdown)}${note.archivedAt ? t('（已归档）', ' (archived)') : ''}`);
+    if (note.source) output.push(`> ${t('引用', 'Source')}: ${note.source.path.join(' / ')}\n>\n${note.source.quote.split('\n').map(line => `> ${line}`).join('\n')}`);
     if (note.markdown.trim()) output.push(note.markdown);
   }
   return `${output.join('\n\n---\n\n')}\n`;

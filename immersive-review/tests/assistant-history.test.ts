@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { setLanguage } from '../src/i18n';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { ASSISTANT_HISTORY_KEY, LEGACY_ASSISTANT_HISTORY_KEY, assistantRequestContent, assistantRequestMessages, clampAssistantWidth,
   loadAssistantHistory, newAssistantConversation, saveAssistantHistory, type AssistantHistory, type AssistantTurn } from '../src/notebook/assistant-history';
 
@@ -9,6 +10,8 @@ function storage(seed: Record<string, string> = {}) {
 function turn(id: string, patch: Partial<AssistantTurn> = {}): AssistantTurn {
   return { id, question: `问题 ${id}`, requestContent: `问题 ${id}`, answer: `回答 ${id}`, providerId: 'deepseek', model: 'deepseek-chat', status: 'complete', ...patch };
 }
+
+beforeEach(() => setLanguage('zh-CN'));
 
 describe('assistant persistent conversations', () => {
   it('migrates the old session without deleting it, preserving interrupted replies and quote snapshots', () => {

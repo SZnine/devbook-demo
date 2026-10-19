@@ -1,7 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { NotebookApp } from './notebook/NotebookApp';
-document.title = 'Read · 随笔、阅读与记忆';
+import { useLanguage } from './i18n';
+function App() {
+  useLanguage();
+  return <NotebookApp />;
+}
 const root = createRoot(document.getElementById('root')!);
-root.render(<StrictMode><NotebookApp /></StrictMode>);
+root.render(<StrictMode><App /></StrictMode>);
 if (import.meta.hot) import.meta.hot.dispose(() => root.unmount());
