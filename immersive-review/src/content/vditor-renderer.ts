@@ -6,6 +6,7 @@ import type { Root, Element, Nodes } from 'hast';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import type { Code, Root as MarkdownRoot } from 'mdast';
+import { normalizeMathMarkdown } from './math-source';
 import luteUrl from 'vditor/dist/js/lute/lute.min.js?url';
 
 export type RenderedMarkdown = { tree: Root };
@@ -51,7 +52,9 @@ export function renderMarkdown(body: string): Promise<RenderedMarkdown> {
   const found = cache.get(body);
   if (found) return found;
   const pending = loadRuntime().then(async Vditor => {
-    const html = await Vditor.md2html(body, {
+    // Older copied notes may still contain chat-export TeX delimiters. Adapt
+    // the render input only; leave the saved document and its history intact.
+    const html = await Vditor.md2html(normalizeMathMarkdown(body), {
       mode: 'dark', cdn: `${import.meta.env.BASE_URL}vendor/vditor`, anchor: 0,
       markdown: { sanitize: true, footnotes: true, callout: true, mark: true, sup: true, sub: true,
         autoSpace: false, fixTermTypo: false, toc: false, imageCaption: true },

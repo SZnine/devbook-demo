@@ -41,6 +41,7 @@
    still spans the entire main column, and toggling the outline never rewraps text. */
 @media(min-width:1240px){
   .notebook.nb-native-workspace.has-reference-navigation .nb-reader{margin-left:auto;margin-right:max(280px,calc((100% - 880px)/2))}
+  .notebook.nb-native-workspace.has-reference-navigation .cw-page{width:min(calc(100% - 280px),832px);margin-left:auto;margin-right:max(280px,calc((100% - 832px)/2));padding-left:32px;padding-right:32px}
   .notebook.nb-native-workspace.has-reference-navigation .nro-drawer{background:transparent;border-color:transparent;box-shadow:none;backdrop-filter:none}
 }
 @media(prefers-reduced-motion:reduce){.nb-reference-outline .nro-drawer,.nb-reference-outline .nro-marker,.nb-reference-outline .nro-row,.nb-reference-outline .nro-rail,.nb-reference-outline .nro-close,.nro-rail-lines i{transition:none}}

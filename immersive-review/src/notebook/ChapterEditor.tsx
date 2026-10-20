@@ -6,6 +6,8 @@ import { createDirectInsertion, type MarkdownInsertion, type MarkdownInsertKind 
 import { useComponentLibrary } from './ComponentLibrary';
 import { captureRenderedSelection, markdownForSourceSelection, markdownSectionAt, registerChapterSelection, type ChapterSelection } from './editor-selection';
 import { codeTokenColors } from '../content/code-theme';
+import { clipboardMarkdown } from './editor-paste';
+import { continuePreviousListItem, enterListParagraph, isEmptyListBlock, normalizeOrderedListMarkers } from './editor-lists';
 import 'vditor/dist/index.css';
 import 'vditor/dist/js/highlight.js/styles/github.min.css';
 import './chapter-editor.css';
@@ -159,15 +161,27 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
     else window.clearTimeout(state.ir?.processTimeoutId);
   }
 
+  function syncRenderedMathPreviews() {
+    // Static mathRender updates the formula asynchronously without marking its
+    // preview. Vditor only strips rendered math from history when this is 1.
+    host.current?.querySelectorAll<HTMLElement>('.vditor-wysiwyg__preview, .vditor-ir__preview').forEach(preview => {
+      const math = preview.firstElementChild;
+      if (math?.matches('.language-math')) preview.dataset.render = math.hasAttribute('data-math') ? '1' : '2';
+    });
+  }
+
   function editorTransaction(action: () => void) {
     const instance = editor.current;
     const field = activeField();
     if (!instance || !field || composing.current || (field instanceof HTMLTextAreaElement ? field.disabled : field.getAttribute('contenteditable') === 'false')) return;
     clearUndoTimer(instance);
+    syncRenderedMathPreviews();
     instance.vditor.undo?.addToUndoStack(instance.vditor);
     action();
     clearUndoTimer(instance);
+    if (!(field instanceof HTMLTextAreaElement)) normalizeOrderedListMarkers(field);
     refreshEmptyBlocks();
+    syncRenderedMathPreviews();
     instance.vditor.undo?.addToUndoStack(instance.vditor);
     captureInsertSelection();
     renderCodeHighlights();
@@ -180,6 +194,7 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
     const field = restoreInsertSelection();
     if (!instance || !field || composing.current || (field instanceof HTMLTextAreaElement ? field.disabled : field.getAttribute('contenteditable') === 'false')) return;
     clearUndoTimer(instance);
+    syncRenderedMathPreviews();
     if (!redo) instance.vditor.undo?.addToUndoStack(instance.vditor);
     if (redo) instance.vditor.undo?.redo(instance.vditor);
     else instance.vditor.undo?.undo(instance.vditor);
@@ -600,6 +615,42 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
         block.append(editable);
       } else block = editable;
     }
+    const listItem = parent?.closest<HTMLElement>('li');
+    if (item.kind === 'text' && listItem?.parentElement?.tagName === 'OL' && listItem.contains(range.endContainer) && !existingCode && !existingTable) {
+      // Removing an item's marker means continuing the previous item, while
+      // paragraph formatting within an item stays at its existing depth.
+      if (wasSelected && leaf) {
+        // A partial text selection must not replace the whole paragraph or
+        // remove its list marker. Paragraph formatting is already plain text.
+        if (!leaf.contains(range.endContainer)) return;
+        const before = range.cloneRange();
+        before.selectNodeContents(leaf);
+        before.setEnd(range.startContainer, range.startOffset);
+        const after = range.cloneRange();
+        after.selectNodeContents(leaf);
+        after.setStart(range.endContainer, range.endOffset);
+        const hasContent = (fragment: DocumentFragment) => Boolean(fragment.textContent?.replace(/\u200b/g, '') || fragment.querySelector('img,input,video,audio,hr,table,ul,ol'));
+        if (hasContent(before.cloneContents()) || hasContent(after.cloneContents())) {
+          if (leaf.matches('h1,h2,h3,h4,h5,h6')) {
+            const paragraph = document.createElement('p');
+            paragraph.dataset.block = '0';
+            paragraph.append(...leaf.childNodes);
+            leaf.replaceWith(paragraph);
+            focusBlockContent(paragraph);
+          }
+          return;
+        }
+      }
+      if (leaf === listItem || leaf === listItem.firstElementChild) {
+        if (leaf !== listItem && leaf?.matches('h1,h2,h3,h4,h5,h6') && listItem.previousElementSibling) leaf.replaceWith(block);
+        const continuation = continuePreviousListItem(listItem);
+        if (continuation) { focusConvertedContent(continuation); return; }
+      } else if (leaf?.parentElement === listItem) {
+        leaf.replaceWith(block);
+        focusConvertedContent(editable);
+        return;
+      }
+    }
     insertStructuredBlock(field, block);
     focusConvertedContent(editable);
   }
@@ -697,6 +748,12 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
 
   function renderCodeHighlights() {
     const element = host.current;
+    syncRenderedMathPreviews();
+    // insertMD does not schedule native preview rendering. Render formulas
+    // after the same transactions as code, including paste and undo/redo.
+    if (element && !composing.current && editor.current?.getCurrentMode() !== 'sv') {
+      editorConstructor?.mathRender(element, { cdn: assetRoot });
+    }
     const highlighter = (window as Window & { hljs?: LocalHighlighter }).hljs;
     const runtime = window as Window & HighlightRuntime;
     const registry = runtime.CSS?.highlights;
@@ -887,6 +944,23 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
     if (!selection?.rangeCount) return false;
     const range = selection.getRangeAt(0);
     const parent = range.startContainer.nodeType === Node.ELEMENT_NODE ? range.startContainer as HTMLElement : range.startContainer.parentElement;
+    const listItem = parent?.closest<HTMLElement>('li');
+    if (range.collapsed && !event.shiftKey && listItem?.parentElement?.tagName === 'OL' && !parent?.closest('table,[data-type="code-block"],[data-type="math-block"]')) {
+      if (event.key === 'Backspace' && isEmptyListBlock(listItem) && listItem.previousElementSibling?.tagName === 'LI') {
+        consume();
+        editorTransaction(() => {
+          const paragraph = continuePreviousListItem(listItem);
+          if (paragraph) focusBlockContent(paragraph);
+        });
+        return true;
+      }
+      const paragraph = parent?.closest<HTMLElement>('p');
+      if (event.key === 'Enter' && paragraph?.parentElement === listItem && paragraph.previousElementSibling) {
+        consume();
+        editorTransaction(() => focusBlockContent(enterListParagraph(paragraph, range)));
+        return true;
+      }
+    }
     if (event.key === 'Tab' && parent?.closest('li') && !parent.closest('table,[data-type="code-block"]')) {
       consume();
       editorTransaction(() => {
@@ -997,11 +1071,56 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
         leaveEmptyDraft(event.target);
       }
     };
+    const pasteRichText = (event: ClipboardEvent) => {
+      const field = activeField();
+      const clipboard = event.clipboardData;
+      if (!instance || !initialized || !clipboard || !field || !field.contains(event.target as Node) || composing.current || savingRef.current) return;
+      const selection = window.getSelection();
+      const range = selection?.rangeCount ? selection.getRangeAt(0) : null;
+      let replacesDocument = false;
+      if (!(field instanceof HTMLTextAreaElement) && range && !range.collapsed && field.contains(range.startContainer) && field.contains(range.endContainer)) {
+        const before = range.cloneRange(); before.selectNodeContents(field); before.setEnd(range.startContainer, range.startOffset);
+        const after = range.cloneRange(); after.selectNodeContents(field); after.setStart(range.endContainer, range.endOffset);
+        const hasContent = (part: Range) => {
+          const fragment = part.cloneContents();
+          // Formula previews duplicate their editable source. They must not
+          // make a fully selected document look like a partial selection.
+          fragment.querySelectorAll('.vditor-wysiwyg__preview, .vditor-ir__preview').forEach(node => node.remove());
+          return !!fragment.textContent?.replace(/\u200b/g, '').trim() || !!fragment.querySelector('img,hr,input,table,video,audio');
+        };
+        replacesDocument = !hasContent(before) && !hasContent(after);
+      }
+      const anchor = range?.startContainer;
+      const position = anchor instanceof Element ? anchor : anchor?.parentElement;
+      // Pasting into a code sample or table cell must remain literal. Source
+      // mode also keeps the user's exact Markdown when it is available.
+      const literal = position?.closest('code, pre, td, th, [data-type="code-block"], [data-type="math-block"]');
+      // Vditor's entire rich field is itself a <pre>; only a nested code
+      // region that contains the whole selection should bypass conversion.
+      if (!replacesDocument && instance.getCurrentMode() !== 'sv' && literal && literal !== field && field.contains(literal) && range && literal.contains(range.endContainer)) return;
+      const html = clipboard.getData('text/html');
+      const plain = clipboard.getData('text/plain');
+      const markdown = instance.getCurrentMode() === 'sv' && plain ? plain
+        : clipboardMarkdown(html, plain, source => instance!.html2md(source));
+      if (markdown === null) return;
+      event.preventDefault();
+      event.stopPropagation();
+      editorTransaction(() => {
+        if (replacesDocument) {
+          // Native insertMD leaves the first selected heading as an empty
+          // shell on whole-document replacement. Keep the undo stack intact.
+          instance!.setValue(markdown);
+          const caret = document.createRange(); caret.selectNodeContents(field); caret.collapse(false);
+          selection!.removeAllRanges(); selection!.addRange(caret);
+        } else instance!.insertMD(markdown);
+      });
+    };
     // Run before the destination's React click handler can unmount this page.
     // This also covers navigation items that intentionally do not take focus.
     document.addEventListener('pointerdown', flushBeforeNavigation, true);
     document.addEventListener('focusin', dismissEmptyAfterFocus);
     window.addEventListener('pagehide', flushBeforeUnload);
+    element.addEventListener('paste', pasteRichText, true);
 
     const initialize = (Editor: typeof Vditor) => {
       if (disposed) return;
@@ -1025,7 +1144,8 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
           mode: 'editor',
           maxWidth: 10000,
           hljs: { enable: false },
-          markdown: { codeBlockPreview: false, mathBlockPreview: false, sanitize: true },
+          math: { inlineDigit: true },
+          markdown: { codeBlockPreview: false, mathBlockPreview: true, sanitize: true },
           theme: { current: '', path: '' },
         },
         hint: { emoji: {}, parse: false },
@@ -1078,6 +1198,7 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
       document.removeEventListener('pointerdown', flushBeforeNavigation, true);
       document.removeEventListener('focusin', dismissEmptyAfterFocus);
       window.removeEventListener('pagehide', flushBeforeUnload);
+      element.removeEventListener('paste', pasteRichText, true);
       clearCommitTimer();
       if (initialized && instance) {
         const next = instance.getValue();
@@ -1317,6 +1438,8 @@ export function ChapterEditor({ value, onChange, onSave, onCancel, autoFocus, la
 
   function publishCurrent(synchronous = false) {
     if (!mounted.current || !editor.current || switchingMode.current || (!synchronous && composing.current) || (!callbacks.current.live && savingRef.current)) return;
+    const field = activeField();
+    if (field && !(field instanceof HTMLTextAreaElement)) normalizeOrderedListMarkers(field);
     const next = editor.current.getValue();
     if (synchronous) {
       // Even an already-published value may still be awaiting React's commit.
